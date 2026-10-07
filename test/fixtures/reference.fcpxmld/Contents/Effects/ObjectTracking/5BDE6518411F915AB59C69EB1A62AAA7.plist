@@ -1,0 +1,154 @@
+bplist00ÓRidTtypeTdata_ 5BDE6518411F915AB59C69EB1A62AAA7_$fcpxmld.data.effects.object-trackingO$<parameter-container>
+<param name="Radius" key="160"/>
+<param name="Curvature" key="159"/>
+<param name="Feather" key="102"/>
+<param name="Falloff" key="158"/>
+<param name="Transforms" key="200">
+    <param name="Position" key="201">
+        <keyframeAnimation>
+            <keyframe time="81865784/24000s" value="-178.497 -205.41"/>
+            <keyframe time="81866785/24000s" value="-194.342 -192.577"/>
+            <keyframe time="81867786/24000s" value="-258.524 -198.394"/>
+            <keyframe time="81868787/24000s" value="-323.354 -178.506"/>
+            <keyframe time="81869788/24000s" value="-338.514 -78.8549"/>
+            <keyframe time="81870789/24000s" value="-343.706 5.34573"/>
+            <keyframe time="81871790/24000s" value="-361.472 37.2056"/>
+            <keyframe time="81872791/24000s" value="-370.706 61.3122"/>
+            <keyframe time="81873792/24000s" value="-378.15 74.9854"/>
+            <keyframe time="81874793/24000s" value="-381.617 91.0888"/>
+            <keyframe time="81875794/24000s" value="-381.774 108.794"/>
+            <keyframe time="81876795/24000s" value="-380.979 123.742"/>
+            <keyframe time="81877796/24000s" value="-380.007 132.62"/>
+            <keyframe time="81878797/24000s" value="-380.397 134.337"/>
+            <keyframe time="81879798/24000s" value="-381.512 129.283"/>
+            <keyframe time="81880799/24000s" value="-386.904 119.909"/>
+            <keyframe time="81881800/24000s" value="-390.787 111.962"/>
+            <keyframe time="81882801/24000s" value="-399.101 105.337"/>
+            <keyframe time="81883802/24000s" value="-397.782 108.258"/>
+            <keyframe time="81884803/24000s" value="-398.291 108.823"/>
+            <keyframe time="81885804/24000s" value="-398.853 109.905"/>
+            <keyframe time="81886805/24000s" value="-400.195 110.563"/>
+            <keyframe time="81887806/24000s" value="-401.399 112.99"/>
+            <keyframe time="81888807/24000s" value="-402.495 115.799"/>
+            <keyframe time="81889808/24000s" value="-403.351 118.149"/>
+            <keyframe time="81890809/24000s" value="-403.572 118.449"/>
+            <keyframe time="81891810/24000s" value="-404.198 117.21"/>
+            <keyframe time="81892811/24000s" value="-404.676 115.532"/>
+            <keyframe time="81893812/24000s" value="-405.765 114.191"/>
+            <keyframe time="81894813/24000s" value="-406.808 113.104"/>
+            <keyframe time="81895814/24000s" value="-409.972 111.679"/>
+            <keyframe time="81896815/24000s" value="-417.58 109.994"/>
+            <keyframe time="81897816/24000s" value="-433.345 108.769"/>
+            <keyframe time="81898817/24000s" value="-457.2 109.291"/>
+            <keyframe time="81899818/24000s" value="-488.495 117.36"/>
+            <keyframe time="81900819/24000s" value="-523.351 103.151"/>
+            <keyframe time="81901820/24000s" value="-550.781 94.6141"/>
+            <keyframe time="81902821/24000s" value="-560.861 92.2957"/>
+        </keyframeAnimation>
+    </param>
+    <param name="Rotation" key="202">
+        <keyframeAnimation>
+            <keyframe time="81865784/24000s" value="-7.87738"/>
+            <keyframe time="81866785/24000s" value="-7.53048"/>
+            <keyframe time="81867786/24000s" value="-7.20028"/>
+            <keyframe time="81868787/24000s" value="-6.43313"/>
+            <keyframe time="81869788/24000s" value="-5.65365"/>
+            <keyframe time="81870789/24000s" value="-5.00318"/>
+            <keyframe time="81871790/24000s" value="-4.82346"/>
+            <keyframe time="81872791/24000s" value="-4.69833"/>
+            <keyframe time="81873792/24000s" value="-4.63529"/>
+            <keyframe time="81874793/24000s" value="-4.54044"/>
+            <keyframe time="81875794/24000s" value="-4.42831"/>
+            <keyframe time="81876795/24000s" value="-4.30825"/>
+            <keyframe time="81877796/24000s" value="-4.18743"/>
+            <keyframe time="81878797/24000s" value="-4.06622"/>
+            <keyframe time="81879798/24000s" value="-3.95724"/>
+            <keyframe time="81880799/24000s" value="-3.85575"/>
+            <keyframe time="81881800/24000s" value="-3.78743"/>
+            <keyframe time="81882801/24000s" value="-3.7375"/>
+            <keyframe time="81883802/24000s" value="-3.73879"/>
+            <keyframe time="81884803/24000s" value="-3.73637"/>
+            <keyframe time="81885804/24000s" value="-3.73404"/>
+            <keyframe time="81886805/24000s" value="-3.73317"/>
+            <keyframe time="81887806/24000s" value="-3.73625"/>
+            <keyframe time="81888807/24000s" value="-3.74313"/>
+            <keyframe time="81889808/24000s" value="-3.75121"/>
+            <keyframe time="81890809/24000s" value="-3.758"/>
+            <keyframe time="81891810/24000s" value="-3.76246"/>
+            <keyframe time="81892811/24000s" value="-3.76048"/>
+            <keyframe time="81893812/24000s" value="-3.75638"/>
+            <keyframe time="81894813/24000s" value="-3.74973"/>
+            <keyframe time="81895814/24000s" value="-3.74679"/>
+            <keyframe time="81896815/24000s" value="-3.74734"/>
+            <keyframe time="81897816/24000s" value="-3.78258"/>
+            <keyframe time="81898817/24000s" value="-3.81182"/>
+            <keyframe time="81899818/24000s" value="-3.8926"/>
+            <keyframe time="81900819/24000s" value="-4.16133"/>
+            <keyframe time="81901820/24000s" value="-4.43937"/>
+            <keyframe time="81902821/24000s" value="-4.52685"/>
+        </keyframeAnimation>
+    </param>
+    <param name="Scale" key="203">
+        <keyframeAnimation>
+            <keyframe time="81865784/24000s" value="0.530409 0.751048"/>
+            <keyframe time="81866785/24000s" value="0.551406 0.747211"/>
+            <keyframe time="81867786/24000s" value="0.587233 0.761622"/>
+            <keyframe time="81868787/24000s" value="0.667157 0.77474"/>
+            <keyframe time="81869788/24000s" value="0.71728 0.733428"/>
+            <keyframe time="81870789/24000s" value="0.790542 0.716346"/>
+            <keyframe time="81871790/24000s" value="0.83604 0.730624"/>
+            <keyframe time="81872791/24000s" value="0.875261 0.745238"/>
+            <keyframe time="81873792/24000s" value="0.903806 0.759306"/>
+            <keyframe time="81874793/24000s" value="0.930224 0.765646"/>
+            <keyframe time="81875794/24000s" value="0.957061 0.768439"/>
+            <keyframe time="81876795/24000s" value="0.982244 0.767439"/>
+            <keyframe time="81877796/24000s" value="1.00334 0.762098"/>
+            <keyframe time="81878797/24000s" value="1.01872 0.751536"/>
+            <keyframe time="81879798/24000s" value="1.03019 0.739755"/>
+            <keyframe time="81880799/24000s" value="1.03552 0.724633"/>
+            <keyframe time="81881800/24000s" value="1.03896 0.714235"/>
+            <keyframe time="81882801/24000s" value="1.03491 0.702125"/>
+            <keyframe time="81883802/24000s" value="1.0506 0.713011"/>
+            <keyframe time="81884803/24000s" value="1.05775 0.717402"/>
+            <keyframe time="81885804/24000s" value="1.06744 0.723526"/>
+            <keyframe time="81886805/24000s" value="1.0705 0.725433"/>
+            <keyframe time="81887806/24000s" value="1.0738 0.728262"/>
+            <keyframe time="81888807/24000s" value="1.07506 0.730453"/>
+            <keyframe time="81889808/24000s" value="1.07534 0.732213"/>
+            <keyframe time="81890809/24000s" value="1.07495 0.733263"/>
+            <keyframe time="81891810/24000s" value="1.07541 0.734443"/>
+            <keyframe time="81892811/24000s" value="1.07697 0.735122"/>
+            <keyframe time="81893812/24000s" value="1.07828 0.73522"/>
+            <keyframe time="81894813/24000s" value="1.07773 0.73355"/>
+            <keyframe time="81895814/24000s" value="1.07501 0.73113"/>
+            <keyframe time="81896815/24000s" value="1.0691 0.727217"/>
+            <keyframe time="81897816/24000s" value="1.05655 0.725402"/>
+            <keyframe time="81898817/24000s" value="1.03882 0.718708"/>
+            <keyframe time="81899818/24000s" value="1.01648 0.718061"/>
+            <keyframe time="81900819/24000s" value="0.952562 0.719049"/>
+            <keyframe time="81901820/24000s" value="0.901519 0.725635"/>
+            <keyframe time="81902821/24000s" value="0.884176 0.725584"/>
+        </keyframeAnimation>
+    </param>
+</param>
+<param name="Transform" key="209/0/2105/2100">
+    <param name="Position" key="2101">
+        <keyframeAnimation>
+            <keyframe time="81864783/24000s" value="-601.806 305.751"/>
+            <keyframe time="81865784/24000s" value="-601.806 305.751"/>
+        </keyframeAnimation>
+    </param>
+    <param name="Rotation" key="2102">
+        <keyframeAnimation>
+            <keyframe time="81864783/24000s" value="-3.7375"/>
+            <keyframe time="81865784/24000s" value="-3.7375"/>
+        </keyframeAnimation>
+    </param>
+    <param name="Scale" key="2103">
+        <keyframeAnimation>
+            <keyframe time="81864783/24000s" value="5.18104 3.51502"/>
+            <keyframe time="81865784/24000s" value="5.18104 3.51502"/>
+        </keyframeAnimation>
+    </param>
+</param>
+</parameter-container>      ? f                           $‚

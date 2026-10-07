@@ -1,6 +1,6 @@
 # cutter — Phase 1 Implementation Spec
 
-**Goal:** A local Python CLI that takes a folder of numbered raw video clips, transcribes them, removes failed takes using the transcript only, tightens the cuts, and writes an FCPXML file that Final Cut Pro imports as an editable rough cut.
+**Goal:** A local Python CLI that takes a folder of numbered raw sources, transcribes them, removes failed takes using the transcript only, tightens the cuts, and writes an FCPXML file that Final Cut Pro imports as an editable rough cut.
 
 **Audience:** Coding agents. Every section is meant to be implementable without further context. Where something must be verified against a real tool (FCP, parakeet-mlx), the spec says so explicitly. Do not guess in those places; verify.
 
@@ -13,7 +13,7 @@
 3. **All FCPXML time math uses `fractions.Fraction`.** Analysis code may use float seconds; conversion to frames happens once, in the export stage.
 4. **No hard-coded thresholds.** Every number in this spec marked `[cfg]` lives in the profile YAML.
 5. **Each stage is pure:** reads artifacts from disk, writes one artifact, no hidden state.
-6. **Verify, don't assume,** for: parakeet-mlx return types, FCPXML attributes (mirror `tests/fixtures/reference.fcpxml`), the FCP DTD location.
+6. **Verify, don't assume,** for: parakeet-mlx return types, FCPXML attributes (mirror `test/fixtures/reference.fcpxmld/Info.fcpxml`), the FCP DTD location.
 
 ---
 
@@ -21,17 +21,19 @@
 
 ### In scope
 
-- Ingest numbered clips, validate formats, extract audio
-- Word-level transcription (local)
-- Text-only restart (retake) detection
-- Optional local-LLM judge for ambiguous restarts
+- Ingest numbered sources for one output video, validate formats, extract audio
+- Word-level transcription of English speech (local)
+- Text-only retake detection
+- Optional local-LLM judge for ambiguous aborted retakes
 - Tightening: gap removal, padding, snap-to-silence, frame rounding
 - FCPXML export: rough-cut project + rejects project + `CHECK` markers
 - Stage caching, CLI, and an eval command against a manually edited gold project
 
+One project is one output video and lives in its own folder. Phase 1 speech is English. A `CHECK` marker is resolved by the editor in Final Cut; cutter has no accept/reject command.
+
 ### Out of scope (later phases, do not build)
 
-Clap detection, script alignment, keywords per script paragraph, chapter markers, punch-ins, filler removal, VAD, audio volume ramps, Remotion, short-form clips.
+Clap detection, script alignment, keywords per script paragraph, chapter markers, punch-ins, filler removal, VAD, audio volume ramps, Remotion, short-form videos, languages other than English. Interviews, multicam, and b-roll assemblies are out.
 
 ---
 
@@ -39,9 +41,9 @@ Clap detection, script alignment, keywords per script paragraph, chapter markers
 
 | Item | Path | Purpose |
 | --- | --- | --- |
-| Reference export from FCP | `tests/fixtures/reference.fcpxml` | One project containing 2 clips from the usual camera, cut once. Source of truth for `version`, `<format>` and `<asset>` attributes. |
-| Sample raw clips | `tests/fixtures/sample/raw/01.mov …` | Short real recording (2–5 min) with a few retakes. |
-| Gold project | `tests/gold/<name>/` | Raw clips + `manual.fcpxml` exported from the finished FCP edit. Used by `cutter eval`. |
+| Reference export from FCP | `test/fixtures/reference.fcpxmld/Info.fcpxml` | Full library export. Source of truth for `version`, `<format>` and camera `<asset>` attributes. The timeline also contains screen recordings, titles, color, and transitions; do not reproduce that timeline. |
+| Sample raw sources | `test/fixtures/sample/raw/` | `1-intro.MP4` and `2-skills.MP4`, the camera sources for the gold edit. |
+| Gold project | `test/gold/frontend-skills/manual.fcpxmld/Info.fcpxml` | A cut made only from those two sources. `src` attributes point at `~/Downloads/sample-videos/Videos/`; resolve them to the repo copies by filename. Used by `cutter eval`. |
 | Machine | Apple Silicon, macOS, ffmpeg via Homebrew, LM Studio optional | |
 
 Locate the DTD with:
@@ -50,7 +52,7 @@ Locate the DTD with:
 find "/Applications/Final Cut Pro.app" -iname "*.dtd" | grep -i fcpxml
 ```
 
-Use the DTD matching the version in `reference.fcpxml`. Store its path in config (`fcpxml.dtd_path`).
+The reference file is FCPXML 1.14. Its DTD is `/Applications/Final Cut Pro.app/Contents/Frameworks/Interchange.framework/Versions/A/Resources/FCPXMLv1_14.dtd`. Store that path in config (`fcpxml.dtd_path`).
 
 ---
 
@@ -69,37 +71,38 @@ Do not add librosa, moviepy, OpenTimelineIO or any video-processing library.
 
 ## 4. Repository layout
 
+Paths below are relative to this repo root. `projects/` is local working data and is gitignored. The checked-in fixtures and gold edit live under `test/`, not `tests/`. Pytest modules live under `tests/`.
+
 ```
+pyproject.toml
+profiles/
+  long.yaml
 cutter/
-  pyproject.toml
-  profiles/
-    long.yaml
-  cutter/
-    __init__.py
-    cli.py            # Typer app, stage orchestration, caching
-    config.py         # Pydantic config models, profile loading
-    models.py         # Pydantic models for all artifacts
-    cache.py          # input/config hashing, skip logic
-    ingest.py
-    transcribe.py
-    retakes.py
-    judge.py
-    tighten.py
-    timeline.py
-    fcpxml.py
-    fcpxml_parse.py   # for eval only
-    evaluate.py
-    llm.py
-    audio.py          # RMS envelope helpers
-  tests/
-    fixtures/
-    gold/
-    unit/
-    e2e/
-projects/<name>/
-  raw/                # input clips: 01.mov, 02.mov, …
-  artifacts/          # stage outputs (JSON + WAVs)
-  out/                # <name>.fcpxml
+  __init__.py
+  cli.py            # Typer app, stage orchestration, caching
+  config.py         # Pydantic config models, profile loading
+  models.py         # Pydantic models for all artifacts
+  cache.py          # input/config hashing, skip logic
+  ingest.py
+  transcribe.py
+  retakes.py
+  judge.py
+  tighten.py
+  timeline.py
+  fcpxml.py
+  fcpxml_parse.py   # for eval only
+  evaluate.py
+  llm.py
+  audio.py          # RMS envelope helpers
+tests/
+  fixtures/
+  gold/
+  unit/
+  e2e/
+projects/<name>/    # gitignored
+  raw/              # input sources: 01.mov, 02.mov, …
+  artifacts/        # stage outputs (JSON + WAVs)
+  out/              # <name>.fcpxml
 ```
 
 ---
@@ -118,7 +121,7 @@ transcribe:
   overlap_duration_s: 15
 
 retakes:
-  window_words: 6            # words compared at a restart candidate
+  window_words: 6            # words compared at a retake candidate
   min_match_words: 3         # minimum consecutive matching words
   word_similarity: 85        # rapidfuzz ratio per word, 0–100
   max_mismatches: 1          # tolerated mismatched words inside the match
@@ -145,8 +148,8 @@ tighten:
   min_range_frames: 6        # shorter ranges are merged into neighbours or dropped with a CHECK marker
 
 fcpxml:
-  version: "1.11"            # must match reference.fcpxml
-  dtd_path: null             # required for validation
+  version: "1.14"            # must match test/fixtures/reference.fcpxmld/Info.fcpxml
+  dtd_path: "/Applications/Final Cut Pro.app/Contents/Frameworks/Interchange.framework/Versions/A/Resources/FCPXMLv1_14.dtd"
   event_name: "{project} – cutter"
   project_name: "{project} – rough cut"
   rejects_project_name: "{project} – rejects"
@@ -223,7 +226,7 @@ Times in analysis artifacts are **float seconds from the start of the source fil
   "decisions": [
     {
       "id": "d001",
-      "kind": "restart",
+      "kind": "retake",
       "dropped_words": [120, 141],
       "kept_from_word": 142,
       "match_words": 5,
@@ -309,13 +312,13 @@ Times in analysis artifacts are **float seconds from the start of the source fil
 4. Assign global `i` across sources in source order.
 5. Sanity checks: monotonic non-decreasing starts within a source, `end >= start`, no word outside `[0, duration_s]`. Clamp and log tiny violations (< 50 ms), raise on larger ones.
 
-**Acceptance:** On the sample clip, word timestamps visually match the waveform within ~100 ms on 10 spot checks (write a small script that prints word, start, end for a range so this can be checked by ear in QuickTime).
+**Acceptance:** On the sample source, word timestamps visually match the waveform within ~100 ms on 10 spot checks (write a small script that prints word, start, end for a range so this can be checked by ear in QuickTime).
 
 ### 7.3 Retake detection (`retakes.py`)
 
 **Input:** `words.json`. **Output:** `decisions.json`.
 
-A *restart* is when the speaker repeats words they said shortly before because the first attempt failed. The failed attempt is dropped; the restart is kept ("last take wins").
+A *retake* is when the speaker aborts a sentence and starts it again. The aborted failed take is dropped; the later take is kept ("last take wins"). A finished sentence that is said again is not a retake: it stays in the rough cut, with a `CHECK` marker.
 
 **Algorithm**
 
@@ -337,38 +340,40 @@ for i in range(n):                                   # left to right
 - `candidates(i)`: indices `j` with `j < i`, same source as `i`, `j not in dropped`, `words[i].start - words[j].start <= max_lookback_s`, ordered **nearest first** (descending `j`).
 - `match_length(j, i)`: compare `norm` of `words[j+t]` and `words[i+t]` for `t = 0, 1, …` while `t < window_words` and `j + t < i`. A word matches if `rapidfuzz.fuzz.ratio >= word_similarity`. Count consecutive matches, allowing up to `max_mismatches` mismatches that are followed by a match. Stop at the first unrecoverable mismatch. Return the match count.
 - `has_content_word(j, m)`: at least one matched word is not a stopword, **or** `m >= 5`. Prevents matching "and the" / "so the".
-- Restarts never cross a source boundary. A failed take at the end of `01.mov` and its restart in `02.mov` is handled separately: see *cross-file restarts* below.
+- Retakes never cross a source boundary in the main scan. A failed take at the end of `01.mov` and its retake in `02.mov` is handled separately: see *cross-file retakes* below.
 
-**Guards (set `flag: true` and `flag_reason`)**
+A candidate is auto-dropped only when the earlier span is aborted: none of its words end in `.`, `?`, or `!`. Apply the guards in order; the first match wins.
 
-1. `dropped_duration_s > auto_drop_max_s` → `action: keep`, reason `long_segment`. Long "failed takes" are often legitimate repetition.
-2. Missing content: let `D` = content words (non-stopwords, normalized) in the dropped segment and `K` = content words in `words[i : i + len(dropped) + 10]`. If `|D − K| / |D| > missing_content_ratio` → `action: drop` still, but flag with reason `retake_missing_content`. The restart may have left something out.
-3. The dropped segment contains a sentence end followed by at least one full sentence (two or more complete sentences) → `action: keep`, reason `multi_sentence`. Restarts rarely span whole sentences; this is more likely a deliberate repeat.
+1. The earlier span contains a sentence end → `action: keep`, `flag: true`, reason `complete_sentence`. The finished sentence stays. This reason is final: the judge must not change the action to `drop`.
+2. `dropped_duration_s > auto_drop_max_s` → `action: keep`, `flag: true`, reason `long_segment`. A long aborted span is often a legitimate repetition.
+3. Missing content, only reached for aborted spans: let `D` = content words (non-stopwords, normalized) in the dropped segment and `K` = content words in `words[i : i + len(dropped) + 10]`. If `|D − K| / |D| > missing_content_ratio` → `action: drop`, `flag: true`, reason `retake_missing_content`. The retake may have left something out.
+4. Otherwise → `action: drop`, `flag: false`.
 
-**Cross-file restarts**
+**Cross-file retakes**
 
-If the first `window_words` words of source `k+1` match (same rules) a word run starting at `j` in the last `max_lookback_s` of source `k`, record a decision dropping `[j, last word of source k]`. Same guards apply. This covers the common workflow "messed up, stopped recording, started a new file".
+If the first `window_words` words of source `k+1` match (same rules) a word run starting at `j` in the last `max_lookback_s` of source `k`, record a decision on `[j, last word of source k]`. Same guards apply. This covers the common workflow "messed up, stopped recording, started a new file".
 
 **Acceptance (unit tests with synthetic word lists, no audio needed)**
 
 | Case | Words | Expected |
 | --- | --- | --- |
-| Simple restart | `the agent joins the — the agent joins the call` | drop first 4 |
-| Short false start | `so the agent so the agent joins the call` | drop first 3 |
-| Chain of 3 takes | take A, take B, take C of the same sentence | keep C only, two decisions |
+| Simple retake | `the agent joins the — the agent joins the call` | drop first 4 |
+| Short aborted take | `so the agent so the agent joins the call` | drop first 3 |
+| Chain of 3 aborted takes | takes A, B, C of the same words, no sentence end | keep C only, two decisions |
 | Stopword-only repeat | `and the … and the server` | no decision |
 | Legit repetition after 2 min | same sentence 120 s apart | no decision (lookback) |
-| Long segment | restart with 30 s failed segment | `keep`, flagged `long_segment` |
-| Cross-file | `01` ends with failed sentence, `02` starts with it | drop tail of `01` |
-| Multi-sentence | two full sentences, then the first one repeated | `keep`, flagged |
+| Long aborted segment | aborted span longer than 20 s | `keep`, flagged `long_segment` |
+| Finished sentence | `A neuron is a weighted vote. A neuron is a weighted vote.` | `keep`, flagged `complete_sentence` |
+| Cross-file | `01` ends with an aborted sentence, `02` starts with it | drop tail of `01` |
+| Finished sentence, cross-file | `01` ends with a sentence, `02` starts by repeating it | `keep`, flagged `complete_sentence` |
 
 ### 7.4 Judge (`judge.py`, `llm.py`)
 
 **Input:** `decisions.json` (flagged ones), `words.json`. **Output:** `decisions.json` updated in place (new artifact version).
 
-- Runs only on decisions with `flag: true` and only if `judge.enabled` and the endpoint answers. If the endpoint is unreachable: log a warning once, leave decisions unchanged.
+- Runs only on ambiguous aborted takes: `flag_reason` of `long_segment` or `retake_missing_content`, and only if `judge.enabled` and the endpoint answers. It may turn those into a drop. `complete_sentence` is never sent to the judge and stays `action: keep` and flagged. Any decision still flagged after this stage is resolved in Final Cut. If the endpoint is unreachable: log a warning once, leave decisions unchanged.
 - `llm.py`: thin wrapper around `openai.OpenAI(base_url=…, api_key="lm-studio")` with one method `complete_json(system, user, schema) -> dict`. Use `response_format={"type": "json_schema", …}`. If the server rejects structured output, retry once with plain JSON instructions and parse; on parse failure return `None`.
-- Prompt input: up to 2 sentences before, segment **A** (dropped candidate), segment **B** (restart onward, same length + 1 sentence), 1 sentence after. Plain text only, no timestamps.
+- Prompt input: up to 2 sentences before, segment **A** (dropped candidate), segment **B** (retake onward, same length + 1 sentence), 1 sentence after. Plain text only, no timestamps.
 - System prompt: load from `skills/retake-judging/SKILL.md` if present, else a built-in default. The default must explain: A is a candidate failed attempt, B is the candidate retake; answer `"B"` if A should be dropped, `"A"` if B is the failed one and A should be kept instead, `"both"` if it's not a retake.
 - Output schema:
   ```json
@@ -382,10 +387,10 @@ If the first `window_words` words of source `k+1` match (same rules) a word run 
   - `confidence < min_confidence` → `action: keep`, stays flagged.
   - `"B"` → `action: drop`, unflag.
   - `"both"` → `action: keep`, unflag.
-  - `"A"` → drop the restart segment instead (B's matching span up to where it diverges from A is not well defined, so: `action: keep`, stays flagged with reason `judge_prefers_first_take`). Do not attempt automatic reverse cuts in Phase 1.
+  - `"A"` → drop the retake segment instead (B's matching span up to where it diverges from A is not well defined, so: `action: keep`, stays flagged with reason `judge_prefers_first_take`). Do not attempt automatic reverse cuts in Phase 1.
 - Store the raw verdict in `decision.judge`.
 
-**Acceptance:** With a mocked LLM client, each verdict path produces the expected action and flag. With LM Studio stopped, the stage completes and logs one warning.
+**Acceptance:** With a mocked LLM client, each verdict path produces the expected action and flag. A `complete_sentence` decision stays kept and flagged even when the mock returns `"B"`. With LM Studio stopped, the stage completes and logs one warning.
 
 ### 7.5 Tighten (`tighten.py`, `audio.py`)
 
@@ -406,13 +411,13 @@ If the first `window_words` words of source `k+1` match (same rules) a word run 
 **Acceptance**
 
 - Property test (hypothesis, synthetic words + random RMS): no range contains a dropped word's midpoint; all ranges have `in_frame < out_frame`; no two ranges of the same source overlap; every kept word's midpoint lies inside some range.
-- On the sample clip: listen to 20 random cuts in FCP, no clipped word starts or ends.
+- On the sample source: listen to 20 random cuts in FCP, no clipped word starts or ends.
 
 ### 7.6 FCPXML export (`fcpxml.py`)
 
 **Input:** `timeline.json`, `sources.json`. **Output:** `out/<project>.fcpxml`.
 
-**Before writing code:** open `tests/fixtures/reference.fcpxml` and mirror its `fcpxml version`, `<format>` attributes (including `name` and `colorSpace`) and `<asset>` attributes. Where this spec and the reference disagree, the reference wins.
+**Before writing code:** open `test/fixtures/reference.fcpxmld/Info.fcpxml` and mirror its `fcpxml version`, the camera `<format>` attributes (including `name` and `colorSpace`) and the camera `<asset>` attributes. Where this spec and the reference disagree, the reference wins. Do not reproduce the reference timeline's screen recordings, titles, color, or transitions.
 
 **Time conversion**
 
@@ -430,9 +435,9 @@ Every time attribute written is `t(<integer frame count>)`. Never write a float.
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fcpxml>
-<fcpxml version="1.11">
+<fcpxml version="1.14">
   <resources>
-    <format id="r1" name="FFVideoFormat2160p2997" frameDuration="1001/30000s"
+    <format id="r1" name="FFVideoFormat3840x2160p2398" frameDuration="1001/24000s"
             width="3840" height="2160" colorSpace="1-1-1 (Rec. 709)"/>
     <asset id="r2" name="01" start="0s" duration="9369360/30000s"
            hasVideo="1" hasAudio="1" format="r1"
@@ -466,10 +471,10 @@ Every time attribute written is `t(<integer frame count>)`. Never write a float.
 - `asset.start = t(start_frames)`; `asset.duration = t(duration_frames)`.
 - `src` = `Path(path).resolve().as_uri()` (handles spaces and umlauts).
 - For each range, in order:
-  - `start = t(start_frames + in_frame)` — clip start is in **source timecode space**, so the asset's start timecode is added.
+  - `start = t(start_frames + in_frame)` — asset-clip start is in **source timecode space**, so the asset's start timecode is added.
   - `duration = t(out_frame − in_frame)`
   - `offset` = running sum of previous durations, `t(…)`.
-- Markers inside an `asset-clip` use the clip's source time: `marker.start = t(start_frames + frame_of(at_word))`, where `frame_of` = floor of the word's start time in frames, clamped into the clip.
+- Markers inside an `asset-clip` use that asset-clip's source time: `marker.start = t(start_frames + frame_of(at_word))`, where `frame_of` = floor of the word's start time in frames, clamped into the asset-clip.
 - Rejects project: one `asset-clip` per dropped span, in timeline order, each with a marker `value="<decision id>: <kind>"`.
 - Write with `lxml`, pretty-printed, UTF-8.
 - **Validate** with `lxml.etree.DTD(dtd_path)` before writing to `out/`. On failure, write to `out/<project>.invalid.fcpxml`, print the DTD errors, exit non-zero. If `dtd_path` is not set, write the file and print a prominent warning.
@@ -483,9 +488,9 @@ Every time attribute written is `t(<integer frame count>)`. Never write a float.
 
 ### 7.7 Eval (`evaluate.py`, `fcpxml_parse.py`)
 
-**Input:** `tests/gold/<name>/` (raw clips + `manual.fcpxml`). **Output:** `tests/gold/<name>/eval.json` + console table.
+**Input:** `test/gold/frontend-skills/` (raw sources are `test/fixtures/sample/raw/`; the edit is `manual.fcpxmld/Info.fcpxml`). **Output:** `test/gold/frontend-skills/eval.json` + console table.
 
-1. Run the full pipeline on the gold raw clips (cached artifacts allowed).
+1. Run the full pipeline on the gold raw sources (cached artifacts allowed).
 2. Parse `manual.fcpxml`: resolve `<asset>` ids to file paths, then collect primary-storyline clips from the first `<project>`'s `<spine>`: `asset-clip`, and `clip` elements with a nested `video`/`audio` ref. For each: source path, source start, duration → source time span. Ignore connected clips, titles, generators, gaps. Unsupported elements in the spine (`sync-clip`, `mc-clip`, `ref-clip`) → warn and skip, listing them.
 3. Label each word: **gold kept** if its midpoint lies inside a gold span of its source; **predicted kept** if inside a pipeline range.
 4. Metrics:
@@ -526,8 +531,8 @@ cutter words      <project_dir> --from 12.0 --to 30.0   # debug: print words wit
 
 `tests/e2e/make_fixture.py` builds a synthetic project using macOS `say` and ffmpeg:
 
-1. Generate speech per segment with `say -v Samantha -o seg.aiff "<text>"`, including deliberate restarts, e.g. `"The agent joins the call and then"` followed by `"The agent joins the call and then subscribes to the audio track."`
-2. Concatenate segments with 300 ms silences into two files (one restart crossing the file boundary).
+1. Generate speech per segment with `say -v Samantha -o seg.aiff "<text>"`, including deliberate retakes, e.g. `"The agent joins the call and then"` followed by `"The agent joins the call and then subscribes to the audio track."`
+2. Concatenate segments with 300 ms silences into two files (one retake crossing the file boundary).
 3. Mux with a video test pattern: `ffmpeg -f lavfi -i testsrc2=size=1920x1080:rate=30000/1001 -i speech.wav -shortest -c:v prores_ks -c:a pcm_s16le 01.mov`.
 4. Store the expected kept/dropped text alongside.
 
@@ -571,7 +576,8 @@ T2, T3, T4 and T7 can run in parallel after T1. T7 works from a hand-written syn
 
 ## 12. Known risks (read before starting)
 
-- **Source timecode.** Forgetting to add the asset's start timecode to clip `start` makes every clip point at the wrong frames. Covered by the timecode acceptance test in §7.1 and the rule in §7.6.
-- **Variable frame rate.** Phone footage is often VFR. FCP conforms it; transcript times may drift against FCP's frames on long clips. Phase 1 only warns. If drift shows up in testing, add an optional ffmpeg constant-frame-rate proxy step in Phase 2, still keeping originals in the FCPXML.
-- **ASR smoothing.** Parakeet may normalize false starts ("the the" → "the"), hiding very short restarts. Accept this in Phase 1; Phase 2's clap detection covers it.
+- **Source timecode.** Forgetting to add the asset's start timecode to asset-clip `start` makes every asset-clip point at the wrong frames. Covered by the timecode acceptance test in §7.1 and the rule in §7.6.
+- **Variable frame rate.** Phone footage is often VFR. FCP conforms it; transcript times may drift against FCP's frames on long sources. Phase 1 only warns. If drift shows up in testing, add an optional ffmpeg constant-frame-rate proxy step in Phase 2, still keeping originals in the FCPXML.
+- **ASR smoothing.** Parakeet may normalize false starts ("the the" → "the"), hiding very short retakes. Accept this in Phase 1; Phase 2's clap detection covers it.
+- **Missing punctuation.** A finished sentence is detected only by a word ending in `.`, `?`, or `!`. If the transcript omits that mark, the sentence is treated as aborted and can be auto-dropped. Accept this in Phase 1.
 - **Format name.** FCP is picky about `<format name>`. Always copy it from the reference export rather than generating it.

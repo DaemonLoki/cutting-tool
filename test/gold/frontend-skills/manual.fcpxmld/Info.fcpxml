@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+
+<fcpxml version="1.14">
+    <resources>
+        <format id="r1" name="FFVideoFormat3840x2160p2398" frameDuration="1001/24000s" width="3840" height="2160" colorSpace="1-1-1 (Rec. 709)"/>
+        <asset id="r2" name="1-intro" uid="85DB906F8E4F24AB780D6F6448EB59E9" start="115977862/24000s" duration="928928/24000s" hasVideo="1" format="r1" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+            <media-rep kind="original-media" sig="85DB906F8E4F24AB780D6F6448EB59E9" src="file:///Users/stefanblos/Downloads/sample-videos/Videos/1-intro.MP4">
+                <bookmark>Ym9va5gDAAAAAAUQQAAAALCGHnX3n+HXbCrut3qmmj/BpAuu51JVNE7vJPSYh/VyAAAAAAAAAAAAAAAAAAAAAFQCAAAgAAAAAQIAAM51QWIk6ZmXEnkJ/qrc72eCZpjfKmLziUslmvf8GMP5BAAAAAMDAAAAGAAoBQAAAAEBAABVc2VycwAAAAoAAAABAQAAc3RlZmFuYmxvcwAACQAAAAEBAABEb3dubG9hZHMAAAANAAAAAQEAAHNhbXBsZS12aWRlb3MAAAAGAAAAAQEAAFZpZGVvcwAACwAAAAEBAAAxLWludHJvLk1QNAAYAAAAAQYAADgAAABIAAAAXAAAAHAAAACIAAAAmAAAAAgAAAAEAwAAZEIAAAAAAAAIAAAABAMAAIAiBAAAAAAACAAAAAQDAADNqTQAAAAAAAgAAAAEAwAABfn3CgAAAAAIAAAABAMAAG/69woAAAAACAAAAAQDAAAg+fcKAAAAABgAAAABBgAAzAAAANwAAADsAAAA/AAAAAwBAAAcAQAACAAAAAAEAABByDshcgAAABgAAAABAgAAAQAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAEFAAAEAAAAAwMAAAgAAAAEAAAAAwMAAAQAAAAIAAAABAMAAAQAAAAAAAAABAAAAAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAATWFjaW50b3NoIEhECAAAAAQDAAAAkIKW5wAAAAgAAAAABAAAQcgygjaAAAAkAAAAAQEAAERBNzNGREQzLTAzMDItNDIxQi05QjY0LUU3Mjk5QkU3Rjc2QhgAAAABAgAAgQAAAAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAA/AAAAP7///8BAAAAAAAAABQAAAAEEAAArAAAAAAAAAAFEAAALAEAAAAAAAAQEAAAXAEAAAAAAABAEAAATAEAAAAAAABUEAAAhAEAAAAAAABVEAAAkAEAAAAAAABWEAAAfAEAAAAAAAACIAAASAIAAAAAAAAFIAAAuAEAAAAAAAAQIAAAyAEAAAAAAAARIAAA/AEAAAAAAAASIAAA3AEAAAAAAAATIAAA7AEAAAAAAAAgIAAAKAIAAAAAAAAwIAAAfAEAAAAAAAABwAAAnAEAAAAAAAARwAAASAAAAAAAAAASwAAArAEAAAAAAAAQ0AAALAAAAAAAAACE8AAABAAAAAAAAAA=</bookmark>
+            </media-rep>
+            <metadata>
+                <md key="com.apple.proapps.studio.rawToLogConversion" value="0"/>
+                <md key="com.apple.proapps.spotlight.kMDItemProfileName" value="(2-2-1)"/>
+                <md key="com.apple.proapps.studio.cameraISO" value="0"/>
+                <md key="com.apple.proapps.studio.cameraColorTemperature" value="0"/>
+                <md key="com.apple.proapps.spotlight.kMDItemCodecs">
+                    <array>
+                        <string>HEVC</string>
+                        <string>MPEG-4 AAC</string>
+                    </array>
+                </md>
+                <md key="com.apple.proapps.mio.ingestDate" value="2026-10-07 11:10:35 +0200"/>
+            </metadata>
+        </asset>
+        <asset id="r3" name="2-skills" uid="6F81B8D71C670546DDCD5B06BAEE1B31" start="114559445/24000s" duration="1418417/24000s" hasVideo="1" format="r1" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+            <media-rep kind="original-media" sig="6F81B8D71C670546DDCD5B06BAEE1B31" src="file:///Users/stefanblos/Downloads/sample-videos/Videos/2-skills.MP4">
+                <bookmark>Ym9va5gDAAAAAAUQQAAAAM7x8dcs2pvvfYzX1aL5chUJ/vOJq3o4s3ZKBPiokRLTAAAAAAAAAAAAAAAAAAAAAFQCAAAgAAAAAQIAAEumf5LHEI2pD7g19k56NjnfLZSzWRRM5bYDv+kmL54sBAAAAAMDAAAAGAAoBQAAAAEBAABVc2VycwAAAAoAAAABAQAAc3RlZmFuYmxvcwAACQAAAAEBAABEb3dubG9hZHMAAAANAAAAAQEAAHNhbXBsZS12aWRlb3MAAAAGAAAAAQEAAFZpZGVvcwAADAAAAAEBAAAyLXNraWxscy5NUDQYAAAAAQYAADgAAABIAAAAXAAAAHAAAACIAAAAmAAAAAgAAAAEAwAAZEIAAAAAAAAIAAAABAMAAIAiBAAAAAAACAAAAAQDAADNqTQAAAAAAAgAAAAEAwAABfn3CgAAAAAIAAAABAMAAG/69woAAAAACAAAAAQDAAAf+fcKAAAAABgAAAABBgAAzAAAANwAAADsAAAA/AAAAAwBAAAcAQAACAAAAAAEAABByDshWIAAABgAAAABAgAAAQAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAEFAAAEAAAAAwMAAAgAAAAEAAAAAwMAAAQAAAAIAAAABAMAAAQAAAAAAAAABAAAAAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAATWFjaW50b3NoIEhECAAAAAQDAAAAkIKW5wAAAAgAAAAABAAAQcgygjaAAAAkAAAAAQEAAERBNzNGREQzLTAzMDItNDIxQi05QjY0LUU3Mjk5QkU3Rjc2QhgAAAABAgAAgQAAAAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAA/AAAAP7///8BAAAAAAAAABQAAAAEEAAArAAAAAAAAAAFEAAALAEAAAAAAAAQEAAAXAEAAAAAAABAEAAATAEAAAAAAABUEAAAhAEAAAAAAABVEAAAkAEAAAAAAABWEAAAfAEAAAAAAAACIAAASAIAAAAAAAAFIAAAuAEAAAAAAAAQIAAAyAEAAAAAAAARIAAA/AEAAAAAAAASIAAA3AEAAAAAAAATIAAA7AEAAAAAAAAgIAAAKAIAAAAAAAAwIAAAfAEAAAAAAAABwAAAnAEAAAAAAAARwAAASAAAAAAAAAASwAAArAEAAAAAAAAQ0AAALAAAAAAAAACE8AAABAAAAAAAAAA=</bookmark>
+            </media-rep>
+            <metadata>
+                <md key="com.apple.proapps.studio.rawToLogConversion" value="0"/>
+                <md key="com.apple.proapps.spotlight.kMDItemProfileName" value="(2-2-1)"/>
+                <md key="com.apple.proapps.studio.cameraISO" value="0"/>
+                <md key="com.apple.proapps.studio.cameraColorTemperature" value="0"/>
+                <md key="com.apple.proapps.spotlight.kMDItemCodecs">
+                    <array>
+                        <string>HEVC</string>
+                        <string>MPEG-4 AAC</string>
+                    </array>
+                </md>
+                <md key="com.apple.proapps.mio.ingestDate" value="2026-10-07 11:10:35 +0200"/>
+            </metadata>
+        </asset>
+    </resources>
+    <library location="file:///Users/stefanblos/Downloads/sample-videos/sample-videos.fcpbundle/">
+        <event name="7.10.26" uid="C0CA85DC-99B7-476F-8504-91D6AA31301B">
+            <project name="sample-videos" uid="D4A8D7D8-58F8-4B92-A86C-DBA2A6EC2502" modDate="2026-10-07 11:12:31 +0200">
+                <sequence format="r1" duration="1055054/24000s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+                    <spine>
+                        <asset-clip ref="r2" offset="0s" name="1-intro" start="116172056/24000s" duration="303303/24000s" tcFormat="NDF" audioRole="dialogue">
+                            <keyword start="57988931/12000s" duration="928928/24000s" value="videos"/>
+                        </asset-clip>
+                        <asset-clip ref="r3" offset="303303/24000s" name="2-skills" start="114875761/24000s" duration="287287/24000s" tcFormat="NDF" audioRole="dialogue">
+                            <keyword start="22911889/4800s" duration="1418417/24000s" value="videos"/>
+                        </asset-clip>
+                        <asset-clip ref="r3" offset="590590/24000s" name="2-skills" start="115395280/24000s" duration="379379/24000s" tcFormat="NDF" audioRole="dialogue">
+                            <keyword start="22911889/4800s" duration="1418417/24000s" value="videos"/>
+                        </asset-clip>
+                        <asset-clip ref="r3" offset="969969/24000s" name="2-skills" start="115822707/24000s" duration="85085/24000s" tcFormat="NDF" audioRole="dialogue">
+                            <keyword start="22911889/4800s" duration="1418417/24000s" value="videos"/>
+                        </asset-clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+        <smart-collection name="Projects" match="all">
+            <match-clip rule="is" type="project"/>
+        </smart-collection>
+        <smart-collection name="All Video" match="any">
+            <match-media rule="is" type="videoOnly"/>
+            <match-media rule="is" type="videoWithAudio"/>
+        </smart-collection>
+        <smart-collection name="Audio Only" match="all">
+            <match-media rule="is" type="audioOnly"/>
+        </smart-collection>
+        <smart-collection name="Stills" match="all">
+            <match-media rule="is" type="stills"/>
+        </smart-collection>
+        <smart-collection name="Favorites" match="all">
+            <match-ratings value="favorites"/>
+        </smart-collection>
+        <smart-collection name="Missing Analysis" match="all">
+            <match-analysis-type rule="isMissing" value="any"/>
+        </smart-collection>
+    </library>
+</fcpxml>
