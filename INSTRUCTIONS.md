@@ -33,11 +33,19 @@ uv run cutter --help
 Run Cutter through `uv run cutter ...` from the repository root. You can also
 activate `.venv` and invoke `cutter` directly.
 
-The default profile is `profiles/long.yaml`. It is currently the only supplied
-profile. Every key is explained in `profiles/long.md`, including which way to
-turn the retake thresholds when repetitions are missed. Change a value in the
-YAML, or pass `--set key.path=value` for one run. A stage reruns when the
-keys it reads have changed.
+When `--profile` is omitted, Cutter measures the frame and chooses for you.
+A horizontal or square picture uses `profiles/long.yaml`. A vertical picture
+uses `profiles/short.yaml`, including a phone file stored sideways with a
+90° rotation tag. The command prints the choice, for example
+`profile short (vertical, 1080x1920)`. Pass `--profile long` or
+`--profile short` to override it.
+
+`short` is the same pipeline with a faster pace: pauses longer than 150 ms
+are cut, and the handles around each word are shorter. Every key is
+explained in `profiles/long.md`. The short-form numbers are explained in
+`profiles/short.md`. Change a value in the YAML, or pass
+`--set key.path=value` for one run. A stage reruns when the keys it reads
+have changed.
 
 ## Create a project
 
@@ -363,7 +371,8 @@ there before running eval. Pipeline artifacts are written in the folder that
 holds `raw/` (`test/fixtures/sample/artifacts/` when using the sample path).
 `eval.json` is written in the gold folder.
 
-Eval uses the `long` profile and calls the judge when `judge.enabled` is true.
+Eval picks `long` or `short` from the frame, the same way `run` does, and
+calls the judge when `judge.enabled` is true.
 It has no `--no-llm` flag. Skip the model with `--set judge.enabled=false`.
 If the endpoint is down, the judge warning is logged and scoring continues
 with the retake decisions. Eval then compares word midpoints with the gold

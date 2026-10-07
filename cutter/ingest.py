@@ -44,6 +44,7 @@ class MediaInfo:
     audio_channels: int
     timecode: str
     duration: Fraction
+    rotation: int = 0
 
     @property
     def nominal_fps(self) -> int:
@@ -216,6 +217,7 @@ def _parse_probe(path: Path, payload: dict) -> MediaInfo:
         audio_channels=int(channels),
         timecode=timecode,
         duration=duration,
+        rotation=_rotation(video),
     )
 
 
@@ -325,6 +327,23 @@ def _wavs_present(project_dir: Path, data: SourcesData) -> bool:
         (project_dir / source.asr_wav).is_file() and (project_dir / source.analysis_wav).is_file()
         for source in data.sources
     )
+
+
+def _rotation(video: dict) -> int:
+    """Display rotation in degrees. 90 and 270 swap width and height."""
+    tags = video.get("tags") or {}
+    raw = tags.get("rotate")
+    if raw is None:
+        for item in video.get("side_data_list") or []:
+            if isinstance(item, dict) and item.get("rotation") is not None:
+                raw = item["rotation"]
+                break
+    if raw is None:
+        return 0
+    try:
+        return int(round(float(raw)))
+    except (TypeError, ValueError):
+        return 0
 
 
 def _fraction(raw: object, label: str) -> Fraction:

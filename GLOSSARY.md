@@ -53,4 +53,5 @@ A marker, resolved in Final Cut, that a person should review a decision before t
 A finished human edit of a project, the reference for which words should have been kept.
 
 **Profile**:
-The named thresholds for one recording shape. Phase 1 has a single profile, `long`.
+The named thresholds for one recording shape. `long` is the horizontal cut.
+`short` is the vertical cut. When `--profile` is omitted, the frame decides.

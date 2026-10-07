@@ -1,0 +1,83 @@
+# Thresholds for one English speaker, one camera, short-form.
+# Same keys as profiles/long.yaml. Key meanings are in profiles/long.md.
+# What changed for pacing is in profiles/short.md.
+# Retake detection matches long.yaml. Only the cut is tighter.
+
+ingest:
+  # Extensions in raw/. Case is ignored. Hidden files are ignored either way.
+  allowed_extensions: [".mov", ".mp4", ".m4v"]
+  # Mono WAV sent to Parakeet, in Hz.
+  asr_sample_rate: 16000
+  # Mono WAV used to snap cut points, in Hz. Source video is not re-encoded.
+  analysis_sample_rate: 48000
+
+transcribe:
+  # Hugging Face id. The first run downloads this model.
+  model: "mlx-community/parakeet-tdt-0.6b-v2"
+  # Seconds of audio per Parakeet chunk.
+  chunk_duration_s: 120
+  # Seconds repeated at each chunk boundary. Keep this below chunk_duration_s.
+  overlap_duration_s: 15
+
+retakes:
+  # Words compared from the start of the later take and an earlier run.
+  window_words: 20
+  # Shortest similar run that counts as a retake.
+  # Matches under 5 words still need one word that is not a stopword.
+  min_match_words: 3
+  # Rapidfuzz ratio, 0–100. Lower treats more spellings as the same word.
+  word_similarity: 85
+  # Non-matching words allowed inside the window when the next word matches.
+  max_mismatches: 5
+  # Seconds from the later take back to the earlier take.
+  max_lookback_s: 90
+  # Aborted spans longer than this stay, flagged long_segment, unless the judge drops them.
+  auto_drop_max_s: 20
+  # Flag a drop when the retake is missing more than this share of the earlier content words.
+  missing_content_ratio: 0.5
+  # null uses the built-in English function words. A path replaces that list.
+  stopwords_file: null
+
+judge:
+  # false skips the model and keeps the retake decisions.
+  enabled: true
+  # OpenAI-compatible server. LM Studio is the usual one on this machine.
+  base_url: "http://localhost:1234/v1"
+  # Name of the model loaded in that server.
+  model: "google/gemma-4-12b-qat"
+  # Verdicts below this (0–1) stay flagged and do not change the cut.
+  min_confidence: 0.7
+  # Seconds to wait for one verdict. A timeout leaves decisions unchanged.
+  timeout_s: 60
+
+tighten:
+  # Gaps longer than this, in ms, start a new range. long.yaml uses 400.
+  # 150 removes a breath. Word-to-word gaps under that stay in the phrase.
+  max_gap_ms: 150
+  # Milliseconds kept before the first word. long.yaml uses 80.
+  pad_head_ms: 40
+  # Milliseconds kept after the last word. long.yaml uses 120.
+  pad_tail_ms: 50
+  # Each side of a cut, in ms, searched for the quietest moment.
+  # Smaller than long.yaml (150) so the snap does not walk back into the pause.
+  snap_window_ms: 60
+  # In-point stays at least this far before the first word. long.yaml uses 30.
+  min_head_ms: 20
+  # Out-point stays at least this far after the last word. long.yaml uses 40.
+  min_tail_ms: 25
+  # Loudness is measured in frames of this many milliseconds.
+  rms_frame_ms: 10
+  # Shorter ranges are merged into a neighbour or removed with a CHECK marker.
+  min_range_frames: 6
+
+fcpxml:
+  # Must match the DTD below.
+  version: "1.14"
+  # Missing file: the FCPXML is still written, with a warning.
+  dtd_path: "/Applications/Final Cut Pro.app/Contents/Frameworks/Interchange.framework/Versions/A/Resources/FCPXMLv1_14.dtd"
+  # {project} is the project folder name.
+  event_name: "{project} – cutter"
+  project_name: "{project} – rough cut"
+  rejects_project_name: "{project} – rejects"
+  # audioRole on each clip in Final Cut.
+  audio_role: "dialogue"

@@ -9,7 +9,8 @@ from typing import Annotated
 import typer
 from pydantic import ValidationError
 
-from cutter.config import REPO_ROOT, ConfigError, load_profile
+from cutter.choose import FrameUnknown, choose_profile
+from cutter.config import REPO_ROOT, ConfigError, Profile, load_profile
 from cutter.evaluate import evaluate_gold
 from cutter.fcpxml import FcpxmlValidationError, export_fcpxml
 from cutter.ingest import IngestError, ToolMissing, ingest_project
@@ -25,7 +26,16 @@ app = typer.Typer(
     no_args_is_help=True,
 )
 
-ProfileOpt = Annotated[str, typer.Option("--profile", help="Profile name under profiles/.")]
+ProfileOpt = Annotated[
+    str | None,
+    typer.Option(
+        "--profile",
+        help=(
+            "Profile under profiles/. Omit to use long for a horizontal or "
+            "square frame and short for a vertical one."
+        ),
+    ),
+]
 ForceOpt = Annotated[bool, typer.Option("--force", help="Re-run even when the cache matches.")]
 SetOpt = Annotated[
     list[str] | None,
@@ -40,16 +50,12 @@ def main() -> None:
 @app.command()
 def ingest(
     project_dir: Annotated[Path, typer.Argument(help="Project folder.")],
-    profile: ProfileOpt = "long",
+    profile: ProfileOpt = None,
     force: ForceOpt = False,
 ) -> None:
     """Validate sources and extract audio."""
     try:
-        loaded = load_profile(profile)
-    except ConfigError as exc:
-        typer.echo(str(exc), err=True)
-        raise typer.Exit(1) from exc
-    try:
+        loaded = _resolve_profile(project_dir, profile)
         data = ingest_project(project_dir, loaded, force=force)
     except IngestError as exc:
         typer.echo(str(exc), err=True)
@@ -68,7 +74,8 @@ def transcribe(
 ) -> None:
     """Transcribe speech to words."""
     try:
-        artifact = transcribe_project(project_dir, force=force)
+        loaded = _resolve_profile(project_dir)
+        artifact = transcribe_project(project_dir, profile=loaded, force=force)
     except (FileNotFoundError, TimestampError, ValidationError) as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
@@ -90,7 +97,8 @@ def retakes(
         typer.echo(f"missing words artifact: {words_path}", err=True)
         raise typer.Exit(1)
     try:
-        artifact = run_retakes(project_dir, force=force)
+        loaded = _resolve_profile(project_dir)
+        artifact = run_retakes(project_dir, loaded, force=force)
     except (FileNotFoundError, ValidationError) as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
@@ -112,7 +120,8 @@ def judge(
         typer.echo(f"missing words artifact: {words_path}", err=True)
         raise typer.Exit(1)
     try:
-        artifact = run_judge(project_dir, force=force, no_llm=no_llm)
+        loaded = _resolve_profile(project_dir)
+        artifact = run_judge(project_dir, loaded, force=force, no_llm=no_llm)
     except (FileNotFoundError, ValidationError, OSError) as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
@@ -126,7 +135,8 @@ def tighten(
 ) -> None:
     """Place cut points and build the rough cut."""
     try:
-        artifact = run_tighten(project_dir, force=force)
+        loaded = _resolve_profile(project_dir)
+        artifact = run_tighten(project_dir, loaded, force=force)
     except (FileNotFoundError, ValidationError, OSError) as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
@@ -157,7 +167,7 @@ def export(
         result = export_fcpxml(
             sources.data,
             timeline.data,
-            load_profile(),
+            _resolve_profile(project_dir),
             project_dir.name,
             project_dir / "out" / f"{project_dir.name}.fcpxml",
             word_starts,
@@ -175,7 +185,7 @@ def export(
 @app.command()
 def run(
     project_dir: Annotated[Path, typer.Argument(help="Project folder.")],
-    profile: ProfileOpt = "long",
+    profile: ProfileOpt = None,
     no_llm: Annotated[bool, typer.Option("--no-llm", help="Skip the judge.")] = False,
     force: ForceOpt = False,
     set_values: SetOpt = None,
@@ -183,11 +193,7 @@ def run(
     """Run every stage and write the rough cut."""
     _configure_logging()
     try:
-        loaded = load_profile(profile, set_values)
-    except ConfigError as exc:
-        typer.echo(str(exc), err=True)
-        raise typer.Exit(1) from exc
-    try:
+        loaded = _resolve_profile(project_dir, profile, set_values)
         summary = run_project(project_dir, loaded, no_llm=no_llm, force=force)
     except IngestError as exc:
         typer.echo(str(exc), err=True)
@@ -215,9 +221,10 @@ def evaluate(
     """Score a rough cut against a gold edit."""
     _configure_logging()
     try:
-        loaded = load_profile("long", set_values)
+        load_profile("long", set_values)
         manual = _manual_fcpxml(gold_dir)
         project_dir = _eval_project(gold_dir)
+        loaded = _resolve_profile(project_dir, overrides=set_values)
     except (ConfigError, FileNotFoundError) as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
@@ -299,6 +306,38 @@ def _echo_summary(summary: RunSummary) -> None:
     )
     typer.echo(f"{summary.dropped} dropped, {summary.kept} kept, {summary.flagged} flagged")
     typer.echo(f"wrote {summary.fcpxml}")
+
+
+def _resolve_profile(
+    project_dir: Path,
+    name: str | None = None,
+    overrides: list[str] | None = None,
+) -> Profile:
+    """Load ``name``, or long/short from the frame when ``name`` is omitted.
+
+    A project with nothing to measure yet keeps ``long``. The stage that
+    follows reports the missing raw folder or artifact.
+    """
+    if name is not None or overrides:
+        try:
+            load_profile(name or "long", overrides)
+        except ConfigError as exc:
+            typer.echo(str(exc), err=True)
+            raise typer.Exit(1) from exc
+    if name is not None:
+        return load_profile(name, overrides)
+    try:
+        choice = choose_profile(project_dir)
+    except FrameUnknown:
+        return load_profile("long", overrides)
+    except IngestError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    except ToolMissing as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(2) from exc
+    typer.echo(f"profile {choice.name} ({choice.orientation}, {choice.width}x{choice.height})")
+    return load_profile(choice.name, overrides)
 
 
 def _manual_fcpxml(gold_dir: Path) -> Path:

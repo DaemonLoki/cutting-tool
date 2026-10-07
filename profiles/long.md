@@ -1,9 +1,10 @@
 # `long` profile
 
-`profiles/long.yaml` is the only profile. It is the set of thresholds for one
-English speaker, one camera, recorded long-form. This file explains every
-key. The numbers in the YAML are what Cutter reads. Comments there are
-reminders; this file is the one to read while changing them.
+`profiles/long.yaml` is the long-form profile: one English speaker, one
+camera. Cutter selects it for a horizontal or square frame. A vertical frame
+selects `profiles/short.yaml` instead; see `profiles/short.md`. This file
+explains every key. The numbers in the YAML are what Cutter reads. Comments
+there are reminders; this file is the one to read while changing them.
 
 Try one change without editing the file:
 
@@ -98,9 +99,10 @@ Lookback on that pair is measured inside the earlier source only.
 
 `window_words`
 : How many words, counting from the start of both runs, are eligible to
-  match. The default `6` compares the first six words of the later take with
-  six words of an earlier run. Raising it lets a longer shared opening count.
-  Lowering it stops the comparison sooner, so a long repeat that differs
+  match. The default `20` compares the first twenty words of the later take
+  with twenty words of an earlier run. Raising it lets a longer shared
+  opening count. Lowering it stops the comparison sooner, so a long repeat
+  that differs
   early still needs `min_match_words` words before the difference.
 
 `min_match_words`
@@ -118,8 +120,8 @@ Lookback on that pair is measured inside the earlier source only.
 
 `max_mismatches`
 : How many non-matching words may sit inside the window when the word after
-  each of them matches. The default `1` allows a single insertion or
-  substitution (`the agent joins` against `the agent then joins`). A second
+  each of them matches. The default `5` allows up to five insertions or
+  substitutions (`the agent joins` against `the agent then joins`). A second
   difference in a row ends the match. `0` requires an unbroken run. Raising
   it keeps matching through messier restarts.
 
@@ -146,8 +148,8 @@ Lookback on that pair is measured inside the earlier source only.
   The later window is as long as the dropped span, plus 10 words. If the
   share of dropped content words absent from that window is greater than
   this ratio, the span is still dropped but flagged
-  `retake_missing_content`. The default `0.3` flags a retake that left out
-  at least 30% of the earlier content words. Raise it toward `1` to drop
+  `retake_missing_content`. The default `0.5` flags a retake that left out
+  more than half of the earlier content words. Raise it toward `1` to drop
   those takes without a flag. Lower it to flag more often. An earlier span
   with no content words skips this check.
 

@@ -13,6 +13,21 @@ DTD = (
 )
 
 
+def test_short_profile_cuts_tighter_than_long():
+    long_form = load_profile("long")
+    short_form = load_profile("short")
+    assert short_form.tighten.max_gap_ms < long_form.tighten.max_gap_ms
+    assert short_form.tighten.pad_head_ms < long_form.tighten.pad_head_ms
+    assert short_form.tighten.pad_tail_ms < long_form.tighten.pad_tail_ms
+    assert short_form.tighten.snap_window_ms < long_form.tighten.snap_window_ms
+    assert short_form.tighten.min_head_ms < long_form.tighten.min_head_ms
+    assert short_form.tighten.min_tail_ms < long_form.tighten.min_tail_ms
+    assert short_form.tighten.pad_head_ms >= short_form.tighten.min_head_ms
+    assert short_form.tighten.pad_tail_ms >= short_form.tighten.min_tail_ms
+    assert short_form.retakes == long_form.retakes
+    assert short_form.judge == long_form.judge
+
+
 def test_long_profile_loads():
     profile = load_profile("long")
     assert profile.fcpxml.version == "1.14"
