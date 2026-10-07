@@ -1,0 +1,44 @@
+ingest:
+  allowed_extensions: [".mov", ".mp4", ".m4v"]
+  asr_sample_rate: 16000
+  analysis_sample_rate: 48000
+
+transcribe:
+  model: "mlx-community/parakeet-tdt-0.6b-v2"
+  chunk_duration_s: 120
+  overlap_duration_s: 15
+
+retakes:
+  window_words: 6            # words compared at a retake candidate
+  min_match_words: 3         # minimum consecutive matching words
+  word_similarity: 85        # rapidfuzz ratio per word, 0–100
+  max_mismatches: 1          # tolerated mismatched words inside the match
+  max_lookback_s: 90
+  auto_drop_max_s: 20        # longer failed segments are flagged, not auto-dropped
+  missing_content_ratio: 0.3 # flag if dropped segment has this share of content words the retake lacks
+  stopwords_file: null       # null = built-in English list
+
+judge:
+  enabled: true
+  base_url: "http://localhost:1234/v1"
+  model: "qwen3-14b"         # whatever is loaded in LM Studio
+  min_confidence: 0.7
+  timeout_s: 60
+
+tighten:
+  max_gap_ms: 400            # gaps longer than this get cut
+  pad_head_ms: 80
+  pad_tail_ms: 120
+  snap_window_ms: 150
+  min_head_ms: 30            # in-point never closer than this to first word
+  min_tail_ms: 40            # out-point never closer than this to last word
+  rms_frame_ms: 10
+  min_range_frames: 6        # shorter ranges are merged into neighbours or dropped with a CHECK marker
+
+fcpxml:
+  version: "1.14"            # must match test/fixtures/reference.fcpxmld/Info.fcpxml
+  dtd_path: "/Applications/Final Cut Pro.app/Contents/Frameworks/Interchange.framework/Versions/A/Resources/FCPXMLv1_14.dtd"
+  event_name: "{project} – cutter"
+  project_name: "{project} – rough cut"
+  rejects_project_name: "{project} – rejects"
+  audio_role: "dialogue"
