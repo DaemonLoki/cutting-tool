@@ -1,18 +1,23 @@
-"""Cutter commands. Stages land one at a time; unimplemented ones say so."""
+"""Cutter commands."""
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import Annotated
 
 import typer
 from pydantic import ValidationError
 
-from cutter.config import ConfigError, load_profile
+from cutter.config import REPO_ROOT, ConfigError, load_profile
+from cutter.evaluate import evaluate_gold
 from cutter.fcpxml import FcpxmlValidationError, export_fcpxml
 from cutter.ingest import IngestError, ToolMissing, ingest_project
-from cutter.models import SourcesArtifact, TimelineArtifact, WordsArtifact
+from cutter.judge import run_judge
+from cutter.models import Decision, SourcesArtifact, TimelineArtifact, WordsArtifact
 from cutter.retakes import run_retakes
+from cutter.run import RunSummary, run_project
+from cutter.tighten import run_tighten
 from cutter.transcribe import TimestampError, transcribe_project, words_between
 
 app = typer.Typer(
@@ -89,13 +94,7 @@ def retakes(
     except (FileNotFoundError, ValidationError) as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
-    decisions = artifact.data.decisions
-    dropped = sum(decision.action == "drop" for decision in decisions)
-    flagged = sum(decision.flag for decision in decisions)
-    decisions_path = project_dir / "artifacts" / "decisions.json"
-    typer.echo(
-        f"{len(decisions)} decisions, {dropped} dropped, {flagged} flagged -> {decisions_path}"
-    )
+    _echo_decisions(artifact.data.decisions, project_dir / "artifacts" / "decisions.json")
 
 
 @app.command()
@@ -107,7 +106,17 @@ def judge(
     ] = False,
 ) -> None:
     """Judge ambiguous aborted takes."""
-    _unimplemented("judge")
+    _configure_logging()
+    words_path = project_dir / "artifacts" / "words.json"
+    if not words_path.is_file():
+        typer.echo(f"missing words artifact: {words_path}", err=True)
+        raise typer.Exit(1)
+    try:
+        artifact = run_judge(project_dir, force=force, no_llm=no_llm)
+    except (FileNotFoundError, ValidationError, OSError) as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    _echo_decisions(artifact.data.decisions, project_dir / "artifacts" / "decisions.json")
 
 
 @app.command()
@@ -116,7 +125,16 @@ def tighten(
     force: ForceOpt = False,
 ) -> None:
     """Place cut points and build the rough cut."""
-    _unimplemented("tighten")
+    try:
+        artifact = run_tighten(project_dir, force=force)
+    except (FileNotFoundError, ValidationError, OSError) as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    timeline_path = project_dir / "artifacts" / "timeline.json"
+    typer.echo(
+        f"{len(artifact.data.ranges)} ranges, {len(artifact.data.dropped)} dropped "
+        f"-> {timeline_path}"
+    )
 
 
 @app.command()
@@ -163,8 +181,30 @@ def run(
     set_values: SetOpt = None,
 ) -> None:
     """Run every stage and write the rough cut."""
-    _load(profile, set_values)
-    _unimplemented("run")
+    _configure_logging()
+    try:
+        loaded = load_profile(profile, set_values)
+    except ConfigError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    try:
+        summary = run_project(project_dir, loaded, no_llm=no_llm, force=force)
+    except IngestError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    except ToolMissing as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(2) from exc
+    except ImportError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(2) from exc
+    except FcpxmlValidationError as exc:
+        typer.echo(f"DTD validation failed -> {exc.invalid_path}", err=True)
+        raise typer.Exit(3) from exc
+    except (FileNotFoundError, TimestampError, ValidationError, OSError) as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    _echo_summary(summary)
 
 
 @app.command("eval")
@@ -173,8 +213,50 @@ def evaluate(
     set_values: SetOpt = None,
 ) -> None:
     """Score a rough cut against a gold edit."""
-    _load("long", set_values)
-    _unimplemented("eval")
+    _configure_logging()
+    try:
+        loaded = load_profile("long", set_values)
+        manual = _manual_fcpxml(gold_dir)
+        project_dir = _eval_project(gold_dir)
+    except (ConfigError, FileNotFoundError) as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    try:
+        run_project(project_dir, loaded, no_llm=False, force=False)
+        artifacts = project_dir / "artifacts"
+        sources = SourcesArtifact.model_validate_json(
+            (artifacts / "sources.json").read_text(encoding="utf-8")
+        )
+        words = WordsArtifact.model_validate_json(
+            (artifacts / "words.json").read_text(encoding="utf-8")
+        )
+        timeline = TimelineArtifact.model_validate_json(
+            (artifacts / "timeline.json").read_text(encoding="utf-8")
+        )
+        _metrics, table = evaluate_gold(
+            words=words.data.words,
+            sources=sources.data,
+            timeline=timeline.data,
+            manual_fcpxml=manual,
+            eval_json=gold_dir / "eval.json",
+        )
+    except IngestError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    except ToolMissing as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(2) from exc
+    except ImportError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(2) from exc
+    except FcpxmlValidationError as exc:
+        typer.echo(f"DTD validation failed -> {exc.invalid_path}", err=True)
+        raise typer.Exit(3) from exc
+    except (FileNotFoundError, TimestampError, ValidationError, OSError, ValueError) as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    typer.echo(table)
+    typer.echo(f"wrote {gold_dir / 'eval.json'}")
 
 
 @app.command()
@@ -204,14 +286,44 @@ def _word_starts(path: Path) -> dict[int, float] | None:
     return {word.i: word.start for word in artifact.data.words}
 
 
-def _load(profile: str, overrides: list[str] | None) -> None:
-    try:
-        load_profile(profile, overrides)
-    except ConfigError as exc:
-        typer.echo(str(exc), err=True)
-        raise typer.Exit(1) from exc
+def _echo_decisions(decisions: list[Decision], path: Path) -> None:
+    dropped = sum(decision.action == "drop" for decision in decisions)
+    flagged = sum(decision.flag for decision in decisions)
+    typer.echo(f"{len(decisions)} decisions, {dropped} dropped, {flagged} flagged -> {path}")
 
 
-def _unimplemented(command: str) -> None:
-    typer.echo(f"cutter {command} is not implemented yet.", err=True)
-    raise typer.Exit(1)
+def _echo_summary(summary: RunSummary) -> None:
+    typer.echo(
+        f"{summary.sources} sources, {summary.raw_duration_s:.3f}s raw, "
+        f"{summary.output_duration_s:.3f}s output"
+    )
+    typer.echo(f"{summary.dropped} dropped, {summary.kept} kept, {summary.flagged} flagged")
+    typer.echo(f"wrote {summary.fcpxml}")
+
+
+def _manual_fcpxml(gold_dir: Path) -> Path:
+    candidates = [
+        gold_dir / "manual.fcpxmld" / "Info.fcpxml",
+        gold_dir / "manual.fcpxml",
+    ]
+    for path in candidates:
+        if path.is_file():
+            return path
+    joined = " or ".join(str(path) for path in candidates)
+    raise FileNotFoundError(f"missing gold edit: {joined}")
+
+
+def _eval_project(gold_dir: Path) -> Path:
+    """Project whose raw sources the gold edit was cut from."""
+    if (gold_dir / "raw").is_dir():
+        return gold_dir
+    sample = REPO_ROOT / "test" / "fixtures" / "sample"
+    if (sample / "raw").is_dir():
+        return sample
+    raise FileNotFoundError(
+        f"no raw sources for eval. Expected {gold_dir / 'raw'} or {sample / 'raw'}"
+    )
+
+
+def _configure_logging() -> None:
+    logging.basicConfig(level=logging.WARNING, format="%(message)s")

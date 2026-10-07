@@ -35,10 +35,24 @@ def test_run_rejects_an_unknown_override(tmp_path):
 def test_run_accepts_a_valid_override_then_stops(tmp_path):
     result = runner.invoke(app, ["run", str(tmp_path), "--set", "judge.enabled=false"])
     assert result.exit_code == 1
-    assert "not implemented" in result.output
+    assert "unknown config path" not in result.output
+    assert "no raw folder" in result.output
 
 
 def test_eval_set_override(tmp_path):
     result = runner.invoke(app, ["eval", str(tmp_path), "--set", "tighten.max_gap_ms=200"])
     assert result.exit_code == 1
-    assert "not implemented" in result.output
+    assert "unknown config path" not in result.output
+    assert "missing gold edit" in result.output
+
+
+def test_judge_requires_words(tmp_path):
+    result = runner.invoke(app, ["judge", str(tmp_path), "--no-llm"])
+    assert result.exit_code == 1
+    assert "missing words artifact" in result.output
+
+
+def test_tighten_requires_words(tmp_path):
+    result = runner.invoke(app, ["tighten", str(tmp_path)])
+    assert result.exit_code == 1
+    assert "missing words artifact" in result.output
