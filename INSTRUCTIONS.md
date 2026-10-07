@@ -34,7 +34,10 @@ Run Cutter through `uv run cutter ...` from the repository root. You can also
 activate `.venv` and invoke `cutter` directly.
 
 The default profile is `profiles/long.yaml`. It is currently the only supplied
-profile.
+profile. Every key is explained in `profiles/long.md`, including which way to
+turn the retake thresholds when repetitions are missed. Change a value in the
+YAML, or pass `--set key.path=value` for one run. A stage reruns when the
+keys it reads have changed.
 
 ## Create a project
 
