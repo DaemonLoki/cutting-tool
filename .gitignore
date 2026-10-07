@@ -1,6 +1,6 @@
 # Local working projects. Fixtures and gold edits live under tests/ and stay in git.
 projects/
-test/fixtures/sample/raw
+# test/fixtures/sample/raw
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python
