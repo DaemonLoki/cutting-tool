@@ -310,8 +310,8 @@ def evaluate(
         load_profile("long", set_values)
         manual = _manual_fcpxml(gold_dir)
         project_dir = _eval_project(gold_dir)
-        _stage_gold_script(gold_dir, project_dir)
         loaded = _resolve_profile(project_dir, overrides=set_values)
+        _stage_gold_script(gold_dir, project_dir, loaded.script.path)
     except (ConfigError, OSError) as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
@@ -327,16 +327,16 @@ def evaluate(
         timeline = TimelineArtifact.model_validate_json(
             (artifacts / "timeline.json").read_text(encoding="utf-8")
         )
+        notes = information(
+            fillers_dropped=count_filler_drops(artifacts / "fillers.json"),
+            chapters=len(timeline.data.chapters),
+        )
         _metrics, table = evaluate_gold(
             words=words.data.words,
             sources=sources.data,
             timeline=timeline.data,
             manual_fcpxml=manual,
             eval_json=gold_dir / "eval.json",
-        )
-        notes = information(
-            fillers_dropped=count_filler_drops(artifacts / "fillers.json"),
-            chapters=len(timeline.data.chapters),
         )
     except IngestError as exc:
         typer.echo(str(exc), err=True)
@@ -428,17 +428,19 @@ def _echo_summary(summary: RunSummary) -> None:
     typer.echo(f"wrote {summary.fcpxml}")
 
 
-def _stage_gold_script(gold_dir: Path, project_dir: Path) -> None:
-    """Copy ``script.md`` from the gold folder when the project is elsewhere.
+def _stage_gold_script(gold_dir: Path, project_dir: Path, script_path: str) -> None:
+    """Copy the gold ``script.md`` to ``<project>/<script.path>``.
 
-    Align reads the script from the project that holds ``raw/``. When that
-    project is the gold folder, the file is already in place. A byte-identical
-    copy is left untouched so a later eval can still hit the align cache.
+    Align reads ``profile.script.path``, not a fixed name. When the project
+    is the gold folder and that path is already ``script.md``, the file stays
+    put. A byte-identical copy is left untouched so a later eval can still
+    hit the align cache.
     """
     script = gold_dir / "script.md"
     if not script.is_file():
         return
-    dest = project_dir / "script.md"
+    dest = project_dir / script_path
+    dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.exists() and dest.samefile(script):
         return
     payload = script.read_bytes()

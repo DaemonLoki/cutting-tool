@@ -13,6 +13,8 @@ from cutter.models import (
     Source,
     SourcesArtifact,
     SourcesData,
+    TimelineArtifact,
+    TimelineData,
     Word,
     WordsArtifact,
     WordsData,
@@ -91,14 +93,14 @@ def test_gold_script_is_copied_beside_raw_sources(tmp_path: Path) -> None:
     script = "# Cache\n\nHello.\n"
     (gold / "script.md").write_text(script, encoding="utf-8")
 
-    _stage_gold_script(gold, project)
+    _stage_gold_script(gold, project, "script.md")
 
     dest = project / "script.md"
     assert dest.read_text(encoding="utf-8") == script
     stamped = dest.stat().st_mtime_ns
-    _stage_gold_script(gold, project)
+    _stage_gold_script(gold, project, "script.md")
     assert dest.stat().st_mtime_ns == stamped
-    _stage_gold_script(gold, gold)
+    _stage_gold_script(gold, gold, "script.md")
     assert (gold / "script.md").read_text(encoding="utf-8") == script
 
 
@@ -107,8 +109,86 @@ def test_eval_without_a_gold_script_leaves_the_project_alone(tmp_path: Path) -> 
     project = tmp_path / "sample"
     gold.mkdir()
     project.mkdir()
-    _stage_gold_script(gold, project)
+    _stage_gold_script(gold, project, "script.md")
     assert not (project / "script.md").exists()
+
+
+def test_gold_script_follows_script_path(tmp_path: Path) -> None:
+    gold = tmp_path / "gold"
+    project = tmp_path / "sample"
+    gold.mkdir()
+    project.mkdir()
+    (gold / "script.md").write_text("# Cache\n\nHello.\n", encoding="utf-8")
+
+    _stage_gold_script(gold, project, "notes/take.md")
+
+    assert (project / "notes" / "take.md").read_text(encoding="utf-8").startswith("# Cache")
+    assert not (project / "script.md").exists()
+
+
+def test_a_broken_fillers_file_does_not_write_the_score(tmp_path: Path, monkeypatch) -> None:
+    gold = tmp_path / "gold"
+    (gold / "raw").mkdir(parents=True)
+    (gold / "manual.fcpxml").write_text("<fcpxml/>", encoding="utf-8")
+    meta = make_meta(
+        stage="transcribe",
+        stage_version=1,
+        inputs_hash="sha256:in",
+        config_hash="sha256:cfg",
+        created_at=datetime(2026, 10, 8, tzinfo=UTC),
+    )
+
+    def fake_run(project_dir: Path, profile, **_kwargs) -> None:
+        artifacts = project_dir / "artifacts"
+        artifacts.mkdir(parents=True)
+        write_artifact(
+            artifacts / "sources.json",
+            SourcesArtifact(
+                meta=meta.model_copy(update={"stage": "ingest"}),
+                data=SourcesData(
+                    fps="30000/1001",
+                    width=1920,
+                    height=1080,
+                    audio_rate=48000,
+                    audio_channels=1,
+                    sources=[
+                        Source(
+                            id="s01",
+                            path="raw/01.mov",
+                            duration_s=1.0,
+                            duration_frames=30,
+                            start_timecode="00:00:00:00",
+                            start_frames=0,
+                            vfr_warning=False,
+                            asr_wav="artifacts/audio/s01.16k.wav",
+                            analysis_wav="artifacts/audio/s01.48k.wav",
+                        )
+                    ],
+                ),
+            ),
+        )
+        write_artifact(
+            artifacts / "words.json",
+            WordsArtifact(meta=meta, data=WordsData(words=[])),
+        )
+        write_artifact(
+            artifacts / "timeline.json",
+            TimelineArtifact(
+                meta=meta.model_copy(update={"stage": "tighten"}),
+                data=TimelineData(ranges=[], dropped=[]),
+            ),
+        )
+        (artifacts / "fillers.json").write_text("{", encoding="utf-8")
+
+    def fake_eval(**kwargs):
+        kwargs["eval_json"].write_text("{}\n", encoding="utf-8")
+        return None, "table"
+
+    monkeypatch.setattr("cutter.cli.run_project", fake_run)
+    monkeypatch.setattr("cutter.cli.evaluate_gold", fake_eval)
+    result = runner.invoke(app, ["eval", str(gold)])
+    assert result.exit_code == 1
+    assert not (gold / "eval.json").exists()
 
 
 def test_words_source_limits_the_window(tmp_path: Path) -> None:

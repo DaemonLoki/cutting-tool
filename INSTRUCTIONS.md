@@ -649,9 +649,10 @@ is how many chapter markers are on the timeline. A missing `fillers.json`
 counts as zero filler drops.
 
 When the gold folder contains `script.md`, the eval run aligns against that
-script. If `raw/` is inside the gold folder, the file is already in the
-project. If the camera files are in `test/fixtures/sample/`, eval copies
-`script.md` into that project when the copy is missing or different. A
+script. The copy is placed at `script.path` (`script.md` by default). If
+`raw/` is inside the gold folder and that path is already the gold file, it
+stays put. If the camera files are in `test/fixtures/sample/`, eval copies
+the script into that project when the copy is missing or different. A
 byte-identical copy is left in place.
 
 Unsupported storyline items (`sync-clip`, `mc-clip`, `ref-clip`) are skipped
