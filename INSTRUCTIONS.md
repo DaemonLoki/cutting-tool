@@ -4,7 +4,7 @@ Cutter currently supports these pipeline stages:
 
 1. Ingest numbered video sources and extract analysis audio.
 2. Transcribe the sources into word-level timestamps.
-3. Record speech segments. Claps are not detected yet.
+3. Record speech segments and claps.
 4. Align the transcript to an optional script.
 5. Inspect transcribed words in a time range.
 6. Detect aborted failed takes and decide which ones should be dropped.
@@ -56,10 +56,12 @@ plus `ingest.cfr_proxy` (`never`, `auto`, or `always`), `ingest.proxy_codec`
 (`prores_proxy` or `h264`), `tighten.use_vad`, `fcpxml.rejects_include_fillers`,
 and `fcpxml.vfr_media` (`original` or `proxy`). What each key will do is in
 `profiles/long.md`. `cutter audio` writes speech segments when `vad.enabled`
-is true. Those segments do not move cut points yet. `fillers` writes drop
+is true, and records claps. Set `claps.enabled` to `false` to record none,
+and change `claps.min_rise_db` when a real clap is missed or a knock is marked
+as one. Those events do not move cut points yet. `fillers` writes drop
 decisions, and tighten does not apply them yet, so the rough cut is unchanged.
 `cutter align` writes `alignment.json` from `script.md` and does not drop
-words. Claps are still a scaffold. The new keys do change the cache for the
+words. The new keys do change the cache for the
 stages that read them. `short` uses the same values as `long` for every new key.
 
 ## Create a project
@@ -194,9 +196,16 @@ When `vad.enabled` is true, the file's backend is `vad.backend` (`silero` or
 `energy`) and `speech` lists each run of voice. `silero` reads the 16 kHz WAV.
 `energy` reads the 48 kHz WAV and treats a frame as speech when it sits at
 least `tighten.voice_margin_db` above that file's background. When
-`vad.enabled` is false, the backend is `none` and speech is empty. Claps are
-none yet. A second run with the same inputs and the same `vad` and `claps`
-settings is a cache hit. The summary is `speech segments: <count>, claps: 0`.
+`vad.enabled` is false, the backend is `none` and speech is empty.
+
+Claps are short transients on the 48 kHz WAV. An onset inside a speech
+segment is ignored. Set `claps.enabled` to `false` to record none.
+`claps.min_rise_db` is how many decibels a transient must rise above the
+one-second background; raise it when a knock is marked, lower it when a real
+clap is missed. The other `claps.*` keys are described in `profiles/long.md`.
+
+A second run with the same inputs and the same `vad` and `claps` settings is
+a cache hit. The summary is `speech segments: <n>, claps: <n>`.
 
 ## 4. Align an optional script
 
@@ -468,10 +477,11 @@ tighten, and export. A stage whose inputs and profile section are unchanged
 is skipped. A judged decisions file already includes the retake result, so a
 cache hit skips both retakes and judge. Fillers runs after that file is
 settled, because it hashes `decisions.json`. `--no-llm` still runs the judge
-stage, without calling the model. Audio records speech segments and does not
-change which words are kept. Fillers writes decisions for configured filler
-words; tighten does not remove those words yet. Align writes `alignment.json`
-from `script.md` when that file is present, and does not drop words.
+stage, without calling the model. Audio records speech segments and claps.
+Neither changes which words are kept yet. Fillers writes decisions for
+configured filler words; tighten does not remove those words yet. Align writes
+`alignment.json` from `script.md` when that file is present, and does not drop
+words.
 
 The project folder after a run looks like this:
 
@@ -481,7 +491,7 @@ projects/my-video/
 ├── artifacts/
 │   ├── sources.json
 │   ├── words.json
-│   ├── audio_events.json      # speech segments; claps none yet
+│   ├── audio_events.json      # speech segments and claps
 │   ├── alignment.json         # script takes, or no script
 │   ├── decisions.json
 │   ├── fillers.json           # filler decisions; tighten does not apply them yet
@@ -559,7 +569,7 @@ a valid cache entry.
 | --- | --- | --- |
 | `cutter ingest` | Implemented | `artifacts/sources.json`, WAV files |
 | `cutter transcribe` | Implemented | `artifacts/words.json` |
-| `cutter audio` | Implemented (speech segments; claps none yet) | `artifacts/audio_events.json` |
+| `cutter audio` | Implemented (speech segments and claps) | `artifacts/audio_events.json` |
 | `cutter align` | Implemented | `artifacts/alignment.json` |
 | `cutter words` | Implemented | Console output |
 | `cutter retakes` | Implemented | `artifacts/decisions.json` |

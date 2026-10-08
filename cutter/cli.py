@@ -104,7 +104,8 @@ def audio(
 ) -> None:
     """Record speech segments and claps.
 
-    Speech comes from the profile VAD backend. Claps are not detected yet.
+    Speech comes from the profile VAD backend. Claps are detected on each
+    48 kHz analysis WAV when ``claps.enabled`` is true.
     """
     sources_path = project_dir / "artifacts" / "sources.json"
     if not sources_path.is_file():

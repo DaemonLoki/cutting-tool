@@ -1,6 +1,7 @@
 """Speech segments and claps for one project.
 
-T3 fills in clap detection. Until then the clap list stays empty.
+Voice activity comes from ``vad.py``. Claps are detected on each 48 kHz
+analysis WAV and dropped when their onset falls inside speech.
 """
 
 from __future__ import annotations
@@ -9,6 +10,7 @@ import hashlib
 from pathlib import Path
 
 from cutter.cache import STAGE_CONFIG_SECTIONS, cache_hit, config_hash, inputs_hash
+from cutter.claps import detect_claps
 from cutter.config import Profile, load_profile
 from cutter.models import (
     AudioEventsArtifact,
@@ -23,7 +25,7 @@ from cutter.models import (
 from cutter.vad import speech_segments
 
 STAGE = "audio"
-STAGE_VERSION = 2
+STAGE_VERSION = 3
 
 
 def run_audio(
@@ -37,7 +39,7 @@ def run_audio(
     Reads ``artifacts/sources.json`` and each source's 16 kHz and 48 kHz WAVs.
     Writes ``artifacts/audio_events.json``. A cache hit returns the artifact
     already on disk. When VAD is disabled the backend is ``none`` and speech
-    is empty. Claps are not detected yet.
+    is empty. Claps are filled in when ``claps.enabled`` is true.
     """
     loaded = load_profile("long") if profile is None else profile
     project_dir = Path(project_dir)
@@ -66,7 +68,23 @@ def run_audio(
     else:
         backend = "none"
         speech = []
+    # Claps use the speech segments already in `speech` (empty when VAD is off).
     claps: list[Clap] = []
+    if loaded.claps.enabled:
+        speech_by_source: dict[str, list[tuple[float, float]]] = {}
+        for segment in speech:
+            speech_by_source.setdefault(segment.source, []).append((segment.start, segment.end))
+        for source in sources.data.sources:
+            hits = detect_claps(
+                project_dir / source.analysis_wav,
+                speech_by_source.get(source.id, []),
+                loaded.claps,
+            )
+            claps.extend(
+                Clap(source=source.id, t=hit.t, peak_db=hit.peak_db, rise_db=hit.rise_db)
+                for hit in hits
+            )
+        claps.sort(key=lambda clap: (clap.source, clap.t))
     artifact = AudioEventsArtifact(
         meta=make_meta(
             stage=STAGE,
