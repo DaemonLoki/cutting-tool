@@ -98,6 +98,25 @@ def test_run_audio_cache_follows_vad_not_tighten(tmp_path: Path):
     assert fourth.meta.created_at == third.meta.created_at
 
 
+def test_energy_cache_misses_when_the_voice_margin_changes(tmp_path: Path):
+    _write_project(tmp_path)
+    profile = load_profile("long").model_copy(
+        update={"vad": load_profile("long").vad.model_copy(update={"backend": "energy"})}
+    )
+    first = run_audio(tmp_path, profile)
+    shifted = profile.model_copy(
+        update={"tighten": profile.tighten.model_copy(update={"voice_margin_db": 20})}
+    )
+    second = run_audio(tmp_path, shifted)
+    assert second.meta.config_hash != first.meta.config_hash
+
+    padded = shifted.model_copy(
+        update={"tighten": shifted.tighten.model_copy(update={"pad_head_ms": 10})}
+    )
+    third = run_audio(tmp_path, padded)
+    assert third.meta.created_at == second.meta.created_at
+
+
 def _vad(backend: str) -> VadConfig:
     return load_profile("long").vad.model_copy(
         update={

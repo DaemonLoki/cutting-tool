@@ -5,6 +5,7 @@ T3 fills in clap detection. Until then the clap list stays empty.
 
 from __future__ import annotations
 
+import hashlib
 from pathlib import Path
 
 from cutter.cache import STAGE_CONFIG_SECTIONS, cache_hit, config_hash, inputs_hash
@@ -49,7 +50,7 @@ def run_audio(
     sources = SourcesArtifact.model_validate_json(sources_path.read_text(encoding="utf-8"))
     wavs = _wavs(project_dir, sources.data.sources)
     hashed_inputs = inputs_hash(artifacts=[sources_path, *wavs])
-    hashed_config = config_hash(loaded, STAGE_CONFIG_SECTIONS[STAGE])
+    hashed_config = _config_hash(loaded)
     if not force and cache_hit(
         events_path,
         stage=STAGE,
@@ -77,6 +78,19 @@ def run_audio(
     )
     write_artifact(events_path, artifact)
     return artifact
+
+
+def _config_hash(profile: Profile) -> str:
+    """Hash the audio sections, plus the margin the energy backend reads.
+
+    ``pad_head_ms`` and the rest of ``tighten`` stay out of this hash. Only
+    ``voice_margin_db`` changes an energy segmentation, and only then.
+    """
+    hashed = config_hash(profile, STAGE_CONFIG_SECTIONS[STAGE])
+    if not profile.vad.enabled or profile.vad.backend != "energy":
+        return hashed
+    payload = f"{hashed}\0{profile.tighten.voice_margin_db}"
+    return f"sha256:{hashlib.sha256(payload.encode()).hexdigest()}"
 
 
 def _speech(project_dir: Path, sources: list[Source], profile: Profile) -> list[SpeechSegment]:
