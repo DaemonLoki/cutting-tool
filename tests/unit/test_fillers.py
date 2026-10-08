@@ -160,6 +160,12 @@ def test_you_know_drops_only_when_the_phrase_is_listed():
     assert phrase[0].dropped_words == (0, 1)
 
 
+def test_a_dropped_first_word_does_not_make_the_next_word_an_opener():
+    words = _indexed(_words(["The", "so", "the", "agent", "joins", "the", "call."]))
+    listed = FILLERS.model_copy(update={"sentence_start_words": ["so"]})
+    assert detect_fillers(words, [_retake(0, 0)], listed) == []
+
+
 def test_filler_inside_a_dropped_retake_is_not_a_decision():
     words = _indexed(_words(["Um,", "the", "agent", "joins", "the", "call."]))
     assert detect_fillers(words, [_retake(0, 0)], FILLERS) == []
