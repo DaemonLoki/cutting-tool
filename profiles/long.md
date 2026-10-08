@@ -210,18 +210,17 @@ An exact repeat of a finished sentence is already dropped and is not sent.
 ## vad
 
 Used by `cutter audio` and, once speech segments affect cut points, by
-`cutter tighten`. `cutter audio` is a scaffold: it writes an empty
-`audio_events.json` and does not measure speech yet. Changing a key here
-still reruns `audio` and `tighten`.
+`cutter tighten`. `cutter audio` writes one segment per run of voice.
+Changing a key here still reruns `audio` and `tighten`.
 
 `enabled`
 : `false` leaves the speech list empty and records backend `none`. `true`
-  will ask the backend below. The scaffold writes `none` either way.
+  asks the backend below.
 
 `backend`
-: `silero` is the neural voice detector. `energy` reuses the loudness
-  tighten already measures, with `tighten.voice_margin_db` as the speech
-  line. The scaffold does not call either backend.
+: `silero` is the neural voice detector and reads the 16 kHz WAV. `energy`
+  reuses the loudness tighten already measures on the 48 kHz WAV, with
+  `tighten.voice_margin_db` as the speech line.
 
 `threshold`
 : Silero speech probability, from 0 to 1. A chunk at or above this counts as

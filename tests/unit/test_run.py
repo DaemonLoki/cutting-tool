@@ -99,7 +99,7 @@ def _write_sources(project_dir: Path) -> None:
     audio_dir = project_dir / "artifacts" / "audio"
     audio_dir.mkdir(parents=True, exist_ok=True)
     sf.write(audio_dir / "s01.48k.wav", np.zeros(48_000, dtype=np.float32), 48_000)
-    (audio_dir / "s01.16k.wav").write_bytes(b"16k")
+    sf.write(audio_dir / "s01.16k.wav", np.zeros(16_000, dtype=np.float32), 16_000)
     duration_s = 2.0
     duration_frames = math.floor(Fraction(duration_s) * Fraction(FPS))
     data = SourcesData(

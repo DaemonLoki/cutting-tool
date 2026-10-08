@@ -4,7 +4,7 @@ Cutter currently supports these pipeline stages:
 
 1. Ingest numbered video sources and extract analysis audio.
 2. Transcribe the sources into word-level timestamps.
-3. Record speech segments and claps (scaffold: writes an empty artifact).
+3. Record speech segments. Claps are not detected yet.
 4. Align the transcript to an optional script (scaffold: writes an empty artifact).
 5. Inspect transcribed words in a time range.
 6. Detect aborted failed takes and decide which ones should be dropped.
@@ -55,9 +55,10 @@ Phase 2 adds the sections `vad`, `claps`, `fillers`, `script`, and `chapters`,
 plus `ingest.cfr_proxy` (`never`, `auto`, or `always`), `ingest.proxy_codec`
 (`prores_proxy` or `h264`), `tighten.use_vad`, `fcpxml.rejects_include_fillers`,
 and `fcpxml.vfr_media` (`original` or `proxy`). What each key will do is in
-`profiles/long.md`. The new stages are scaffolds, so these keys do not change
-the cut yet. They do change the cache for the stages that read them. `short`
-uses the same values as `long` for every new key.
+`profiles/long.md`. `cutter audio` writes speech segments when `vad.enabled`
+is true. Those segments do not move cut points yet. Align, fillers, and claps
+are still scaffolds. The new keys do change the cache for the stages that
+read them. `short` uses the same values as `long` for every new key.
 
 ## Create a project
 
@@ -179,16 +180,20 @@ uv run cutter audio projects/my-video
 uv run cutter audio projects/my-video --profile long --force
 ```
 
-This command is a scaffold. It reads `artifacts/sources.json` and the 16 kHz
-and 48 kHz WAV files, and writes:
+It reads `artifacts/sources.json` and the 16 kHz and 48 kHz WAV files, and
+writes:
 
 ```text
 projects/my-video/artifacts/audio_events.json
 ```
 
-The file records backend `none`, no speech segments, and no claps. A second
-run with the same inputs and the same `vad` and `claps` settings is a cache
-hit. The summary is `speech segments: 0, claps: 0`.
+When `vad.enabled` is true, the file's backend is `vad.backend` (`silero` or
+`energy`) and `speech` lists each run of voice. `silero` reads the 16 kHz WAV.
+`energy` reads the 48 kHz WAV and treats a frame as speech when it sits at
+least `tighten.voice_margin_db` above that file's background. When
+`vad.enabled` is false, the backend is `none` and speech is empty. Claps are
+none yet. A second run with the same inputs and the same `vad` and `claps`
+settings is a cache hit. The summary is `speech segments: <count>, claps: 0`.
 
 ## 4. Align an optional script
 
@@ -439,8 +444,9 @@ tighten, and export. A stage whose inputs and profile section are unchanged
 is skipped. A judged decisions file already includes the retake result, so a
 cache hit skips both retakes and judge. Fillers runs after that file is
 settled, because it hashes `decisions.json`. `--no-llm` still runs the judge
-stage, without calling the model. Audio, align, and fillers are scaffolds:
-they write empty artifacts and do not change which words are kept.
+stage, without calling the model. Audio records speech segments and does not
+change which words are kept. Align and fillers are scaffolds: they write
+empty artifacts.
 
 The project folder after a run looks like this:
 
@@ -450,7 +456,7 @@ projects/my-video/
 ├── artifacts/
 │   ├── sources.json
 │   ├── words.json
-│   ├── audio_events.json      # scaffold: no speech, no claps
+│   ├── audio_events.json      # speech segments; claps none yet
 │   ├── alignment.json         # scaffold: no script
 │   ├── decisions.json
 │   ├── fillers.json           # scaffold: no filler decisions
@@ -527,7 +533,7 @@ a valid cache entry.
 | --- | --- | --- |
 | `cutter ingest` | Implemented | `artifacts/sources.json`, WAV files |
 | `cutter transcribe` | Implemented | `artifacts/words.json` |
-| `cutter audio` | Scaffolded (writes an empty artifact) | `artifacts/audio_events.json` |
+| `cutter audio` | Implemented (speech segments; claps none yet) | `artifacts/audio_events.json` |
 | `cutter align` | Scaffolded (writes an empty artifact) | `artifacts/alignment.json` |
 | `cutter words` | Implemented | Console output |
 | `cutter retakes` | Implemented | `artifacts/decisions.json` |

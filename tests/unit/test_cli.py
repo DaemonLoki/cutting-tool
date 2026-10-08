@@ -1,5 +1,6 @@
 """CLI help and profile overrides."""
 
+import wave
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -82,7 +83,7 @@ def test_audio_requires_sources(tmp_path):
     assert "missing sources artifact" in result.output
 
 
-def test_audio_reports_an_empty_scaffold(tmp_path):
+def test_audio_reports_no_speech_in_silence(tmp_path):
     _write_sources(tmp_path)
     result = runner.invoke(app, ["audio", str(tmp_path), "--profile", "long"])
     assert result.exit_code == 0, result.output
@@ -130,8 +131,8 @@ def _meta(stage: str):
 def _write_sources(project: Path) -> None:
     audio = project / "artifacts" / "audio"
     audio.mkdir(parents=True, exist_ok=True)
-    (audio / "s01.16k.wav").write_bytes(b"16k")
-    (audio / "s01.48k.wav").write_bytes(b"48k")
+    _silence_wav(audio / "s01.16k.wav", 16_000)
+    _silence_wav(audio / "s01.48k.wav", 48_000)
     write_artifact(
         project / "artifacts" / "sources.json",
         SourcesArtifact(
@@ -158,6 +159,14 @@ def _write_sources(project: Path) -> None:
             ),
         ),
     )
+
+
+def _silence_wav(path: Path, sample_rate: int) -> None:
+    with wave.open(str(path), "wb") as handle:
+        handle.setnchannels(1)
+        handle.setsampwidth(2)
+        handle.setframerate(sample_rate)
+        handle.writeframes(b"\x00\x00" * sample_rate)
 
 
 def _write_words(project: Path) -> None:
