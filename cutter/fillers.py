@@ -48,7 +48,7 @@ def detect_fillers(
     phrases = _phrases(config.phrases)
     filler_norms = set(config.words)
     openers = set(config.sentence_start_words)
-    spans = _spans(kept, sole, phrases, filler_norms, openers)
+    spans = _spans(words, kept, sole, phrases, filler_norms, openers)
     return [
         _decision(kept, start, end, number, config.max_duration_s)
         for number, (start, end) in enumerate(spans, start=1)
@@ -139,6 +139,7 @@ def _phrases(phrases: list[str]) -> tuple[tuple[str, ...], ...]:
 
 
 def _spans(
+    words: list[Word],
     kept: list[Word],
     sole: set[int],
     phrases: tuple[tuple[str, ...], ...],
@@ -170,7 +171,7 @@ def _spans(
     for index, word in enumerate(kept):
         if covered[index] or word.i in sole or word.norm not in openers:
             continue
-        if not _opens_sentence(kept, index, covered):
+        if not _opens_sentence(words, kept, index, covered):
             continue
         if index + 1 >= len(kept) or kept[index + 1].sent != word.sent:
             continue
@@ -218,20 +219,30 @@ def _take(spans: list[tuple[int, int]], covered: list[bool], start: int, end: in
         covered[index] = True
 
 
-def _opens_sentence(kept: list[Word], index: int, covered: list[bool]) -> bool:
-    """True when every earlier kept word of this sentence is already a filler.
+def _opens_sentence(
+    words: list[Word],
+    kept: list[Word],
+    index: int,
+    covered: list[bool],
+) -> bool:
+    """True when every earlier word of this sentence is a filler dropped here.
 
     ``Um, so the agent`` drops ``so`` once it is listed in
     ``sentence_start_words``, because ``um`` is a filler match. A mid-sentence
-    ``so`` stays. Sentence-start marks are not filler matches, so ``so well``
-    marks only ``so``.
+    ``so`` stays. A word a retake already dropped still counts, so ``so`` after
+    a dropped ``The`` is not a sentence opener. Sentence-start marks are not
+    filler matches, so ``so well`` marks only ``so``.
     """
-    sentence = kept[index].sent
-    earlier = index - 1
-    while earlier >= 0 and kept[earlier].sent == sentence:
-        if not covered[earlier]:
+    word = kept[index]
+    kept_at = {item.i: position for position, item in enumerate(kept)}
+    for earlier in words:
+        if earlier.i >= word.i:
+            continue
+        if earlier.sent != word.sent or earlier.source != word.source:
+            continue
+        position = kept_at.get(earlier.i)
+        if position is None or not covered[position]:
             return False
-        earlier -= 1
     return True
 
 
