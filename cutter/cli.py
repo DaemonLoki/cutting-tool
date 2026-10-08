@@ -9,13 +9,23 @@ from typing import Annotated
 import typer
 from pydantic import ValidationError
 
+from cutter.align import run_align
 from cutter.choose import FrameUnknown, choose_profile
 from cutter.config import REPO_ROOT, ConfigError, Profile, load_profile
 from cutter.evaluate import evaluate_gold
+from cutter.events import run_audio
 from cutter.fcpxml import FcpxmlValidationError, export_fcpxml
+from cutter.fillers import run_fillers
 from cutter.ingest import IngestError, ToolMissing, ingest_project
 from cutter.judge import run_judge
-from cutter.models import Decision, SourcesArtifact, TimelineArtifact, WordsArtifact
+from cutter.models import (
+    AlignmentArtifact,
+    AudioEventsArtifact,
+    Decision,
+    SourcesArtifact,
+    TimelineArtifact,
+    WordsArtifact,
+)
 from cutter.retakes import run_retakes
 from cutter.run import RunSummary, run_project
 from cutter.tighten import run_tighten
@@ -87,6 +97,53 @@ def transcribe(
 
 
 @app.command()
+def audio(
+    project_dir: Annotated[Path, typer.Argument(help="Project folder.")],
+    profile: ProfileOpt = None,
+    force: ForceOpt = False,
+) -> None:
+    """Record speech segments and claps.
+
+    This stage is a scaffold. It writes an empty artifact.
+    """
+    sources_path = project_dir / "artifacts" / "sources.json"
+    if not sources_path.is_file():
+        typer.echo(f"missing sources artifact: {sources_path}", err=True)
+        raise typer.Exit(1)
+    try:
+        loaded = _resolve_profile(project_dir, profile)
+        artifact = run_audio(project_dir, loaded, force=force)
+    except (FileNotFoundError, ValidationError) as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    _echo_audio(artifact)
+
+
+@app.command()
+def align(
+    project_dir: Annotated[Path, typer.Argument(help="Project folder.")],
+    profile: ProfileOpt = None,
+    force: ForceOpt = False,
+) -> None:
+    """Align the transcript to an optional script.
+
+    This stage is a scaffold. It writes an empty artifact.
+    """
+    _configure_logging()
+    words_path = project_dir / "artifacts" / "words.json"
+    if not words_path.is_file():
+        typer.echo(f"missing words artifact: {words_path}", err=True)
+        raise typer.Exit(1)
+    try:
+        loaded = _resolve_profile(project_dir, profile)
+        artifact = run_align(project_dir, loaded, force=force)
+    except (FileNotFoundError, ValidationError) as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    _echo_alignment(artifact)
+
+
+@app.command()
 def retakes(
     project_dir: Annotated[Path, typer.Argument(help="Project folder.")],
     force: ForceOpt = False,
@@ -126,6 +183,33 @@ def judge(
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
     _echo_decisions(artifact.data.decisions, project_dir / "artifacts" / "decisions.json")
+
+
+@app.command()
+def fillers(
+    project_dir: Annotated[Path, typer.Argument(help="Project folder.")],
+    profile: ProfileOpt = None,
+    force: ForceOpt = False,
+) -> None:
+    """Mark filler words to drop.
+
+    This stage is a scaffold. It writes an empty artifact.
+    """
+    artifacts = project_dir / "artifacts"
+    for label, path in (
+        ("words", artifacts / "words.json"),
+        ("decisions", artifacts / "decisions.json"),
+    ):
+        if not path.is_file():
+            typer.echo(f"missing {label} artifact: {path}", err=True)
+            raise typer.Exit(1)
+    try:
+        loaded = _resolve_profile(project_dir, profile)
+        artifact = run_fillers(project_dir, loaded, force=force)
+    except (FileNotFoundError, ValidationError) as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(1) from exc
+    typer.echo(f"filler decisions: {len(artifact.data.decisions)}")
 
 
 @app.command()
@@ -291,6 +375,21 @@ def _word_starts(path: Path) -> dict[int, float] | None:
         return None
     artifact = WordsArtifact.model_validate_json(path.read_text(encoding="utf-8"))
     return {word.i: word.start for word in artifact.data.words}
+
+
+def _echo_audio(artifact: AudioEventsArtifact) -> None:
+    typer.echo(f"speech segments: {len(artifact.data.speech)}, claps: {len(artifact.data.claps)}")
+
+
+def _echo_alignment(artifact: AlignmentArtifact) -> None:
+    data = artifact.data
+    if data.script is None:
+        typer.echo("no script")
+        return
+    typer.echo(
+        f"sentences: {len(data.sentences)}, chapters: {len(data.chapters)}, "
+        f"missing: {len(data.missing)}"
+    )
 
 
 def _echo_decisions(decisions: list[Decision], path: Path) -> None:
