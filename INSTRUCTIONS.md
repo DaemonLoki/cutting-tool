@@ -277,15 +277,18 @@ Force recalculation:
 uv run cutter retakes projects/my-video --force
 ```
 
-The command reads `artifacts/words.json` and writes:
+The command reads `artifacts/words.json`. It also reads
+`artifacts/audio_events.json` and `artifacts/alignment.json` when those files
+exist. A missing file leaves that evidence out. With both files missing, the
+result matches Phase 1.
+It writes:
 
 ```text
 projects/my-video/artifacts/decisions.json
 ```
 
-Retake detection is conservative:
+Without a script and without claps, detection compares transcript words:
 
-- it compares transcript words, not claps or a script;
 - the later take wins when the earlier take was aborted, and when the next
   sentence repeats a finished sentence in the same words;
 - a sentence counts as finished when any word in it ends in `.`, `?`, or `!`;
@@ -299,6 +302,22 @@ Retake detection is conservative:
 - candidates more than 90 seconds apart are not treated as retakes;
 - a failed take at the end of one source can match a retake at the start of the
   next source.
+
+With a script, the chosen take stays, including when an alternate take comes
+later. An alternate take before the chosen take is dropped. An alternate take
+after the chosen take is dropped when `script.drop_later_takes` is true, and
+kept with a `script_close_call` CHECK when that setting is false. A take score
+gap smaller than `script.min_score_gap` flags that drop `script_close_call`.
+The script is the evidence for these decisions. A short run of words between
+an alternate take and the next take is included in the dropped span when it
+is shorter than `retakes.window_words`.
+
+A clap anchors a retake. The shared opening can be as short as
+`claps.min_match_words`. The failed take before that clap is dropped, with
+evidence `clap`. A clap with no retake after it keeps the words back to the
+previous sentence end (or the previous clap, or the start of the source) and
+flags them `clap_without_retake`. `claps.enabled: false` ignores claps that
+are already in the audio artifact.
 
 The command summary reports total decisions, automatic drops, and flagged
 decisions. Flagged decisions become `CHECK` markers during tightening.
@@ -483,7 +502,9 @@ stage, without calling the model. Audio records speech segments and claps.
 Neither changes which words are kept yet. Fillers writes decisions for
 configured filler words; tighten does not remove those words yet. Align writes
 `alignment.json` from `script.md` when that file is present, and does not drop
-words.
+words. Retakes reads that alignment and any claps in `audio_events.json`. A
+chosen take can drop an alternate take. A clap can drop the failed take it
+anchors.
 
 The project folder after a run looks like this:
 
@@ -559,8 +580,10 @@ WAVs, and the `vad` and `claps` sections. `align` hashes `words.json` and the
 script file when it exists, and the `script` and `chapters` sections. That
 script hash is also stored on the alignment.
 `fillers` hashes `words.json` and `decisions.json`, and the `fillers` section.
-`retakes` also hashes `claps` and `script`. `tighten` also hashes `vad`,
-`claps`, and `chapters`. Export stores a stamp at `artifacts/export.json` so an
+`retakes` hashes `words.json` and, when the files exist, `audio_events.json`
+and `alignment.json`. Its config hash covers the `retakes`, `claps`, and
+`script` sections. `tighten` also hashes `vad`, `claps`, and `chapters`. Export
+stores a stamp at `artifacts/export.json` so an
 unchanged timeline is not written again. Use `--force` on ingest, transcribe,
 audio, align, retakes, judge, fillers, tighten, or run when you need to bypass
 a valid cache entry.
