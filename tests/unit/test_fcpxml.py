@@ -29,6 +29,7 @@ from cutter.models import (
     SourcesArtifact,
     SourcesData,
     TimelineArtifact,
+    TimelineChapter,
     TimelineData,
     Word,
     WordsArtifact,
@@ -38,6 +39,9 @@ from cutter.models import (
 )
 
 GOLDEN = Path(__file__).resolve().parents[1] / "fixtures" / "synthetic-rough-cut.fcpxml"
+GOLDEN_CHAPTERS = (
+    Path(__file__).resolve().parents[1] / "fixtures" / "synthetic-rough-cut-chapters.fcpxml"
+)
 DTD_PATH = Path(load_profile().fcpxml.dtd_path)
 
 FPS = "24000/1001"
@@ -55,6 +59,11 @@ DROPPED_IN_S = 1.0
 DROPPED_OUT_S = 2.5
 DECISION_ID = "d003"
 CHECK_TEXT = "CHECK: low-confidence retake (d003)"
+CHAPTER_WORD = 20
+CHAPTER_WORD_START_S = 0.2
+FILLER_IN_S = 3.0
+FILLER_OUT_S = 3.25
+FILLER_ID = "f003"
 
 _TIME = re.compile(r"^(?:0s|\d+s|\d+/\d+s)$")
 _TIME_ATTRS = {"frameDuration", "start", "duration", "offset", "tcStart"}
@@ -183,6 +192,40 @@ def _word_starts() -> dict[int, float]:
     return {WORD_INDEX: WORD_START_S}
 
 
+def _chapter_word_starts() -> dict[int, float]:
+    return {WORD_INDEX: WORD_START_S, CHAPTER_WORD: CHAPTER_WORD_START_S}
+
+
+def _chapters_timeline() -> TimelineData:
+    base = _timeline()
+    second = base.ranges[1].model_copy(
+        update={"first_word": CHAPTER_WORD, "last_word": CHAPTER_WORD}
+    )
+    return TimelineData(
+        ranges=[base.ranges[0], second],
+        dropped=[
+            *base.dropped,
+            DroppedSpan(
+                source="s01",
+                in_s=FILLER_IN_S,
+                out_s=FILLER_OUT_S,
+                decision=FILLER_ID,
+            ),
+        ],
+        chapters=[
+            TimelineChapter(id="c01", title="Cache", at_word=WORD_INDEX),
+            TimelineChapter(id="c02", title="Agent", at_word=CHAPTER_WORD),
+        ],
+    )
+
+
+def _fillers_profile() -> Profile:
+    profile = load_profile()
+    return profile.model_copy(
+        update={"fcpxml": profile.fcpxml.model_copy(update={"rejects_include_fillers": True})}
+    )
+
+
 def _profile(**fcpxml: str) -> Profile:
     profile = load_profile()
     if not fcpxml:
@@ -296,6 +339,113 @@ def test_snapshot_matches_golden():
     assert reject_marker.get("duration") == _t(FPS, 1)
 
     assert xml.encode("utf-8") == GOLDEN.read_bytes()
+
+
+def test_excluded_filler_keeps_the_phase1_snapshot():
+    timeline = _timeline().model_copy(
+        update={
+            "dropped": [
+                *_timeline().dropped,
+                DroppedSpan(
+                    source="s01",
+                    in_s=FILLER_IN_S,
+                    out_s=FILLER_OUT_S,
+                    decision=FILLER_ID,
+                ),
+            ],
+            "chapters": [TimelineChapter(id="c01", title="Missing", at_word=99)],
+        }
+    )
+    xml = _build(timeline=timeline)
+    assert _root(xml).find(".//chapter-marker") is None
+    assert f"{FILLER_ID}: filler" not in xml
+    assert xml.encode("utf-8") == GOLDEN.read_bytes()
+
+
+def test_snapshot_chapters_and_filler_reject():
+    xml = _build(
+        timeline=_chapters_timeline(),
+        word_starts=_chapter_word_starts(),
+        profile=_fillers_profile(),
+    )
+    root = _root(xml)
+    projects = root.findall("library/event/project")
+    rough = projects[0].findall("sequence/spine/asset-clip")
+    assert [child.tag for child in rough[0]] == ["marker", "chapter-marker"]
+    chapter = rough[0].find("chapter-marker")
+    assert chapter is not None
+    word_frame = _floor_frames(WORD_START_S, FPS)
+    assert chapter.get("start") == _t(FPS, START_FRAMES + word_frame)
+    assert chapter.get("value") == "Cache"
+    assert chapter.get("duration") is None
+    assert chapter.get("posterOffset") is None
+    assert chapter.get("note") is None
+
+    agent = rough[1].find("chapter-marker")
+    assert agent is not None
+    assert [child.tag for child in rough[1]] == ["chapter-marker"]
+    agent_frame = _floor_frames(CHAPTER_WORD_START_S, FPS)
+    assert SECOND_IN <= agent_frame < SECOND_OUT
+    assert agent.get("start") == _t(FPS, agent_frame)
+    assert agent.get("value") == "Agent"
+    assert agent.get("duration") is None
+    assert agent.get("posterOffset") is None
+
+    rejects = projects[1].findall("sequence/spine/asset-clip")
+    assert len(rejects) == 2
+    retake = rejects[0].find("marker")
+    filler = rejects[1].find("marker")
+    assert retake is not None and filler is not None
+    assert retake.get("value") == f"{DECISION_ID}: retake"
+    assert filler.get("value") == f"{FILLER_ID}: filler"
+    filler_in = _floor_frames(FILLER_IN_S, FPS)
+    filler_out = _ceil_frames(FILLER_OUT_S, FPS)
+    assert filler.get("start") == _t(FPS, START_FRAMES + filler_in)
+    assert rejects[1].get("duration") == _t(FPS, filler_out - filler_in)
+    assert rejects[1].get("offset") == rejects[0].get("duration")
+    media = root.find("resources/asset/media-rep")
+    assert media is not None
+    assert media.get("kind") == "original-media"
+
+    assert xml.encode("utf-8") == GOLDEN_CHAPTERS.read_bytes()
+
+
+def test_filler_rejects_stay_out_until_enabled():
+    xml = _build(timeline=_chapters_timeline(), word_starts=_chapter_word_starts())
+    root = _root(xml)
+    values = [marker.get("value") for marker in root.findall(".//marker")]
+    assert values == [CHECK_TEXT, f"{DECISION_ID}: retake"]
+    assert [marker.get("value") for marker in root.findall(".//chapter-marker")] == [
+        "Cache",
+        "Agent",
+    ]
+    projects = root.findall("library/event/project")
+    assert len(projects[1].findall("sequence/spine/asset-clip")) == 1
+
+
+def test_dtd_validates_chapters_golden(tmp_path: Path):
+    if not DTD_PATH.is_file():
+        pytest.skip(f"FCPXML DTD not found at {DTD_PATH}")
+    xml = _build(
+        timeline=_chapters_timeline(),
+        word_starts=_chapter_word_starts(),
+        profile=_fillers_profile(),
+    )
+    assert xml.encode("utf-8") == GOLDEN_CHAPTERS.read_bytes()
+    result = export_fcpxml(
+        _sources(),
+        _chapters_timeline(),
+        _fillers_profile(),
+        PROJECT,
+        tmp_path / f"{PROJECT}.fcpxml",
+        _chapter_word_starts(),
+    )
+    assert result.dtd_validated is True
+    assert result.warning is None
+    assert result.path.read_bytes() == GOLDEN_CHAPTERS.read_bytes()
+    dtd = etree.DTD(DTD_PATH)
+    assert dtd.validate(etree.parse(result.path)), list(dtd.error_log)
+    assert dtd.validate(etree.parse(GOLDEN_CHAPTERS)), list(dtd.error_log)
 
 
 def test_marker_without_word_time_uses_clip_in_point():

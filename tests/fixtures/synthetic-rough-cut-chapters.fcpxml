@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.14">
+  <resources>
+    <format id="r1" name="FFVideoFormat3840x2160p2398" frameDuration="1001/24000s" width="3840" height="2160" colorSpace="1-1-1 (Rec. 709)"/>
+    <asset id="r2" name="Näme clip" start="1002001/24000s" duration="5005/24s" hasVideo="1" format="r1" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="file:///sources/N%C3%A4me%20clip.mov"/>
+    </asset>
+    <asset id="r3" name="second" start="0s" duration="1001/30s" hasVideo="1" format="r1" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="file:///sources/second.mov"/>
+    </asset>
+  </resources>
+  <library>
+    <event name="demo – cutter">
+      <project name="demo – rough cut">
+        <sequence format="r1" duration="13013/8000s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+          <spine>
+            <asset-clip ref="r2" offset="0s" name="Näme clip" start="337337/8000s" duration="1001/1000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="253253/6000s" duration="1001/24000s" value="CHECK: low-confidence retake (d003)"/>
+              <chapter-marker start="253253/6000s" value="Cache"/>
+            </asset-clip>
+            <asset-clip ref="r3" offset="1001/1000s" name="second" start="1001/8000s" duration="1001/1600s" tcFormat="NDF" audioRole="dialogue">
+              <chapter-marker start="1001/6000s" value="Agent"/>
+            </asset-clip>
+          </spine>
+        </sequence>
+      </project>
+      <project name="demo – rejects">
+        <sequence format="r1" duration="11011/6000s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+          <spine>
+            <asset-clip ref="r2" offset="0s" name="Näme clip" start="16016/375s" duration="37037/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="16016/375s" duration="1001/24000s" value="d003: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="37037/24000s" name="Näme clip" start="67067/1500s" duration="7007/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="67067/1500s" duration="1001/24000s" value="f003: filler"/>
+            </asset-clip>
+          </spine>
+        </sequence>
+      </project>
+    </event>
+  </library>
+</fcpxml>
