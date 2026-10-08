@@ -27,10 +27,10 @@ from cutter.models import (
 )
 from cutter.retakes import STAGE as RETAKES_STAGE
 from cutter.retakes import STAGE_VERSION as RETAKES_STAGE_VERSION
-from cutter.retakes import detect_retakes
+from cutter.retakes import detect_retakes, evidence_kwargs, hashed_retake_paths
 
 STAGE = "judge"
-STAGE_VERSION = 2
+STAGE_VERSION = 3
 
 _ELIGIBLE_REASONS = frozenset({"long_segment", "retake_missing_content"})
 _SENTENCE_END = (".", "?", "!")
@@ -77,7 +77,7 @@ def judge_cached(
         artifacts / "decisions.json",
         stage=STAGE,
         stage_version=STAGE_VERSION,
-        inputs_hash=_inputs_hash(words_path, loaded, no_llm=no_llm),
+        inputs_hash=_inputs_hash(hashed_retake_paths(artifacts), loaded, no_llm=no_llm),
         config_hash=config_hash(loaded, STAGE_CONFIG_SECTIONS[STAGE]),
     )
 
@@ -103,11 +103,13 @@ def run_judge(
 ) -> DecisionsArtifact:
     """Stage entry for ``cutter judge <project_dir> [--force] [--no-llm]``.
 
-    Reads ``artifacts/words.json``, recomputes retakes, and writes
-    ``artifacts/decisions.json``. A cache hit returns the artifact already
-    on disk. ``no_llm`` and a disabled judge still record a judge-stage
-    artifact whose decisions are the recomputed retakes. An unreachable
-    endpoint leaves the on-disk decisions artifact unchanged.
+    Reads ``artifacts/words.json`` and, when they exist,
+    ``artifacts/audio_events.json`` and ``artifacts/alignment.json``. Recomputes
+    retakes from those inputs, so a script take or a clap anchor survives this
+    stage, and writes ``artifacts/decisions.json``. A cache hit returns the
+    artifact already on disk. ``no_llm`` and a disabled judge still record a
+    judge-stage artifact whose decisions are the recomputed retakes. An
+    unreachable endpoint leaves the on-disk decisions artifact unchanged.
     """
     loaded = load_profile("long") if profile is None else profile
     artifacts = project_dir / "artifacts"
@@ -119,12 +121,12 @@ def run_judge(
     if not force and judge_cached(project_dir, loaded, no_llm=no_llm):
         return DecisionsArtifact.model_validate_json(decisions_path.read_text(encoding="utf-8"))
 
-    hashed_inputs = _inputs_hash(words_path, loaded, no_llm=no_llm)
+    hashed_inputs = _inputs_hash(hashed_retake_paths(artifacts), loaded, no_llm=no_llm)
     hashed_config = config_hash(loaded, STAGE_CONFIG_SECTIONS[STAGE])
 
     words_artifact = WordsArtifact.model_validate_json(words_path.read_text(encoding="utf-8"))
     words = words_artifact.data.words
-    decisions = detect_retakes(words, loaded.retakes)
+    decisions = detect_retakes(words, loaded.retakes, **evidence_kwargs(artifacts, loaded))
     judged, unreachable = _judged_decisions(
         decisions,
         words,
@@ -328,9 +330,9 @@ def _optional(span: list[Word]) -> str:
     return text if text else "(none)"
 
 
-def _inputs_hash(words_path: Path, profile: Profile, *, no_llm: bool) -> str:
+def _inputs_hash(paths: list[Path], profile: Profile, *, no_llm: bool) -> str:
     mode = "no_llm" if no_llm else "llm"
-    base = inputs_hash(artifacts=[words_path])
+    base = inputs_hash(artifacts=paths)
     retakes_config = config_hash(profile, STAGE_CONFIG_SECTIONS[RETAKES_STAGE])
     payload = f"{base}\0{retakes_config}\0{RETAKES_STAGE_VERSION}\0{mode}"
     digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()

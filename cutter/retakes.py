@@ -157,15 +157,8 @@ def run_retakes(
     loaded = load_profile("long") if profile is None else profile
     artifacts = project_dir / "artifacts"
     words_path = artifacts / "words.json"
-    events_path = artifacts / "audio_events.json"
-    alignment_path = artifacts / "alignment.json"
     decisions_path = artifacts / "decisions.json"
-    hashed_paths = [words_path]
-    if events_path.is_file():
-        hashed_paths.append(events_path)
-    if alignment_path.is_file():
-        hashed_paths.append(alignment_path)
-    hashed_inputs = inputs_hash(artifacts=hashed_paths)
+    hashed_inputs = inputs_hash(artifacts=hashed_retake_paths(artifacts))
     hashed_config = config_hash(loaded, STAGE_CONFIG_SECTIONS[STAGE])
     if not force and cache_hit(
         decisions_path,
@@ -176,16 +169,6 @@ def run_retakes(
     ):
         return DecisionsArtifact.model_validate_json(decisions_path.read_text(encoding="utf-8"))
     words_artifact = WordsArtifact.model_validate_json(words_path.read_text(encoding="utf-8"))
-    events = (
-        AudioEventsArtifact.model_validate_json(events_path.read_text(encoding="utf-8"))
-        if events_path.is_file()
-        else None
-    )
-    alignment = (
-        AlignmentArtifact.model_validate_json(alignment_path.read_text(encoding="utf-8"))
-        if alignment_path.is_file()
-        else None
-    )
     artifact = DecisionsArtifact(
         meta=make_meta(
             stage=STAGE,
@@ -197,15 +180,44 @@ def run_retakes(
             decisions=detect_retakes(
                 words_artifact.data.words,
                 loaded.retakes,
-                claps=None if events is None else events.data.claps,
-                claps_config=loaded.claps,
-                alignment=None if alignment is None else alignment.data,
-                script_config=loaded.script,
+                **evidence_kwargs(artifacts, loaded),
             )
         ),
     )
     write_artifact(decisions_path, artifact)
     return artifact
+
+
+def hashed_retake_paths(artifacts: Path) -> list[Path]:
+    """``words.json``, plus audio events and alignment when those files exist."""
+    paths = [artifacts / "words.json"]
+    for name in ("audio_events.json", "alignment.json"):
+        path = artifacts / name
+        if path.is_file():
+            paths.append(path)
+    return paths
+
+
+def evidence_kwargs(artifacts: Path, profile: Profile) -> dict[str, object]:
+    """Claps and alignment for ``detect_retakes``. A missing file is omitted."""
+    events_path = artifacts / "audio_events.json"
+    alignment_path = artifacts / "alignment.json"
+    events = (
+        AudioEventsArtifact.model_validate_json(events_path.read_text(encoding="utf-8"))
+        if events_path.is_file()
+        else None
+    )
+    alignment = (
+        AlignmentArtifact.model_validate_json(alignment_path.read_text(encoding="utf-8"))
+        if alignment_path.is_file()
+        else None
+    )
+    return {
+        "claps": None if events is None else events.data.claps,
+        "claps_config": profile.claps,
+        "alignment": None if alignment is None else alignment.data,
+        "script_config": profile.script,
+    }
 
 
 def _candidates(
