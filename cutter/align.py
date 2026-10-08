@@ -69,7 +69,9 @@ def align_script(
     the sentence's first word, or its second word when the sentence is longer.
     ``min_take_score`` is the minimum ratio for a whole window. ``prefer``
     ``best`` maximizes the sum of those scores. ``last`` maximizes the sum of
-    ``first_word`` instead. Ties keep the later take.
+    ``first_word`` instead. Ties keep the later take. A sentence the monotonic
+    pass cannot place still keeps its windows, with none chosen. ``missing``
+    is only a sentence with no window.
     """
     parsed = parse_script(markdown, levels=levels)
     ordered = sorted(words, key=lambda word: word.i)
@@ -87,19 +89,16 @@ def align_script(
     kept: list[_Window] = []
     for index, sentence in enumerate(parsed.sentences):
         pick = chosen.get(index)
-        if pick is None:
-            takes: list[Take] = []
-        else:
-            takes = [
-                Take(
-                    first_word=window.first_word,
-                    last_word=window.last_word,
-                    score=window.score,
-                    chosen=offset == pick,
-                )
-                for offset, window in enumerate(windows[index])
-            ]
-            kept.extend(windows[index])
+        takes = [
+            Take(
+                first_word=window.first_word,
+                last_word=window.last_word,
+                score=window.score,
+                chosen=offset == pick,
+            )
+            for offset, window in enumerate(windows[index])
+        ]
+        kept.extend(windows[index])
         sentences.append(
             ScriptSentence(
                 id=sentence.id,
@@ -121,7 +120,11 @@ def align_script(
         ],
         sentences=sentences,
         unscripted=_unscripted(ordered, kept),
-        missing=[sentence.id for sentence in parsed.sentences if sentence.id not in chosen],
+        missing=[
+            sentence.id
+            for sentence, found in zip(parsed.sentences, windows, strict=True)
+            if not found
+        ],
     )
 
 

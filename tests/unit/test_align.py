@@ -104,6 +104,19 @@ def test_aside_between_sentences_is_one_unscripted_span():
     assert data.unscripted == [WordSpan(first_word=len(first), last_word=len(first) + 14)]
 
 
+def test_out_of_order_match_stays_a_take():
+    """A matched sentence the monotonic pass cannot place is not unspoken."""
+    first = "The cache stores the result."
+    second = "The agent joins the call."
+    data = _align([first, second], [second, first])
+    skipped = data.sentences[1]
+    assert data.missing == []
+    assert skipped.takes
+    assert not any(take.chosen for take in skipped.takes)
+    assert data.unscripted == []
+    assert len(_chosen(data)) == 1
+
+
 def test_unspoken_sentence_is_missing():
     data = _align(_LINE, _LINE[:3])
     assert data.missing == [3]
@@ -203,9 +216,11 @@ def _chosen(data: AlignmentData) -> list[Take]:
         if sentence.id in data.missing:
             assert sentence.takes == []
             assert chosen == []
-        else:
+        elif chosen:
             assert len(chosen) == 1
             picked.append(chosen[0])
+        else:
+            assert sentence.takes
         assert sentence.takes == sorted(sentence.takes, key=lambda take: take.first_word)
     for previous, nxt in zip(picked, picked[1:], strict=False):
         assert nxt.first_word > previous.first_word
