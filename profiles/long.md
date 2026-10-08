@@ -292,13 +292,13 @@ detected claps yet. The scaffold writes an empty clap list.
 
 ## fillers
 
-Used by `cutter fillers`. That command is a scaffold: it writes
-`fillers.json` with no decisions, so these keys do not drop words yet.
-Changing one still reruns the stage.
+Used by `cutter fillers`. That command writes `fillers.json`. Tighten does
+not read it yet, so the rough cut still plays the marked words. Changing one
+of these keys reruns the stage.
 
 `enabled`
-: `false` writes no filler decisions. `true` will drop the words and phrases
-  below. The scaffold writes none either way.
+: `false` writes no filler decisions. `true` drops the words and phrases
+  below, except a filler that is the only word of its sentence.
 
 `words`
 : Normalized words dropped wherever they occur. The default list is um, uh,
