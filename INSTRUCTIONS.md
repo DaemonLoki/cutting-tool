@@ -580,6 +580,13 @@ a valid cache entry.
 
 ## Troubleshooting
 
+### VFR warning
+
+A variable-frame-rate source prints `VFR warning` during ingest when its
+average frame rate differs from its nominal frame rate. Cutter does not build
+a constant-frame-rate proxy yet, so the exported FCPXML still points at the
+original file.
+
 ### `ffmpeg is not on PATH` or `ffprobe is not on PATH`
 
 ```bash
