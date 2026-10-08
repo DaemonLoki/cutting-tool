@@ -18,7 +18,7 @@ from cutter.cache import STAGE_CONFIG_SECTIONS, cache_hit, config_hash, inputs_h
 from cutter.config import Profile
 from cutter.models import Source, SourcesArtifact, SourcesData, make_meta, write_artifact
 
-STAGE_VERSION = 1
+STAGE_VERSION = 2
 
 Command = Callable[[list[str]], str]
 

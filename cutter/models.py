@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, field_serializer, field_validator
+from pydantic import BaseModel, ConfigDict, field_serializer, field_validator, model_validator
 
 
 class StrictModel(BaseModel):
@@ -69,6 +69,7 @@ class Source(StrictModel):
     vfr_warning: bool
     asr_wav: str
     analysis_wav: str
+    proxy: str | None = None
 
 
 class SourcesData(StrictModel):
@@ -107,6 +108,98 @@ class WordsArtifact(Artifact[WordsData]):
     data: WordsData
 
 
+class SpeechSegment(StrictModel):
+    """A run of voice in one source. Times are seconds from the start of that source."""
+
+    source: str
+    start: float
+    end: float
+
+    @model_validator(mode="after")
+    def start_not_after_end(self) -> SpeechSegment:
+        if self.start > self.end:
+            raise ValueError("start must be <= end")
+        return self
+
+
+class Clap(StrictModel):
+    """A broadband transient used as a mistake mark. ``t`` is the onset in seconds."""
+
+    source: str
+    t: float
+    peak_db: float
+    rise_db: float
+
+
+class AudioEventsData(StrictModel):
+    backend: Literal["silero", "energy", "none"]
+    speech: list[SpeechSegment]
+    claps: list[Clap]
+
+
+class AudioEventsArtifact(Artifact[AudioEventsData]):
+    data: AudioEventsData
+
+
+class ScriptInfo(StrictModel):
+    path: str
+    hash: str
+
+
+class Take(StrictModel):
+    """One attempt at a script sentence. ``score`` is the match against that sentence."""
+
+    first_word: int
+    last_word: int
+    score: float
+    chosen: bool
+
+    @model_validator(mode="after")
+    def words_ordered(self) -> Take:
+        if self.first_word > self.last_word:
+            raise ValueError("first_word must be <= last_word")
+        return self
+
+
+class ScriptSentence(StrictModel):
+    id: int
+    chapter: str | None
+    text: str
+    takes: list[Take]
+
+
+class ScriptChapter(StrictModel):
+    id: str
+    title: str
+    level: int
+    first_sentence: int
+
+
+class WordSpan(StrictModel):
+    """An inclusive run of transcript words."""
+
+    first_word: int
+    last_word: int
+
+    @model_validator(mode="after")
+    def words_ordered(self) -> WordSpan:
+        if self.first_word > self.last_word:
+            raise ValueError("first_word must be <= last_word")
+        return self
+
+
+class AlignmentData(StrictModel):
+    script: ScriptInfo | None
+    chapters: list[ScriptChapter]
+    sentences: list[ScriptSentence]
+    unscripted: list[WordSpan]
+    missing: list[int]
+
+
+class AlignmentArtifact(Artifact[AlignmentData]):
+    data: AlignmentData
+
+
 class JudgeVerdict(StrictModel):
     choice: Literal["A", "B", "both"]
     confidence: float
@@ -118,7 +211,7 @@ class Decision(StrictModel):
     """Judgment on one candidate repeat: drop the failed take, or keep it for review."""
 
     id: str
-    kind: Literal["retake"]
+    kind: Literal["retake", "filler"]
     dropped_words: tuple[int, int]
     kept_from_word: int
     match_words: int
@@ -127,6 +220,9 @@ class Decision(StrictModel):
     flag: bool
     flag_reason: str | None = None
     judge: JudgeVerdict | None = None
+    evidence: Literal["transcript", "clap", "script"] = "transcript"
+    clap_s: float | None = None
+    score_gap: float | None = None
 
     @field_validator("dropped_words")
     @classmethod
@@ -171,9 +267,18 @@ class DroppedSpan(StrictModel):
     decision: str
 
 
+class TimelineChapter(StrictModel):
+    """A chapter marker. ``at_word`` is a kept word."""
+
+    id: str
+    title: str
+    at_word: int
+
+
 class TimelineData(StrictModel):
     ranges: list[Range]
     dropped: list[DroppedSpan]
+    chapters: list[TimelineChapter] = []
 
 
 class TimelineArtifact(Artifact[TimelineData]):

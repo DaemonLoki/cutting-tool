@@ -37,7 +37,7 @@ from cutter.models import (
 )
 
 STAGE = "tighten"
-STAGE_VERSION = 2
+STAGE_VERSION = 3
 
 _TINY_FRAGMENT = "CHECK: tiny fragment removed"
 _SENTENCE_END = (".", "?", "!")

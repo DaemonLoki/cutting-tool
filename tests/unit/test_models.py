@@ -6,6 +6,11 @@ import pytest
 from pydantic import ValidationError
 
 from cutter.models import (
+    AlignmentArtifact,
+    AlignmentData,
+    AudioEventsArtifact,
+    AudioEventsData,
+    Clap,
     Decision,
     DecisionsArtifact,
     DecisionsData,
@@ -13,14 +18,21 @@ from cutter.models import (
     JudgeVerdict,
     Marker,
     Range,
+    ScriptChapter,
+    ScriptInfo,
+    ScriptSentence,
     Source,
     SourcesArtifact,
     SourcesData,
+    SpeechSegment,
+    Take,
     TimelineArtifact,
+    TimelineChapter,
     TimelineData,
     Word,
     WordsArtifact,
     WordsData,
+    WordSpan,
     make_meta,
 )
 
@@ -174,6 +186,125 @@ def test_models_reject_unknown_keys():
             sent=0,
             extra=1,
         )
+
+
+def test_audio_events_roundtrip():
+    artifact = AudioEventsArtifact(
+        meta=_meta("audio"),
+        data=AudioEventsData(
+            backend="silero",
+            speech=[SpeechSegment(source="s01", start=1.14, end=5.62)],
+            claps=[Clap(source="s01", t=7.312, peak_db=-4.1, rise_db=31.0)],
+        ),
+    )
+    restored = _roundtrip(artifact)
+    assert restored.data.backend == "silero"
+    assert restored.data.speech[0].end == 5.62
+    assert restored.data.claps[0].t == 7.312
+
+
+def test_alignment_roundtrip_with_and_without_script():
+    take = Take(first_word=11, last_word=21, score=100.0, chosen=True)
+    artifact = AlignmentArtifact(
+        meta=_meta("align"),
+        data=AlignmentData(
+            script=ScriptInfo(path="script.md", hash="sha256:abc"),
+            chapters=[ScriptChapter(id="c01", title="Intro", level=1, first_sentence=0)],
+            sentences=[
+                ScriptSentence(
+                    id=0,
+                    chapter="c01",
+                    text="Do you want your designs to go from this to this?",
+                    takes=[
+                        Take(first_word=0, last_word=10, score=100.0, chosen=False),
+                        take,
+                    ],
+                )
+            ],
+            unscripted=[WordSpan(first_word=40, last_word=55)],
+            missing=[7],
+        ),
+    )
+    restored = _roundtrip(artifact)
+    assert restored.data.sentences[0].takes[1].chosen is True
+    assert restored.data.missing == [7]
+
+    empty = AlignmentData(
+        script=None,
+        chapters=[],
+        sentences=[],
+        unscripted=[],
+        missing=[],
+    )
+    assert _roundtrip(empty).script is None
+
+
+def test_filler_decision_and_timeline_chapter_roundtrip():
+    decision = Decision(
+        id="f001",
+        kind="filler",
+        dropped_words=(3, 3),
+        kept_from_word=4,
+        match_words=0,
+        dropped_duration_s=0.4,
+        action="drop",
+        flag=False,
+        evidence="transcript",
+    )
+    restored = _roundtrip(decision)
+    assert restored.kind == "filler"
+    assert restored.evidence == "transcript"
+    assert restored.clap_s is None
+    assert restored.score_gap is None
+
+    chapter = TimelineChapter(id="c01", title="Intro", at_word=11)
+    timeline = TimelineData(ranges=[], dropped=[], chapters=[chapter])
+    assert _roundtrip(timeline).chapters[0].at_word == 11
+
+
+def test_speech_and_word_spans_must_be_ordered():
+    with pytest.raises(ValidationError):
+        SpeechSegment(source="s01", start=2.0, end=1.0)
+    with pytest.raises(ValidationError):
+        Take(first_word=4, last_word=1, score=90.0, chosen=True)
+    with pytest.raises(ValidationError):
+        WordSpan(first_word=8, last_word=3)
+
+
+def test_phase1_json_without_new_keys_still_validates():
+    source = Source.model_validate(
+        {
+            "id": "s01",
+            "path": "/tmp/01.mov",
+            "duration_s": 1.0,
+            "duration_frames": 30,
+            "start_timecode": "00:00:00:00",
+            "start_frames": 0,
+            "vfr_warning": False,
+            "asr_wav": "artifacts/audio/s01.16k.wav",
+            "analysis_wav": "artifacts/audio/s01.48k.wav",
+        }
+    )
+    assert source.proxy is None
+
+    decision = Decision.model_validate(
+        {
+            "id": "d001",
+            "kind": "retake",
+            "dropped_words": [0, 2],
+            "kept_from_word": 3,
+            "match_words": 3,
+            "dropped_duration_s": 1.2,
+            "action": "drop",
+            "flag": False,
+        }
+    )
+    assert decision.evidence == "transcript"
+    assert decision.clap_s is None
+    assert decision.score_gap is None
+
+    timeline = TimelineData.model_validate({"ranges": [], "dropped": []})
+    assert timeline.chapters == []
 
 
 def test_dropped_words_must_be_ordered():
