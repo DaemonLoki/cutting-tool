@@ -1,5 +1,10 @@
 ## Agent skills
 
+### Specs
+
+Phase 1 is `README.md`. Phase 2 is `docs/phase-2.md`; it only describes what
+changes and assumes `README.md` has been read.
+
 ### Issue tracker
 
 Issues and specs live as GitHub issues. See `docs/agents/issue-tracker.md`.
