@@ -210,4 +210,8 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
+# Local video sources
+*.mp4
+*.MP4
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,python
