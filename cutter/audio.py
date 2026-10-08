@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from pathlib import Path
 
 import numpy as np
@@ -115,6 +116,7 @@ def snap_time(
     window_ms: int,
     earliest_s: float,
     latest_s: float,
+    forbidden: Sequence[tuple[float, float]] | None = None,
 ) -> float:
     """Pick the lowest-RMS time inside the snap window and ``[earliest_s, latest_s]``.
 
@@ -123,6 +125,9 @@ def snap_time(
     ``[earliest_s, latest_s]``. Choose the minimum RMS. Ties go to the center
     closest to ``raw_s``, then the earlier one. If ``earliest_s > latest_s``,
     or no frame center lies in the intersection, return ``raw_s``.
+
+    ``forbidden`` intervals are clap zones in seconds. A frame that overlaps
+    one is skipped. If every candidate frame is forbidden, return ``raw_s``.
     """
     if earliest_s > latest_s or envelope.size == 0:
         return raw_s
@@ -137,8 +142,12 @@ def snap_time(
     best_rms = 0.0
     best_distance = 0.0
     for index in range(int(envelope.shape[0])):
+        frame_start = index * step
+        frame_end = (index + 1) * step
         center = (index + 0.5) * step
         if center < low or center > high:
+            continue
+        if _frame_forbidden(frame_start, frame_end, forbidden):
             continue
         energy = float(envelope[index])
         distance = abs(center - raw_s)
@@ -155,3 +164,19 @@ def snap_time(
     if best_index is None:
         return raw_s
     return (best_index + 0.5) * step
+
+
+def _frame_forbidden(
+    frame_start: float,
+    frame_end: float,
+    forbidden: Sequence[tuple[float, float]] | None,
+) -> bool:
+    """True when this RMS frame overlaps a forbidden interval.
+
+    Touching an endpoint is allowed: the frame may end as the zone starts.
+    """
+    if not forbidden:
+        return False
+    return any(
+        frame_start < zone_end and frame_end > zone_start for zone_start, zone_end in forbidden
+    )
