@@ -193,7 +193,7 @@ def fillers(
 ) -> None:
     """Mark filler words to drop.
 
-    This stage is a scaffold. It writes an empty artifact.
+    Writes ``artifacts/fillers.json``. Tighten does not drop these words yet.
     """
     artifacts = project_dir / "artifacts"
     for label, path in (
