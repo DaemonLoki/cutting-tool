@@ -170,6 +170,18 @@ def test_filler_inside_a_dropped_retake_is_not_a_decision():
     assert kept[0].action == "drop"
 
 
+def test_a_filler_run_does_not_cross_a_source():
+    words = _indexed(
+        _words(["Um"], source="s01"),
+        _words(["uh,", "hello."], source="s02"),
+    )
+    decisions = detect_fillers(words, [], FILLERS)
+
+    assert [decision.dropped_words for decision in decisions] == [(0, 0), (1, 1)]
+    assert decisions[0].dropped_duration_s == words[0].end - words[0].start
+    assert decisions[1].dropped_duration_s == words[1].end - words[1].start
+
+
 def test_dropped_words_between_fillers_stay_one_run():
     words = _indexed(_words(["Um,", "nope,", "uh,", "joins", "the", "call."]))
     decisions = detect_fillers(words, [_retake(1, 1)], FILLERS)
