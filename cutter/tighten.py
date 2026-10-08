@@ -2,6 +2,10 @@
 
 A decision with ``action: drop`` removes its words. Each remaining run becomes
 one range. Flagged decisions leave a CHECK marker for Final Cut.
+
+Parakeet often stretches the last word of a sentence across the pause after
+it. A range ends where the voice stops, measured on the audio, not where the
+transcript says the word ends.
 """
 
 from __future__ import annotations
@@ -12,7 +16,7 @@ from pathlib import Path
 
 import numpy as np
 
-from cutter.audio import rms_envelope, snap_time
+from cutter.audio import rms_envelope, snap_time, voice_end, voice_levels
 from cutter.cache import STAGE_CONFIG_SECTIONS, cache_hit, config_hash, inputs_hash
 from cutter.config import Profile, TightenConfig, load_profile
 from cutter.models import (
@@ -33,9 +37,10 @@ from cutter.models import (
 )
 
 STAGE = "tighten"
-STAGE_VERSION = 1
+STAGE_VERSION = 2
 
 _TINY_FRAGMENT = "CHECK: tiny fragment removed"
+_SENTENCE_END = (".", "?", "!")
 
 
 def build_timeline(
@@ -56,9 +61,18 @@ def build_timeline(
     fps = Fraction(sources.fps)
     dropped_ids = _dropped_ids(decisions)
     kept = [word for word in sorted(words, key=lambda word: word.i) if word.i not in dropped_ids]
+    voices = {
+        source_id: voice_levels(samples, config.rms_frame_ms)
+        for source_id, (samples, _rate) in envelopes.items()
+    }
+    sentence_ends = {
+        word.i: _spoken_end(word, voices, config)
+        for word in kept
+        if word.w.endswith(_SENTENCE_END)
+    }
     ranges = [
-        _range_for_group(group, by_source, source_by_id, envelopes, config, fps)
-        for group in _group_kept(kept, dropped_ids, config.max_gap_ms / 1000)
+        _range_for_group(group, by_source, source_by_id, envelopes, voices, config, fps)
+        for group in _group_kept(kept, dropped_ids, config.max_gap_ms / 1000, sentence_ends)
     ]
     ranges = _merge_touching(ranges)
     ranges = _remove_tiny(ranges, config)
@@ -161,7 +175,13 @@ def _group_kept(
     kept: list[Word],
     dropped_ids: set[int],
     max_gap_s: float,
+    spoken_ends: dict[int, float],
 ) -> list[list[Word]]:
+    """Split kept words into ranges.
+
+    ``spoken_ends`` replaces the transcript end of a word whose voice stops
+    earlier, so a pause hidden inside a stretched timestamp still counts.
+    """
     groups: list[list[Word]] = []
     for word in kept:
         if not groups:
@@ -169,10 +189,11 @@ def _group_kept(
             continue
         previous = groups[-1][-1]
         crossed_drop = any(previous.i < index < word.i for index in dropped_ids)
+        previous_end = spoken_ends.get(previous.i, previous.end)
         if (
             word.source != previous.source
             or crossed_drop
-            or word.start - previous.end > max_gap_s
+            or word.start - previous_end > max_gap_s
         ):
             groups.append([word])
         else:
@@ -185,6 +206,7 @@ def _range_for_group(
     by_source: dict[str, list[Word]],
     source_by_id: dict[str, Source],
     envelopes: dict[str, tuple[np.ndarray, int]],
+    voices: dict[str, tuple[np.ndarray, float]],
     config: TightenConfig,
     fps: Fraction,
 ) -> Range:
@@ -193,7 +215,14 @@ def _range_for_group(
     source = source_by_id[first.source]
     previous, following = _neighbours(by_source.get(first.source, []), first.i, last.i)
     in_s, out_s = _cut_points(
-        first, last, previous, following, source.duration_s, envelopes, config
+        first,
+        last,
+        _spoken_end(last, voices, config),
+        previous,
+        following,
+        source.duration_s,
+        envelopes,
+        config,
     )
     in_frame, out_frame = _frames(in_s, out_s, fps, source.duration_frames)
     return Range(
@@ -227,24 +256,31 @@ def _neighbours(
 def _cut_points(
     first: Word,
     last: Word,
+    last_end: float,
     previous: Word | None,
     following: Word | None,
     duration_s: float,
     envelopes: dict[str, tuple[np.ndarray, int]],
     config: TightenConfig,
 ) -> tuple[float, float]:
-    """Pad, clamp to the file and the neighbouring word, then snap inside the legal interval."""
+    """Pad, clamp to the file and the neighbouring word, then snap inside the legal interval.
+
+    ``last_end`` is where the voice of ``last`` stops. The out-point never
+    snaps later than ``pad_tail_ms`` after it, so a range does not end with
+    more silence than the pad.
+    """
     raw_in = _clamp(first.start - config.pad_head_ms / 1000, 0.0, duration_s)
     if previous is not None and previous.end <= first.start:
         raw_in = _clamp(max(raw_in, previous.end), 0.0, duration_s)
-    raw_out = _clamp(last.end + config.pad_tail_ms / 1000, 0.0, duration_s)
+    raw_out = _clamp(last_end + config.pad_tail_ms / 1000, 0.0, duration_s)
     if following is not None:
         raw_out = _clamp(min(raw_out, following.start), 0.0, duration_s)
 
     in_lo = 0.0 if previous is None else max(0.0, previous.end)
     in_hi = min(duration_s, first.start - config.min_head_ms / 1000)
-    out_lo = max(0.0, last.end + config.min_tail_ms / 1000)
+    out_lo = max(0.0, last_end + config.min_tail_ms / 1000)
     out_hi = duration_s if following is None else min(duration_s, following.start)
+    out_hi = min(out_hi, raw_out)
     envelope = envelopes.get(first.source)
     return (
         _snap(envelope, raw_in, in_lo, in_hi, config),
@@ -271,6 +307,35 @@ def _snap(
         earliest_s=earliest_s,
         latest_s=latest_s,
     )
+
+
+def _spoken_end(
+    word: Word,
+    voices: dict[str, tuple[np.ndarray, float]],
+    config: TightenConfig,
+) -> float:
+    """End of the voice in ``word``, never before its midpoint.
+
+    Voice is ``voice_margin_db`` above the source's background. The midpoint
+    floor keeps every kept word inside its range by the rule eval and the
+    property tests use.
+    """
+    voice = voices.get(word.source)
+    if voice is None:
+        return word.end
+    levels, background_db = voice
+    found = voice_end(
+        levels,
+        frame_ms=config.rms_frame_ms,
+        start_s=word.start,
+        end_s=word.end,
+        threshold_db=background_db + config.voice_margin_db,
+        quiet_ms=config.voice_quiet_ms,
+    )
+    if found is None:
+        return word.end
+    midpoint = (word.start + word.end) / 2
+    return min(word.end, max(found, midpoint))
 
 
 def _clamp(value: float, low: float, high: float) -> float:

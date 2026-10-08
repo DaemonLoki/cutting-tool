@@ -194,6 +194,61 @@ def test_flagged_decision_marks_the_range_containing_kept_from_word():
     assert containing[0].markers == [Marker(at_word=1, text="CHECK: long_segment (d001)")]
 
 
+def _speech_envelope(
+    duration_s: float, voiced: list[tuple[float, float]]
+) -> dict[str, tuple[np.ndarray, int]]:
+    """10 ms RMS frames: -20 dB inside ``voiced`` spans, -60 dB elsewhere."""
+    frame_s = TIGHTEN.rms_frame_ms / 1000
+    count = math.ceil(duration_s / frame_s)
+    envelope = np.full(count, 0.001, dtype=np.float64)
+    for start, end in voiced:
+        envelope[round(start / frame_s) : round(end / frame_s)] = 0.1
+    return {"s01": (envelope, 48000)}
+
+
+def test_range_ends_where_the_voice_of_a_stretched_last_word_stops():
+    # "with." is stamped 25.04-26.00 in the sample, but the voice stops near
+    # 25.66. The range must not keep that pause.
+    config = load_profile("long").tighten
+    words = [
+        Word(i=0, source="s01", w="work", norm="work", start=24.72, end=25.04, sent=0),
+        Word(i=1, source="s01", w="with.", norm="with", start=25.04, end=26.0, sent=0),
+    ]
+    envelopes = _speech_envelope(40.0, [(24.72, 25.66)])
+    timeline = build_timeline(words, [], _sources(40.0), envelopes, config)
+
+    assert len(timeline.ranges) == 1
+    out_s = timeline.ranges[0].out_s
+    assert out_s <= 25.66 + config.pad_tail_ms / 1000 + 0.03
+    assert out_s < 26.0
+    assert out_s >= (25.04 + 26.0) / 2
+
+
+def test_out_point_never_snaps_past_the_tail_pad():
+    config = load_profile("long").tighten
+    words = [_word(0, 1.0, 1.5)]
+    envelopes = _speech_envelope(10.0, [(1.0, 1.5)])
+    timeline = build_timeline(words, [], _sources(10.0), envelopes, config)
+
+    assert timeline.ranges[0].out_s <= 1.5 + config.pad_tail_ms / 1000 + 1e-9
+
+
+def test_pause_hidden_in_a_sentence_end_starts_a_new_range():
+    # The question's last word is stamped up to the next sentence, but its
+    # voice stops 600 ms earlier, longer than max_gap_ms.
+    config = load_profile("long").tighten
+    words = [
+        Word(i=0, source="s01", w="to", norm="to", start=11.12, end=11.44, sent=0),
+        Word(i=1, source="s01", w="this?", norm="this", start=11.76, end=12.8, sent=0),
+        Word(i=2, source="s01", w="Then", norm="then", start=13.12, end=13.36, sent=1),
+    ]
+    envelopes = _speech_envelope(20.0, [(11.12, 11.44), (11.76, 12.4), (13.12, 13.36)])
+    timeline = build_timeline(words, [], _sources(20.0), envelopes, config)
+
+    assert [(rng.first_word, rng.last_word) for rng in timeline.ranges] == [(0, 1), (2, 2)]
+    assert timeline.ranges[0].out_s < 12.8
+
+
 def test_tiny_fragment_far_from_neighbours_is_removed():
     config = load_profile("long").tighten.model_copy(update={"min_range_frames": 20})
     words = [_word(0, 0.0, 0.15), _word(1, 10.0, 14.0)]

@@ -123,20 +123,70 @@ def test_long_aborted_segment_is_kept_and_flagged():
     assert decision.flag_reason == "long_segment"
 
 
-def test_finished_sentence_is_kept_and_flagged():
+def test_exact_finished_sentence_is_dropped_once():
     sentence = ["A", "neuron", "is", "a", "weighted", "vote."]
     words = _indexed(_words(sentence + sentence))
     decisions = detect_retakes(words, LONG)
 
-    assert decisions
-    assert decisions[0].dropped_words == (0, 5)
-    assert decisions[0].kept_from_word == 6
-    assert all(
-        decision.action == "keep"
-        and decision.flag is True
-        and decision.flag_reason == "complete_sentence"
-        for decision in decisions
+    assert len(decisions) == 1
+    decision = decisions[0]
+    assert decision.dropped_words == (0, 5)
+    assert decision.kept_from_word == 6
+    assert decision.action == "drop"
+    assert decision.flag is False
+    assert decision.flag_reason is None
+
+
+def test_exact_opening_question_is_dropped_once():
+    # The sample transcript says this question twice, about a second apart.
+    question = [
+        "Do",
+        "you",
+        "want",
+        "your",
+        "designs",
+        "to",
+        "go",
+        "from",
+        "this",
+        "to",
+        "this?",
+    ]
+    words = _indexed(
+        _words(
+            question,
+            starts=[3.68, 3.92, 4.08, 4.24, 4.4, 4.88, 5.12, 5.36, 5.68, 6.0, 6.32],
+        ),
+        _words(
+            question,
+            starts=[8.24, 8.48, 8.64, 8.8, 9.12, 9.84, 10.16, 10.48, 10.8, 11.12, 11.76],
+        ),
+        _words(["Then", "you", "should"], start=13.12),
     )
+    decisions = detect_retakes(words, LONG)
+
+    assert len(decisions) == 1
+    decision = decisions[0]
+    assert decision.dropped_words == (0, 10)
+    assert decision.kept_from_word == 11
+    assert decision.match_words == 11
+    assert decision.action == "drop"
+    assert decision.flag is False
+
+
+def test_different_finished_sentence_stays_once():
+    first = ["A", "neuron", "is", "a", "weighted", "vote."]
+    second = ["A", "neuron", "is", "a", "weighted", "guess."]
+    words = _indexed(_words(first + second))
+    decisions = detect_retakes(words, LONG)
+
+    assert len(decisions) == 1
+    decision = decisions[0]
+    assert decision.dropped_words == (0, 5)
+    assert decision.kept_from_word == 6
+    assert decision.action == "keep"
+    assert decision.flag is True
+    assert decision.flag_reason == "complete_sentence"
 
 
 def test_cross_file_retake_drops_the_aborted_tail():
@@ -156,7 +206,7 @@ def test_cross_file_retake_drops_the_aborted_tail():
     assert decision.flag is False
 
 
-def test_finished_sentence_across_files_is_kept():
+def test_exact_finished_sentence_across_files_is_dropped():
     sentence = ["A", "neuron", "is", "a", "weighted", "vote."]
     words = _indexed(_words(sentence, source="01"), _words(sentence, source="02"))
     decisions = detect_retakes(words, LONG)
@@ -165,9 +215,9 @@ def test_finished_sentence_across_files_is_kept():
     decision = decisions[0]
     assert decision.dropped_words == (0, 5)
     assert decision.kept_from_word == 6
-    assert decision.action == "keep"
-    assert decision.flag is True
-    assert decision.flag_reason == "complete_sentence"
+    assert decision.action == "drop"
+    assert decision.flag is False
+    assert decision.flag_reason is None
 
 
 def test_one_mismatch_inside_the_window_still_matches():
@@ -189,6 +239,7 @@ def test_missing_content_flags_words_the_later_take_lacks():
                 "joins",
                 "server",
                 "cluster",
+                "database",
                 "the",
                 "agent",
                 "joins",
@@ -245,7 +296,7 @@ def test_empty_content_set_skips_the_missing_content_guard():
     assert decisions[0].flag_reason is None
 
 
-def test_finished_sentence_beats_a_long_segment():
+def test_long_exact_finished_sentence_is_dropped():
     sentence = ["A", "neuron", "is", "a", "weighted", "vote."]
     words = _indexed(
         _words(sentence, starts=[0.0, 0.4, 0.8, 1.2, 1.6, 22.0]),
@@ -253,11 +304,26 @@ def test_finished_sentence_beats_a_long_segment():
     )
     decisions = detect_retakes(words, LONG)
 
-    assert decisions
-    assert all(
-        decision.action == "keep" and decision.flag_reason == "complete_sentence"
-        for decision in decisions
+    assert len(decisions) == 1
+    assert decisions[0].dropped_duration_s > LONG.auto_drop_max_s
+    assert decisions[0].action == "drop"
+    assert decisions[0].flag is False
+
+
+def test_different_finished_sentence_beats_a_long_segment():
+    first = ["A", "neuron", "is", "a", "weighted", "vote."]
+    second = ["A", "neuron", "is", "a", "weighted", "guess."]
+    words = _indexed(
+        _words(first, starts=[0.0, 0.4, 0.8, 1.2, 1.6, 22.0]),
+        _words(second, start=23.0),
     )
+    decisions = detect_retakes(words, LONG)
+
+    assert len(decisions) == 1
+    decision = decisions[0]
+    assert decision.dropped_duration_s > LONG.auto_drop_max_s
+    assert decision.action == "keep"
+    assert decision.flag_reason == "complete_sentence"
 
 
 def test_stopwords_file_replaces_the_builtin_list(tmp_path: Path):

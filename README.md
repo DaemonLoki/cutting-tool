@@ -145,6 +145,8 @@ tighten:
   min_head_ms: 30            # in-point never closer than this to first word
   min_tail_ms: 40            # out-point never closer than this to last word
   rms_frame_ms: 10
+  voice_margin_db: 12        # voice is this far above the source's background
+  voice_quiet_ms: 300        # this much background inside a word ends its voice
   min_range_frames: 6        # shorter ranges are merged into neighbours or dropped with a CHECK marker
 
 fcpxml:
@@ -318,12 +320,13 @@ Times in analysis artifacts are **float seconds from the start of the source fil
 
 **Input:** `words.json`. **Output:** `decisions.json`.
 
-A *retake* is when the speaker aborts a sentence and starts it again. The aborted failed take is dropped; the later take is kept ("last take wins"). A finished sentence that is said again is not a retake: it stays in the rough cut, with a `CHECK` marker.
+A *retake* is when the speaker starts a passage again. The earlier take is dropped; the later take is kept ("last take wins"). That includes an aborted attempt, and a finished sentence whose next sentence uses the same words. A finished sentence followed by different words stays in the rough cut, with a `CHECK` marker.
 
 **Algorithm**
 
 ```
 dropped = set()
+claimed = set()
 for i in range(n):                                   # left to right
     if i in dropped: continue
     best = None
@@ -334,20 +337,22 @@ for i in range(n):                                   # left to right
     if best:
         j, m = best
         record decision: dropped_words = [j, i-1], kept_from_word = i, match_words = m
+        claimed |= {j..i-1}
         apply guards (below); if action == drop: dropped |= {j..i-1}
 ```
 
-- `candidates(i)`: indices `j` with `j < i`, same source as `i`, `j not in dropped`, `words[i].start - words[j].start <= max_lookback_s`, ordered **nearest first** (descending `j`).
+- `candidates(i)`: indices `j` with `j < i`, same source as `i`, `j not in claimed`, `words[i].start - words[j].start <= max_lookback_s`, ordered **nearest first** (descending `j`). `claimed` stops a second decision on a suffix of the same repeat.
 - `match_length(j, i)`: compare `norm` of `words[j+t]` and `words[i+t]` for `t = 0, 1, …` while `t < window_words` and `j + t < i`. A word matches if `rapidfuzz.fuzz.ratio >= word_similarity`. Count consecutive matches, allowing up to `max_mismatches` mismatches that are followed by a match. Stop at the first unrecoverable mismatch. Return the match count.
 - `has_content_word(j, m)`: at least one matched word is not a stopword, **or** `m >= 5`. Prevents matching "and the" / "so the".
 - Retakes never cross a source boundary in the main scan. A failed take at the end of `01.mov` and its retake in `02.mov` is handled separately: see *cross-file retakes* below.
 
-A candidate is auto-dropped only when the earlier span is aborted: none of its words end in `.`, `?`, or `!`. Apply the guards in order; the first match wins.
+Apply the guards in order; the first match wins.
 
-1. The earlier span contains a sentence end → `action: keep`, `flag: true`, reason `complete_sentence`. The finished sentence stays. This reason is final: the judge must not change the action to `drop`.
-2. `dropped_duration_s > auto_drop_max_s` → `action: keep`, `flag: true`, reason `long_segment`. A long aborted span is often a legitimate repetition.
-3. Missing content, only reached for aborted spans: let `D` = content words (non-stopwords, normalized) in the dropped segment and `K` = content words in `words[i : i + len(dropped) + 10]`. If `|D − K| / |D| > missing_content_ratio` → `action: drop`, `flag: true`, reason `retake_missing_content`. The retake may have left something out.
-4. Otherwise → `action: drop`, `flag: false`.
+1. The earlier span is one finished sentence and the sentence at `kept_from_word` has the same normalized words → `action: drop`, `flag: false`. Only the last word of each sentence ends in `.`, `?`, or `!`. A longer, shorter, or different later sentence is not this case.
+2. Otherwise, the earlier span contains a sentence end → `action: keep`, `flag: true`, reason `complete_sentence`. The finished sentence stays. This reason is final: the judge must not change the action to `drop`.
+3. `dropped_duration_s > auto_drop_max_s` → `action: keep`, `flag: true`, reason `long_segment`. A long aborted span is often a legitimate repetition. An exact finished-sentence repeat is already dropped in guard 1.
+4. Missing content, only reached for aborted spans: let `D` = content words (non-stopwords, normalized) in the dropped segment and `K` = content words in `words[i : i + len(dropped) + 10]`. If `|D − K| / |D| > missing_content_ratio` → `action: drop`, `flag: true`, reason `retake_missing_content`. The retake may have left something out.
+5. Otherwise → `action: drop`, `flag: false`.
 
 **Cross-file retakes**
 
@@ -363,9 +368,10 @@ If the first `window_words` words of source `k+1` match (same rules) a word run 
 | Stopword-only repeat | `and the … and the server` | no decision |
 | Legit repetition after 2 min | same sentence 120 s apart | no decision (lookback) |
 | Long aborted segment | aborted span longer than 20 s | `keep`, flagged `long_segment` |
-| Finished sentence | `A neuron is a weighted vote. A neuron is a weighted vote.` | `keep`, flagged `complete_sentence` |
+| Exact finished sentence | `A neuron is a weighted vote. A neuron is a weighted vote.` | one decision, drop the first sentence |
+| Different finished sentence | `A neuron is a weighted vote. A neuron is a weighted guess.` | one decision, `keep`, flagged `complete_sentence` |
 | Cross-file | `01` ends with an aborted sentence, `02` starts with it | drop tail of `01` |
-| Finished sentence, cross-file | `01` ends with a sentence, `02` starts by repeating it | `keep`, flagged `complete_sentence` |
+| Exact finished sentence, cross-file | `01` ends with a sentence, `02` starts by repeating it | drop the sentence on `01` |
 
 ### 7.4 Judge (`judge.py`, `llm.py`)
 
@@ -397,16 +403,17 @@ If the first `window_words` words of source `k+1` match (same rules) a word run 
 **Input:** `words.json`, `decisions.json`, `sources.json`, 48 kHz WAVs. **Output:** `timeline.json`.
 
 1. **Kept words** = all words not covered by a decision with `action: drop`.
-2. **Split into ranges:** walk kept words in order; start a new range when the source changes, when a dropped word lies between two kept words, or when the gap `next.start − prev.end > max_gap_ms`.
-3. **Raw cut points:** `in = first.start − pad_head`, `out = last.end + pad_tail`. Clamp to `[0, duration_s]`, and never past the neighbouring word (previous word's end / next word's start, kept or dropped).
-4. **Snap to silence:** compute an RMS envelope (`rms_frame_ms` windows) of the 48 kHz WAV. Within `±snap_window_ms` of each raw cut point, pick the lowest-RMS position, subject to:
+2. **Voice end:** Parakeet stretches sentence-final words across the following pause. For a word, `voice_end` is the start of the first `voice_quiet_ms` run, after a voiced frame, whose 50 ms-smoothed RMS stays below `background + voice_margin_db`. The background is the source's 10th-percentile level. Use `max(voice_end, midpoint)`, capped at `word.end`; with no such run, use `word.end`.
+3. **Split into ranges:** walk kept words in order; start a new range when the source changes, when a dropped word lies between two kept words, or when the gap `next.start − prev_end > max_gap_ms`. `prev_end` is the voice end for a word ending in `.`, `?`, or `!`, else `prev.end`.
+4. **Raw cut points:** `in = first.start − pad_head`, `out = voice_end(last) + pad_tail`. Clamp to `[0, duration_s]`, and never past the neighbouring word (previous word's end / next word's start, kept or dropped).
+5. **Snap to silence:** compute an RMS envelope (`rms_frame_ms` windows) of the 48 kHz WAV. Within `±snap_window_ms` of each raw cut point, pick the lowest-RMS position, subject to:
    - in-point ≤ `first.start − min_head_ms` and ≥ previous word's end
-   - out-point ≥ `last.end + min_tail_ms` and ≤ next word's start
+   - out-point ≥ `voice_end(last) + min_tail_ms`, ≤ the raw out-point, and ≤ next word's start
    If the allowed interval is empty, keep the raw cut point.
-5. **Frame rounding (once, last):** `in_frame = floor(in_s × fps)`, `out_frame = ceil(out_s × fps)`, using `Fraction(fps)`.
-6. **Cleanup:** merge consecutive ranges of the same source whose frame gap is ≤ 1. Ranges shorter than `min_range_frames`: merge into the neighbour if the gap is ≤ `max_gap_ms`, otherwise drop the range and attach a `CHECK: tiny fragment removed` marker to the next range.
-7. **Markers:** each flagged decision attaches a marker to the range containing `kept_from_word` (or the nearest following range). Text: `CHECK: <flag_reason> (<decision id>)`.
-8. **Dropped list:** every dropped decision becomes an entry in `dropped` with its source time span (word boundaries, not padded).
+6. **Frame rounding (once, last):** `in_frame = floor(in_s × fps)`, `out_frame = ceil(out_s × fps)`, using `Fraction(fps)`.
+7. **Cleanup:** merge consecutive ranges of the same source whose frame gap is ≤ 1. Ranges shorter than `min_range_frames`: merge into the neighbour if the gap is ≤ `max_gap_ms`, otherwise drop the range and attach a `CHECK: tiny fragment removed` marker to the next range.
+8. **Markers:** each flagged decision attaches a marker to the range containing `kept_from_word` (or the nearest following range). Text: `CHECK: <flag_reason> (<decision id>)`.
+9. **Dropped list:** every dropped decision becomes an entry in `dropped` with its source time span (word boundaries, not padded).
 
 **Acceptance**
 

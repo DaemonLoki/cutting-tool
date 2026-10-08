@@ -68,6 +68,14 @@ tighten:
   min_tail_ms: 40
   # Loudness is measured in frames of this many milliseconds.
   rms_frame_ms: 10
+  # Voice is this many dB above the source's background (its quietest 10%).
+  # Raise it when a range still ends in breath or room noise. Lower it when
+  # the end of a soft word is cut.
+  voice_margin_db: 12
+  # This much background inside a word, after its voice, ends the word there.
+  # The transcript often stretches the last word of a sentence across the pause.
+  # A range never ends more than pad_tail_ms after that point.
+  voice_quiet_ms: 300
   # Shorter ranges are merged into a neighbour or removed with a CHECK marker.
   min_range_frames: 6
 

@@ -67,6 +67,10 @@ tighten:
   min_tail_ms: 25
   # Loudness is measured in frames of this many milliseconds.
   rms_frame_ms: 10
+  # Voice is this many dB above the source's background (its quietest 10%).
+  voice_margin_db: 12
+  # This much background inside a word, after its voice, ends the word there.
+  voice_quiet_ms: 300
   # Shorter ranges are merged into a neighbour or removed with a CHECK marker.
   min_range_frames: 6
 

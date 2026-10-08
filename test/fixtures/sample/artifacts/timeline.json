@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "stage": "tighten",
+    "stage_version": 2,
+    "inputs_hash": "sha256:9b99638678088de20016aa4d69ba16e3b6c446f4566f6040202e979a01da3655",
+    "config_hash": "sha256:ac4270b9e099493b2564cce619c6c476e09c196f2c62deb09fdcf83f0ef38fc9",
+    "created_at": "2026-10-08T09:19:27Z"
+  },
+  "data": {
+    "ranges": [
+      {
+        "id": "r001",
+        "source": "s01",
+        "in_s": 8.025,
+        "out_s": 20.725,
+        "in_frame": 192,
+        "out_frame": 497,
+        "first_word": 11,
+        "last_word": 37,
+        "markers": []
+      },
+      {
+        "id": "r002",
+        "source": "s02",
+        "in_s": 13.155000000000001,
+        "out_s": 25.745,
+        "in_frame": 315,
+        "out_frame": 618,
+        "first_word": 54,
+        "last_word": 80,
+        "markers": []
+      },
+      {
+        "id": "r003",
+        "source": "s02",
+        "in_s": 34.855000000000004,
+        "out_s": 36.915,
+        "in_frame": 835,
+        "out_frame": 886,
+        "first_word": 81,
+        "last_word": 85,
+        "markers": [
+          {
+            "at_word": 81,
+            "text": "CHECK: complete_sentence (d003)"
+          }
+        ]
+      },
+      {
+        "id": "r004",
+        "source": "s02",
+        "in_s": 37.345,
+        "out_s": 40.605000000000004,
+        "in_frame": 895,
+        "out_frame": 974,
+        "first_word": 86,
+        "last_word": 90,
+        "markers": []
+      },
+      {
+        "id": "r005",
+        "source": "s02",
+        "in_s": 40.935,
+        "out_s": 50.275,
+        "in_frame": 981,
+        "out_frame": 1206,
+        "first_word": 91,
+        "last_word": 111,
+        "markers": []
+      },
+      {
+        "id": "r006",
+        "source": "s02",
+        "in_s": 52.495000000000005,
+        "out_s": 56.335,
+        "in_frame": 1258,
+        "out_frame": 1351,
+        "first_word": 112,
+        "last_word": 117,
+        "markers": []
+      }
+    ],
+    "dropped": [
+      {
+        "source": "s01",
+        "in_s": 3.68,
+        "out_s": 7.28,
+        "decision": "d001"
+      },
+      {
+        "source": "s02",
+        "in_s": 5.6000000000000005,
+        "out_s": 11.440000000000001,
+        "decision": "d002"
+      }
+    ]
+  }
+}

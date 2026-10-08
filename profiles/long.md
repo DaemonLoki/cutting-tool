@@ -44,12 +44,13 @@ worth trying:
 7. `retakes.missing_content_ratio` — raise it when a real retake is flagged
    `retake_missing_content` instead of dropped. Lower it to flag more often.
 
-Two rules are not in this file. A finished sentence stays, even when it is
-said again: any word in the earlier span ending in `.`, `?`, or `!` forces
-`keep` with reason `complete_sentence`. The judge cannot turn that into a
-drop. Parakeet often adds that period at the end of a source, so an aborted
-take that ends a file can look finished and stay in the cut. A match of fewer
-than 5 words must include one word that is not a stopword.
+Two rules are not in this file. An exact repeat of one finished sentence is
+dropped, and the later sentence stays. Any other earlier span with a word
+ending in `.`, `?`, or `!` stays `keep` with reason `complete_sentence`. The
+judge cannot turn that into a drop. Parakeet often adds that period at the
+end of a source, so an aborted take that ends a file stays when the next
+words are different. A match of fewer than 5 words must include one word
+that is not a stopword.
 
 ## ingest
 
@@ -168,6 +169,7 @@ Used by `cutter judge` and by `cutter run` unless you pass `--no-llm`.
 `--set judge.enabled=false`.
 
 Only decisions flagged `long_segment` or `retake_missing_content` are sent.
+An exact repeat of a finished sentence is already dropped and is not sent.
 `complete_sentence` is never sent and stays kept.
 
 `enabled`
@@ -211,15 +213,17 @@ are already gone before this stage runs.
   The cut is also clamped so it does not include the previous word.
 
 `pad_tail_ms`
-: How many milliseconds after the last kept word the range ends, before
-  silence snapping. The default `120` keeps the end of the last word. The
-  cut does not cross into the next word.
+: How many milliseconds after the end of the last kept word's voice the range
+  ends. The default `120` keeps the end of the last word. Silence snapping
+  may move the out-point earlier, never later, so a range does not end with
+  more silence than this. The cut does not cross into the next word.
 
 `snap_window_ms`
 : Search distance, each side of the padded cut, for the quietest 10 ms
   frame. The default `150` can move a cut by up to 150 ms toward silence.
   The move still has to respect `min_head_ms`, `min_tail_ms`, and the
-  neighbouring word. `0` leaves the padded point where it is.
+  neighbouring word. An out-point only moves earlier. `0` leaves the padded
+  point where it is.
 
 `min_head_ms`
 : The in-point stays at least this far before the first word. The default
@@ -234,6 +238,25 @@ are already gone before this stage runs.
 : Width of each loudness frame on the 48 kHz WAV, in milliseconds. The
   default `10` picks silence at about 10 ms resolution. Larger frames are
   smoother and less precise.
+
+`voice_margin_db`
+: Parakeet often stretches the last word of a sentence across the pause
+  after it. In the sample, `with.` is stamped to 26.0 s while the voice stops
+  near 25.7 s. Tighten finds where the voice stops in the analysis audio.
+  The background is the quietest 10% of the source's levels, measured over
+  50 ms. A level at least this many dB above the background is voice. The
+  default `12` treats room tone a few dB above the floor as silence. Raise it
+  when a range still ends in breath or room noise. Lower it when the end of
+  a soft word is cut. A word is never cut before the midpoint of its
+  transcript timestamps, so eval and the rough cut agree on which words are
+  kept.
+
+`voice_quiet_ms`
+: How much background inside a word, after its voice, ends the word there.
+  The default `300` is longer than the gap between two syllables. The end
+  found this way sets the range out-point, and for a word ending in `.`, `?`,
+  or `!`, it also counts toward `max_gap_ms`, so a pause hidden in a
+  stretched timestamp can start a new range.
 
 `min_range_frames`
 : Ranges shorter than this many frames are merged into a neighbour when the

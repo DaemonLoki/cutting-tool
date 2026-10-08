@@ -34,6 +34,8 @@ each word.
 | `tighten.min_tail_ms` | 40 | 25 | The out-point may sit 25 ms after the last word, not 40. |
 
 `rms_frame_ms` stays 10, so the snap is still measured in 10 ms steps.
+`voice_margin_db` stays 12 and `voice_quiet_ms` stays 300, so a range ends
+where the voice stops in both profiles.
 `min_range_frames` stays 6, so a scrap of a few frames is still removed
 instead of becoming a click.
 

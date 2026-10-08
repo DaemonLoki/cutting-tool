@@ -200,11 +200,14 @@ projects/my-video/artifacts/decisions.json
 Retake detection is conservative:
 
 - it compares transcript words, not claps or a script;
-- the later take wins only when the earlier take was aborted;
+- the later take wins when the earlier take was aborted, and when the next
+  sentence repeats a finished sentence in the same words;
 - a sentence counts as finished when any word in it ends in `.`, `?`, or `!`;
-- a repeated, finished sentence is kept and flagged for human review;
-- an aborted take that the transcript marks as finished is kept the same way,
-  including when that mark is added at the end of a source;
+- a finished sentence followed by different words is kept and flagged for
+  human review;
+- an aborted take that the transcript marks as finished is kept the same way
+  when the following words are not that same sentence, including when that
+  mark is added at the end of a source;
 - a long failed-take candidate is kept and flagged;
 - a drop that may omit content is flagged;
 - candidates more than 90 seconds apart are not treated as retakes;
@@ -273,7 +276,15 @@ projects/my-video/artifacts/timeline.json
 
 Kept words become ranges. A dropped retake, a source change, or a gap longer
 than 400 ms starts a new range. Cut points are padded, then snapped to the
-quietest moment in the analysis audio, then rounded to frames once. Flagged
+quietest moment in the analysis audio, then rounded to frames once.
+
+The transcript often stretches the last word of a sentence across the pause
+after it. Tighten measures where the voice actually stops: the first 300 ms
+that stay within 12 dB of the source's background. A range then ends at most
+`pad_tail_ms` after that point, and the hidden pause counts toward the gap
+that starts a new range. A word is never cut before the midpoint of its
+transcript timestamps. Tune this with `tighten.voice_margin_db` and
+`tighten.voice_quiet_ms`; see `profiles/long.md`. Flagged
 decisions become `CHECK` markers. Dropped retakes are listed for the rejects
 sequence. A very short range is merged into a neighbour or removed with a
 `CHECK: tiny fragment removed` marker.

@@ -5,7 +5,16 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
-from cutter.audio import rms_envelope, snap_time
+from cutter.audio import rms_envelope, snap_time, voice_end, voice_levels
+
+QUIET = 0.001  # -60 dB
+LOUD = 0.1  # -20 dB
+
+
+def _levels(*runs: tuple[float, int]) -> tuple[np.ndarray, float]:
+    """10 ms frames: each run is (rms, frame count)."""
+    envelope = np.concatenate([np.full(count, rms) for rms, count in runs])
+    return voice_levels(envelope, 10)
 
 
 def test_rms_envelope_peaks_on_a_middle_spike(tmp_path: Path):
@@ -52,6 +61,71 @@ def test_snap_time_respects_earliest_and_latest():
         latest_s=0.050,
     )
     assert snapped == (3 + 0.5) * 10 / 1000
+
+
+def test_voice_levels_background_is_the_quiet_tenth():
+    levels, background = _levels((QUIET, 200), (LOUD, 100), (QUIET, 200))
+    assert levels.shape == (500,)
+    assert round(background) == -60
+
+
+def test_voice_end_finds_silence_inside_a_stretched_word():
+    # Voice from 1.0 s to 1.3 s. The transcript says the word lasts to 2.0 s.
+    levels, background = _levels((QUIET, 100), (LOUD, 30), (QUIET, 170))
+    end = voice_end(
+        levels,
+        frame_ms=10,
+        start_s=1.0,
+        end_s=2.0,
+        threshold_db=background + 12,
+        quiet_ms=300,
+    )
+    assert end is not None
+    assert 1.3 <= end < 1.34
+
+
+def test_voice_end_ignores_a_dip_shorter_than_quiet_ms():
+    # 100 ms of quiet between two syllables is not the end of the word.
+    levels, background = _levels(
+        (QUIET, 100), (LOUD, 20), (QUIET, 10), (LOUD, 20), (QUIET, 150)
+    )
+    end = voice_end(
+        levels,
+        frame_ms=10,
+        start_s=1.0,
+        end_s=2.0,
+        threshold_db=background + 12,
+        quiet_ms=300,
+    )
+    assert end is not None
+    assert end >= 1.5
+
+
+def test_voice_end_none_without_voice_or_when_voice_continues():
+    silent, background = _levels((QUIET, 300))
+    assert (
+        voice_end(
+            silent,
+            frame_ms=10,
+            start_s=1.0,
+            end_s=2.0,
+            threshold_db=background + 12,
+            quiet_ms=300,
+        )
+        is None
+    )
+    voiced, background = _levels((QUIET, 100), (LOUD, 100), (QUIET, 100))
+    assert (
+        voice_end(
+            voiced,
+            frame_ms=10,
+            start_s=1.0,
+            end_s=2.0,
+            threshold_db=background + 12,
+            quiet_ms=300,
+        )
+        is None
+    )
 
 
 def test_snap_time_returns_raw_when_the_legal_interval_is_empty():

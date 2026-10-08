@@ -20,12 +20,12 @@ _Avoid_: Clip, input video
 One attempt at a passage of speech.
 
 **Retake**:
-A later take that repeats an aborted failed take. The later take is the one that stays.
+A later take that repeats an earlier take. The later take is the one that stays. An exact repeat of a finished sentence is a retake.
 _Avoid_: Restart
 
 **Failed take**:
-An earlier take that was aborted before the sentence ended, and that a retake replaces.
-_Avoid_: a finished sentence repeated on purpose
+An earlier take that a retake replaces: an aborted attempt, or a finished sentence repeated with the same words.
+_Avoid_: a finished sentence whose next take uses different words
 
 **Decision**:
 The judgment on one candidate repeat: drop the failed take, or keep the earlier span for a person to review.

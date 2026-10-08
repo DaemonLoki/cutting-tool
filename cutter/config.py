@@ -55,6 +55,8 @@ class TightenConfig(StrictModel):
     min_head_ms: int
     min_tail_ms: int
     rms_frame_ms: int
+    voice_margin_db: float
+    voice_quiet_ms: int
     min_range_frames: int
 
 

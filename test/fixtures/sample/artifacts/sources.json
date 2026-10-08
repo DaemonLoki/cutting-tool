@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "stage": "ingest",
+    "stage_version": 1,
+    "inputs_hash": "sha256:7835abf44da46ae4e5a568c45329b7c3cec0333acacf65f15a73a05f2c217e6f",
+    "config_hash": "sha256:836dfe75a95b278ec8eb52bcef7fe18fe1d13e5eb4ba969c7c596d168a9e0881",
+    "created_at": "2026-10-08T08:05:10Z"
+  },
+  "data": {
+    "fps": "24000/1001",
+    "width": 3840,
+    "height": 2160,
+    "audio_rate": 48000,
+    "audio_channels": 2,
+    "sources": [
+      {
+        "id": "s01",
+        "path": "/Users/stefanblos/Developer/Stream/cutting-tool/test/fixtures/sample/raw/1-intro.MP4",
+        "duration_s": 38.705333333333336,
+        "duration_frames": 928,
+        "start_timecode": "01:20:27:14",
+        "start_frames": 115862,
+        "vfr_warning": false,
+        "asr_wav": "artifacts/audio/s01.16k.wav",
+        "analysis_wav": "artifacts/audio/s01.48k.wav"
+      },
+      {
+        "id": "s02",
+        "path": "/Users/stefanblos/Developer/Stream/cutting-tool/test/fixtures/sample/raw/2-skills.MP4",
+        "duration_s": 59.10070833333333,
+        "duration_frames": 1417,
+        "start_timecode": "01:19:28:13",
+        "start_frames": 114445,
+        "vfr_warning": false,
+        "asr_wav": "artifacts/audio/s02.16k.wav",
+        "analysis_wav": "artifacts/audio/s02.48k.wav"
+      }
+    ]
+  }
+}

@@ -1,7 +1,8 @@
-"""Find a retake: a later take that repeats an aborted failed take.
+"""Find a retake: a later take that repeats an earlier take.
 
-The later take stays. A finished sentence that is said again is not a failed
-take; that decision stays ``keep`` with reason ``complete_sentence``.
+The later take stays. An aborted failed take is dropped. An exact repeat of
+one finished sentence is dropped too. A finished sentence followed by
+different words stays ``keep`` with reason ``complete_sentence``.
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ from cutter.models import (
     write_artifact,
 )
 
-STAGE_VERSION = 1
+STAGE_VERSION = 2
 STAGE = "retakes"
 
 # Common English function words. ``stopwords_file: null`` uses this list.
@@ -62,29 +63,32 @@ _SENTENCE_END = (".", "?", "!")
 def detect_retakes(words: list[Word], config: RetakesConfig) -> list[Decision]:
     """Return one decision per candidate repeat, in the order they are found.
 
-    The scan walks left to right. The nearest earlier run that matches wins,
-    and a dropped failed take is not matched again. Cross-file retakes are
-    recorded after that scan: the start of source ``k+1`` against the tail of
-    source ``k``.
+    The scan walks left to right. The nearest earlier run that matches wins.
+    Words already covered by a decision are not the start of another one, so
+    one repeated sentence produces one decision. A dropped failed take is not
+    matched again. Cross-file retakes are recorded after that scan: the start
+    of source ``k+1`` against the tail of source ``k``.
     """
     stopwords = _load_stopwords(config)
     dropped: set[int] = set()
+    claimed: set[int] = set()
     decisions: list[Decision] = []
 
     def record(j: int, i: int, match_words: int) -> None:
         decision = _make_decision(words, j, i, match_words, config, stopwords, len(decisions) + 1)
         decisions.append(decision)
+        claimed.update(range(j, i))
         if decision.action == "drop":
             dropped.update(range(j, i))
 
     for i in range(len(words)):
         if i in dropped:
             continue
-        found = _first_match(words, i, _candidates(words, i, dropped, config), config, stopwords)
+        found = _first_match(words, i, _candidates(words, i, claimed, config), config, stopwords)
         if found is not None:
             record(found[0], i, found[1])
 
-    for i, candidates in _cross_file_candidates(words, dropped, config):
+    for i, candidates in _cross_file_candidates(words, claimed, config):
         found = _first_match(words, i, candidates, config, stopwords)
         if found is not None:
             record(found[0], i, found[1])
@@ -134,7 +138,7 @@ def run_retakes(
 def _candidates(
     words: list[Word],
     i: int,
-    dropped: set[int],
+    claimed: set[int],
     config: RetakesConfig,
 ):
     """Earlier indices in this source, nearest first, inside the lookback."""
@@ -145,14 +149,14 @@ def _candidates(
             break
         if origin - words[j].start > config.max_lookback_s:
             break
-        if j in dropped:
+        if j in claimed:
             continue
         yield j
 
 
 def _cross_file_candidates(
     words: list[Word],
-    dropped: set[int],
+    claimed: set[int],
     config: RetakesConfig,
 ) -> list[tuple[int, list[int]]]:
     """Pair each source tail with the first word of the next source.
@@ -169,7 +173,7 @@ def _cross_file_candidates(
         for j in range(k_end, k_start - 1, -1):
             if last_end - words[j].start > config.max_lookback_s:
                 break
-            if j in dropped:
+            if j in claimed:
                 continue
             candidates.append(j)
         scans.append((next_start, candidates))
@@ -305,8 +309,14 @@ def _guards(
     config: RetakesConfig,
     stopwords: frozenset[str],
 ) -> tuple[str, bool, str | None]:
-    """First matching guard wins. ``complete_sentence`` is never a drop."""
+    """First matching guard wins.
+
+    An exact repeat of one finished sentence is dropped. Any other earlier
+    span that contains a sentence end stays, and the judge cannot drop it.
+    """
     earlier = words[j:i]
+    if _exact_finished_repeat(words, j, i):
+        return "drop", False, None
     if any(word.w.endswith(_SENTENCE_END) for word in earlier):
         return "keep", True, "complete_sentence"
     if duration > config.auto_drop_max_s:
@@ -323,6 +333,33 @@ def _guards(
         if missing > config.missing_content_ratio:
             return "drop", True, "retake_missing_content"
     return "drop", False, None
+
+
+def _exact_finished_repeat(words: list[Word], j: int, i: int) -> bool:
+    """True when ``words[j:i]`` and the sentence at ``i`` are the same words.
+
+    Both spans are one sentence: only the last word ends in ``.``, ``?``, or
+    ``!``, and the normalized tokens match. A longer or shorter later sentence
+    is not an exact repeat.
+    """
+    earlier = words[j:i]
+    if not earlier or not _ends_sentence(earlier[-1]):
+        return False
+    if any(_ends_sentence(word) for word in earlier[:-1]):
+        return False
+    end = i + len(earlier)
+    if end > len(words):
+        return False
+    later = words[i:end]
+    if any(word.source != words[i].source for word in later):
+        return False
+    if any(_ends_sentence(word) for word in later[:-1]) or not _ends_sentence(later[-1]):
+        return False
+    return [word.norm for word in earlier] == [word.norm for word in later]
+
+
+def _ends_sentence(word: Word) -> bool:
+    return word.w.endswith(_SENTENCE_END)
 
 
 def _content_norms(span: list[Word], stopwords: frozenset[str]) -> set[str]:

@@ -81,6 +81,7 @@ def _missing_words() -> list[Word]:
                 "joins",
                 "server",
                 "cluster",
+                "database",
                 "the",
                 "agent",
                 "joins",
@@ -92,8 +93,9 @@ def _missing_words() -> list[Word]:
 
 
 def _finished_words() -> list[Word]:
-    sentence = ["A", "neuron", "is", "a", "weighted", "vote."]
-    return _indexed(_words(sentence + sentence))
+    first = ["A", "neuron", "is", "a", "weighted", "vote."]
+    second = ["A", "neuron", "is", "a", "weighted", "guess."]
+    return _indexed(_words(first + second))
 
 
 def _one(words: list[Word]) -> Decision:

@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "stage": "judge",
+    "stage_version": 1,
+    "inputs_hash": "sha256:4f3e771a0d0a87971b30207ae8b4ccccafe6413d69ed3ed5622321fac8f887c2",
+    "config_hash": "sha256:9f695343f6f69ba14c1f26aefbaaa06ad30250960ae05b113189681532f82baf",
+    "created_at": "2026-10-08T09:19:27Z"
+  },
+  "data": {
+    "decisions": [
+      {
+        "id": "d001",
+        "kind": "retake",
+        "dropped_words": [
+          0,
+          10
+        ],
+        "kept_from_word": 11,
+        "match_words": 11,
+        "dropped_duration_s": 3.6,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null
+      },
+      {
+        "id": "d002",
+        "kind": "retake",
+        "dropped_words": [
+          38,
+          53
+        ],
+        "kept_from_word": 54,
+        "match_words": 8,
+        "dropped_duration_s": 5.840000000000001,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null
+      },
+      {
+        "id": "d003",
+        "kind": "retake",
+        "dropped_words": [
+          54,
+          80
+        ],
+        "kept_from_word": 81,
+        "match_words": 4,
+        "dropped_duration_s": 12.799999999999999,
+        "action": "keep",
+        "flag": true,
+        "flag_reason": "complete_sentence",
+        "judge": null
+      }
+    ]
+  }
+}

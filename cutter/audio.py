@@ -8,6 +8,8 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
+_SMOOTH_MS = 50
+
 
 def rms_envelope(wav_path: Path, frame_ms: int) -> tuple[np.ndarray, int]:
     """RMS energy per frame of a mono WAV.
@@ -38,6 +40,70 @@ def rms_envelope(wav_path: Path, frame_ms: int) -> tuple[np.ndarray, int]:
         else:
             envelope[index] = math.sqrt(float(np.mean(frame * frame)))
     return envelope, rate
+
+
+def voice_levels(envelope: np.ndarray, frame_ms: int) -> tuple[np.ndarray, float]:
+    """Smoothed levels in dB, and the background level of the whole source.
+
+    Each level is the RMS averaged over ``_SMOOTH_MS``, so one loud or quiet
+    frame does not decide. The background is the 10th percentile of those
+    levels. An empty envelope returns an empty array and ``-inf``.
+    """
+    if envelope.size == 0:
+        return np.empty(0, dtype=np.float64), float("-inf")
+    width = max(1, round(_SMOOTH_MS / frame_ms))
+    smoothed = np.convolve(envelope, np.ones(width) / width, mode="same")
+    levels = 20 * np.log10(np.maximum(smoothed, 1e-10))
+    return levels, float(np.percentile(levels, 10))
+
+
+def voice_end(
+    levels: np.ndarray,
+    *,
+    frame_ms: int,
+    start_s: float,
+    end_s: float,
+    threshold_db: float,
+    quiet_ms: int,
+) -> float | None:
+    """Where the voice inside ``[start_s, end_s]`` stops, in seconds.
+
+    ``levels`` come from ``voice_levels``. A frame is voiced at or above
+    ``threshold_db``. The voice ends where a run of unvoiced frames,
+    ``quiet_ms`` long, starts after a voiced frame and before ``end_s``. The
+    run may continue past ``end_s``. Returns None when the word has no voiced
+    frame, or when no such run starts inside the word.
+    """
+    total = int(levels.shape[0])
+    if total == 0 or end_s <= start_s:
+        return None
+    step = frame_ms / 1000
+    first = max(0, math.floor(start_s / step))
+    last = min(total - 1, math.ceil(end_s / step) - 1)
+    if first > last:
+        return None
+    need = max(1, math.ceil(quiet_ms / frame_ms))
+
+    voiced = False
+    run_start: int | None = None
+    for index in range(first, min(total, last + need + 1)):
+        if float(levels[index]) >= threshold_db:
+            if index > last:
+                return None
+            voiced = True
+            run_start = None
+            continue
+        if not voiced:
+            if index > last:
+                return None
+            continue
+        if run_start is None:
+            if index > last:
+                return None
+            run_start = index
+        if index - run_start + 1 >= need:
+            return run_start * step
+    return None
 
 
 def snap_time(
