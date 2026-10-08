@@ -127,7 +127,8 @@ def align(
 ) -> None:
     """Align the transcript to an optional script.
 
-    This stage is a scaffold. It writes an empty artifact.
+    Reads the transcript and ``script.md`` when that file exists.
+    Writes ``artifacts/alignment.json``.
     """
     _configure_logging()
     words_path = project_dir / "artifacts" / "words.json"

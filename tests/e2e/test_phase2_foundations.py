@@ -33,7 +33,7 @@ _STAGES = (
 )
 
 
-def test_speech_is_recorded_and_a_second_run_skips_every_stage(tmp_path: Path) -> None:
+def test_speech_alignment_and_fillers_and_a_second_run_is_cached(tmp_path: Path) -> None:
     project = tmp_path / "synthetic"
     build_project(project, fillers=True, clap=True, script=True)
 
@@ -53,11 +53,11 @@ def test_speech_is_recorded_and_a_second_run_skips_every_stage(tmp_path: Path) -
     assert audio.data.backend == "silero"
     assert audio.data.speech
     assert audio.data.claps == []
-    assert alignment.data.script is None
-    assert alignment.data.chapters == []
-    assert alignment.data.sentences == []
-    assert alignment.data.unscripted == []
-    assert alignment.data.missing == []
+    assert alignment.data.script is not None
+    assert alignment.data.script.path == "script.md"
+    assert [chapter.title for chapter in alignment.data.chapters] == ["Cache", "Agent"]
+    assert len(alignment.data.sentences) == 3
+    assert len(alignment.data.missing) == 1
     assert all(decision.kind == "filler" for decision in fillers.data.decisions)
     words = WordsArtifact.model_validate_json(
         (artifacts / "words.json").read_text(encoding="utf-8")
