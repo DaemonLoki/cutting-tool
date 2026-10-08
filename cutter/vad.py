@@ -30,12 +30,32 @@ def speech_segments(
     ``voice_margin_db`` above that file's background. The caller does not
     call this when ``vad.enabled`` is false.
     """
+    stored, _gate = speech_and_clap_gate(wav_path, config, voice_margin_db=voice_margin_db)
+    return stored
+
+
+def speech_and_clap_gate(
+    wav_path: Path,
+    config: VadConfig,
+    *,
+    voice_margin_db: float,
+) -> tuple[list[tuple[float, float]], list[tuple[float, float]]]:
+    """Stored speech segments, and the spans that hide a clap.
+
+    Stored segments bridge pauses shorter than ``min_silence_ms`` and pad
+    both ends. The clap gate does neither. A mistake mark sits in the pause
+    between utterances, and that pause is often shorter than the bridge.
+    Only a voiced run at least ``min_speech_ms`` long is a gate, so a clap
+    that the detector marks as a short blip is not treated as speech.
+    """
     if config.backend == "silero":
         voiced, frame_s, duration = _silero_mask(wav_path, config.threshold)
     else:
         voiced, frame_s, duration = _energy_mask(wav_path, voice_margin_db)
     spans = _mask_to_spans(voiced, frame_s)
-    return _postprocess(spans, config, duration)
+    min_speech_s = config.min_speech_ms / 1000
+    gate = [(start, end) for start, end in spans if end - start >= min_speech_s]
+    return _postprocess(spans, config, duration), gate
 
 
 def _silero_mask(wav_path: Path, threshold: float) -> tuple[np.ndarray, float, float]:
