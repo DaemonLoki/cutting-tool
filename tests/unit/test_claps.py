@@ -90,8 +90,8 @@ def test_audio_stage_records_claps_on_the_source(tmp_path: Path) -> None:
     _write_sources(tmp_path, wav)
     artifact = run_audio(tmp_path, PROFILE)
 
-    assert artifact.meta.stage_version == 2
-    assert artifact.data.backend == "none"
+    assert artifact.meta.stage_version == 3
+    assert artifact.data.backend == "silero"
     assert artifact.data.speech == []
     assert len(artifact.data.claps) == 2
     assert {clap.source for clap in artifact.data.claps} == {"s01"}
@@ -154,7 +154,7 @@ def _write_sources(project: Path, analysis: Path) -> None:
     audio = analysis.parent
     asr = audio / "s01.16k.wav"
     if not asr.is_file():
-        asr.write_bytes(b"16k")
+        sf.write(asr, np.zeros(16_000, dtype=np.float32), 16_000)
     write_artifact(
         project / "artifacts" / "sources.json",
         SourcesArtifact(
