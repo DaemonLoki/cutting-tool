@@ -37,9 +37,18 @@ from pathlib import Path
 from lxml import etree
 
 from cutter.config import Profile
-from cutter.models import DroppedSpan, Marker, Range, Source, SourcesData, TimelineData
+from cutter.models import (
+    DroppedSpan,
+    Range,
+    Source,
+    SourcesData,
+    TimelineChapter,
+    TimelineData,
+)
 
-STAGE_VERSION = 1
+# Chapter markers and filler rejects change the document when a timeline has
+# either. A timeline with neither stays byte-identical to the previous export.
+STAGE_VERSION = 2
 
 # colorSpace on the reference camera format. Kept for every geometry.
 REFERENCE_COLOR_SPACE = "1-1-1 (Rec. 709)"
@@ -55,6 +64,7 @@ _REFERENCE_FORMATS: tuple[tuple[int, int, Fraction, str], ...] = (
 
 _FORMAT_ID = "r1"
 _REJECT_KIND = "retake"
+_FILLER_KIND = "filler"
 
 # Sequence audioRate is an enumeration in FCPXMLv1_14.dtd. Asset audioRate
 # stays the integer Hertz from SourcesData, matching the camera asset.
@@ -156,9 +166,18 @@ def build_fcpxml(
     in the map is placed at the clip's ``in_frame`` (still clamped). Marker
     duration is one frame (``t(1)``).
 
+    Each timeline chapter becomes a ``chapter-marker`` on the asset-clip
+    whose range contains ``at_word`` (``first_word`` through ``last_word``).
+    Its ``start`` uses that same word-start frame. ``duration`` and
+    ``posterOffset`` are omitted, and ``value`` is the chapter title.
+    Chapter markers are written after the clip's ``marker`` elements. A
+    chapter whose word is in no range is omitted.
+
     Dropped spans store seconds. They become rejects clips with
     ``in_frame = floor(in_s * fps)`` and ``out_frame = ceil(out_s * fps)``.
-    Each rejects clip has a marker ``value="<decision id>: retake"``.
+    A decision id that starts with ``f`` is a filler drop. It is included
+    only when ``fcpxml.rejects_include_fillers`` is true, with marker
+    ``value="<id>: filler"``. Every other span stays ``<id>: retake``.
     """
     t, fps = _timebase(sources.fps)
     by_id = {source.id: source for source in sources.sources}
@@ -172,7 +191,14 @@ def build_fcpxml(
         resources.append(_asset_element(source, asset_ids[source.id], sources, t))
 
     rough_spine, rough_frames = _rough_cut_spine(
-        timeline.ranges, by_id, asset_ids, t, fps, profile.fcpxml.audio_role, word_starts
+        timeline.ranges,
+        timeline.chapters,
+        by_id,
+        asset_ids,
+        t,
+        fps,
+        profile.fcpxml.audio_role,
+        word_starts,
     )
     rejects_spine, reject_frames = _rejects_spine(
         timeline.dropped, by_id, asset_ids, t, fps, profile
@@ -279,6 +305,7 @@ def _asset_element(
 
 def _rough_cut_spine(
     ranges: list[Range],
+    chapters: list[TimelineChapter],
     by_id: dict[str, Source],
     asset_ids: dict[str, str],
     t: Callable[[int], str],
@@ -288,6 +315,7 @@ def _rough_cut_spine(
 ) -> tuple[etree._Element, int]:
     clips: list[etree._Element] = []
     offset = 0
+    placed: set[int] = set()
     for item in ranges:
         source = _lookup(by_id, item.source, f"range {item.id}")
         duration = item.out_frame - item.in_frame
@@ -295,11 +323,18 @@ def _rough_cut_spine(
             raise ValueError(f"range {item.id} has out_frame before in_frame")
         markers = [
             _marker_element(
-                t(source.start_frames + _marker_frame(marker, item, fps, word_starts)),
+                t(source.start_frames + _at_word_frame(marker.at_word, item, fps, word_starts)),
                 t(1),
                 marker.text,
             )
             for marker in item.markers
+        ]
+        chapter_markers = [
+            _chapter_marker_element(
+                t(source.start_frames + _at_word_frame(chapter.at_word, item, fps, word_starts)),
+                chapter.title,
+            )
+            for chapter in _chapters_in_range(chapters, item, placed)
         ]
         clips.append(
             _asset_clip(
@@ -309,7 +344,7 @@ def _rough_cut_spine(
                 start=t(source.start_frames + item.in_frame),
                 duration=t(duration),
                 audio_role=audio_role,
-                children=markers,
+                children=[*markers, *chapter_markers],
             )
         )
         offset += duration
@@ -333,10 +368,13 @@ def _rejects_spine(
         duration = out_frame - in_frame
         if duration < 0:
             raise ValueError(f"dropped span {span.decision} ends before it starts")
+        kind = _reject_kind(span.decision)
+        if kind == _FILLER_KIND and not profile.fcpxml.rejects_include_fillers:
+            continue
         marker = _marker_element(
             t(source.start_frames + in_frame),
             t(1),
-            f"{span.decision}: {_REJECT_KIND}",
+            f"{span.decision}: {kind}",
         )
         clips.append(
             _asset_clip(
@@ -353,20 +391,42 @@ def _rejects_spine(
     return _element("spine", children=clips), offset
 
 
-def _marker_frame(
-    marker: Marker,
+def _chapters_in_range(
+    chapters: list[TimelineChapter],
+    item: Range,
+    placed: set[int],
+) -> list[TimelineChapter]:
+    found: list[TimelineChapter] = []
+    for index, chapter in enumerate(chapters):
+        if index in placed:
+            continue
+        if item.first_word <= chapter.at_word <= item.last_word:
+            found.append(chapter)
+            placed.add(index)
+    return found
+
+
+def _at_word_frame(
+    at_word: int,
     item: Range,
     fps: Fraction,
     word_starts: dict[int, float] | None,
 ) -> int:
-    if word_starts is not None and marker.at_word in word_starts:
-        frame = math.floor(Fraction(word_starts[marker.at_word]) * fps)
+    if word_starts is not None and at_word in word_starts:
+        frame = math.floor(Fraction(word_starts[at_word]) * fps)
     else:
         frame = item.in_frame
     last = item.out_frame - 1
     if last < item.in_frame:
         return item.in_frame
     return min(max(frame, item.in_frame), last)
+
+
+def _reject_kind(decision_id: str) -> str:
+    """Filler drops use ids ``f001…``. Every other dropped span is a retake."""
+    if decision_id.startswith("f"):
+        return _FILLER_KIND
+    return _REJECT_KIND
 
 
 def _asset_clip(
@@ -397,6 +457,10 @@ def _asset_clip(
 
 def _marker_element(start: str, duration: str, value: str) -> etree._Element:
     return _element("marker", {"start": start, "duration": duration, "value": value})
+
+
+def _chapter_marker_element(start: str, value: str) -> etree._Element:
+    return _element("chapter-marker", {"start": start, "value": value})
 
 
 def _project(

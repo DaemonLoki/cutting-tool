@@ -63,9 +63,12 @@ range starts and ends with the voice. `fillers` writes drop decisions, and
 tighten removes those fillers from the rough cut when `fillers.json` is
 present. `cutter align` writes `alignment.json` from `script.md` and does not
 drop words. When that alignment has chapters and `chapters.enabled` is true,
-tighten places a chapter marker on the chosen take. When `audio_events.json`
-lists claps, tighten keeps each clap out of the rough cut. The rough cut
-changes when those artifacts exist. The new keys do change the cache for the
+tighten places a chapter marker on the chosen take. Export turns that chapter
+into a chapter marker on the range that contains its kept word. Export leaves
+a filler drop out of the rejects project unless `fcpxml.rejects_include_fillers`
+is true. When `audio_events.json` lists claps, tighten keeps each clap out of
+the rough cut. The rough cut changes when those artifacts exist. The new keys
+do change the cache for the
 stages that read them. `short` uses the same values as `long` for every new key.
 
 ## Create a project
@@ -479,7 +482,7 @@ Export currently requires all of these artifacts:
 projects/my-video/artifacts/
 ├── sources.json
 ├── timeline.json
-└── words.json        # optional, but improves CHECK marker placement
+└── words.json        # optional; positions CHECK and chapter markers
 ```
 
 Create the timeline with `cutter tighten` or `cutter run`, then:
@@ -498,14 +501,23 @@ The FCPXML contains:
 
 - one event named `my-video – cutter`;
 - a `my-video – rough cut` project containing kept ranges;
-- a `my-video – rejects` project containing dropped retakes;
+- a `my-video – rejects` project containing each dropped failed take;
 - `CHECK` markers from the timeline;
+- a chapter marker for each chapter on the timeline, on the range that
+  contains that chapter's kept word;
 - references to the original source files.
 
 All FCPXML times are exact rational frame times. Source paths with spaces and
 non-ASCII characters are encoded as file URIs. If `words.json` is available,
-its word start times position `CHECK` markers; otherwise markers are placed at
-the beginning of their range.
+its word start times position `CHECK` markers and chapter markers; otherwise
+those markers are placed at the beginning of their range. A chapter marker
+uses the chapter title and has no duration. It is written after the `CHECK`
+markers on the same clip.
+
+The rejects project marks each failed take `<id>: retake`. A filler drop stays
+out of that project unless `fcpxml.rejects_include_fillers` is true. When the
+switch is true, the filler is included with marker `<id>: filler`, for example
+`f003: filler`.
 
 By default, Cutter validates the output against Final Cut Pro's FCPXML 1.14
 DTD:

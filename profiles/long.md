@@ -362,8 +362,9 @@ cached. Adding or editing the file misses that cache.
 ## chapters
 
 Used by `cutter align` and by tighten's cache. `cutter align` records a
-chapter for each heading whose level is listed below. Chapter markers in the
-FCPXML are not written yet.
+chapter for each heading whose level is listed below. Export writes a chapter
+marker for each chapter already on the timeline, at that chapter's kept word.
+Tighten does not place those chapters on the timeline yet.
 
 `enabled`
 : `false` writes no chapter markers. `true` will place one at the first kept
@@ -483,9 +484,9 @@ are kept.
   Final Cut shows for this speech.
 
 `rejects_include_fillers`
-: `false` leaves filler drops out of the rejects project. `true` will include
-  them, with a marker such as `f003: filler`. Export does not read filler
-  decisions yet, so both values write the same rejects sequence.
+: `false` leaves filler drops out of the rejects project. `true` includes
+  each filler drop, with a marker `<id>: filler` (for example `f003: filler`).
+  A dropped failed take stays `<id>: retake` either way.
 
 `vfr_media`
 : Which file the FCPXML points at when a source has a proxy. `original` keeps
