@@ -10,7 +10,12 @@ from tests.e2e.test_pipeline import _metal_available
 from typer.testing import CliRunner
 
 from cutter.cli import app
-from cutter.models import AlignmentArtifact, AudioEventsArtifact, DecisionsArtifact
+from cutter.models import (
+    AlignmentArtifact,
+    AudioEventsArtifact,
+    DecisionsArtifact,
+    WordsArtifact,
+)
 
 runner = CliRunner()
 
@@ -53,7 +58,21 @@ def test_speech_is_recorded_and_a_second_run_skips_every_stage(tmp_path: Path) -
     assert alignment.data.sentences == []
     assert alignment.data.unscripted == []
     assert alignment.data.missing == []
-    assert fillers.data.decisions == []
+    assert all(decision.kind == "filler" for decision in fillers.data.decisions)
+    words = WordsArtifact.model_validate_json(
+        (artifacts / "words.json").read_text(encoding="utf-8")
+    )
+    spoken = {word.norm for word in words.data.words}
+    dropped_norms: set[str] = set()
+    for decision in fillers.data.decisions:
+        if decision.action != "drop":
+            continue
+        first, last = decision.dropped_words
+        dropped_norms.update(word.norm for word in words.data.words if first <= word.i <= last)
+    # The fixture says "Um" and "uh" in the kept sentence. Tighten does not
+    # remove them from the rough cut yet; this checks the filler decisions.
+    assert {"um", "uh"} <= spoken
+    assert {"um", "uh"} <= dropped_norms
 
     created = {name: (artifacts / name).read_bytes() for name in _STAGES}
     again = runner.invoke(app, ["run", str(project), "--no-llm"])

@@ -9,7 +9,7 @@ Cutter currently supports these pipeline stages:
 5. Inspect transcribed words in a time range.
 6. Detect aborted failed takes and decide which ones should be dropped.
 7. Ask a local model about ambiguous aborted takes.
-8. Mark filler words (scaffold: writes an empty artifact).
+8. Mark filler words. The rough cut does not remove them yet.
 9. Tighten the kept words into a rough cut.
 10. Export the timeline as editable FCPXML.
 11. Run the whole pipeline.
@@ -56,9 +56,10 @@ plus `ingest.cfr_proxy` (`never`, `auto`, or `always`), `ingest.proxy_codec`
 (`prores_proxy` or `h264`), `tighten.use_vad`, `fcpxml.rejects_include_fillers`,
 and `fcpxml.vfr_media` (`original` or `proxy`). What each key will do is in
 `profiles/long.md`. `cutter audio` writes speech segments when `vad.enabled`
-is true. Those segments do not move cut points yet. Align, fillers, and claps
-are still scaffolds. The new keys do change the cache for the stages that
-read them. `short` uses the same values as `long` for every new key.
+is true. Those segments do not move cut points yet. `fillers` writes drop
+decisions, and tighten does not apply them yet, so the rough cut is unchanged.
+Align and claps are still scaffolds. The new keys do change the cache for the
+stages that read them. `short` uses the same values as `long` for every new key.
 
 ## Create a project
 
@@ -327,17 +328,31 @@ uv run cutter fillers projects/my-video
 uv run cutter fillers projects/my-video --profile long --force
 ```
 
-This command is a scaffold. It reads `artifacts/words.json` and
-`artifacts/decisions.json`, and writes:
+This command reads `artifacts/words.json` and `artifacts/decisions.json`, and
+writes:
 
 ```text
 projects/my-video/artifacts/fillers.json
 ```
 
-The file is a decisions artifact with no decisions. The summary is
-`filler decisions: 0`. A second run with the same words, decisions, and
-`fillers` settings is a cache hit. `cutter run` writes this file after the
-judged decisions are on disk, and before tighten.
+A kept word is one that no retake decision has dropped. `fillers.words` (`um`,
+`uh`, and the other hums) are dropped in runs: consecutive kept fillers become
+one decision. `fillers.phrases`, such as `you know`, match that exact sequence
+of normalized words and become one decision; those words are not also marked
+on their own. `fillers.sentence_start_words`, such as `so`, are dropped only
+when the word opens its sentence and another kept word in that sentence
+follows. A leading filler still counts as the opening, so `Um, so ...` drops
+`so` once it is listed. A mid-sentence `so` stays. A filler that is the only
+kept word of its sentence stays; it is content, and no decision is written. A
+run longer than `fillers.max_duration_s` is kept and flagged `filler_long`.
+`fillers.enabled: false` writes the artifact with no decisions.
+
+The summary is `filler decisions: N`. A second run with the same words,
+decisions, and `fillers` settings is a cache hit. `cutter run` writes this
+file after the judged decisions are on disk, and before tighten.
+
+Tighten does not read these decisions yet, so the rough cut still plays the
+filler words. Removing them from the timeline lands with tighten.
 
 ## 9. Tighten the rough cut
 
@@ -445,8 +460,9 @@ is skipped. A judged decisions file already includes the retake result, so a
 cache hit skips both retakes and judge. Fillers runs after that file is
 settled, because it hashes `decisions.json`. `--no-llm` still runs the judge
 stage, without calling the model. Audio records speech segments and does not
-change which words are kept. Align and fillers are scaffolds: they write
-empty artifacts.
+change which words are kept. Fillers writes decisions for configured filler
+words; tighten does not remove those words yet. Align is a scaffold: it writes
+an empty artifact.
 
 The project folder after a run looks like this:
 
@@ -459,7 +475,7 @@ projects/my-video/
 │   ├── audio_events.json      # speech segments; claps none yet
 │   ├── alignment.json         # scaffold: no script
 │   ├── decisions.json
-│   ├── fillers.json           # scaffold: no filler decisions
+│   ├── fillers.json           # filler decisions; tighten does not apply them yet
 │   ├── timeline.json
 │   ├── export.json
 │   └── audio/
@@ -538,7 +554,7 @@ a valid cache entry.
 | `cutter words` | Implemented | Console output |
 | `cutter retakes` | Implemented | `artifacts/decisions.json` |
 | `cutter judge` | Implemented | `artifacts/decisions.json` |
-| `cutter fillers` | Scaffolded (writes an empty artifact) | `artifacts/fillers.json` |
+| `cutter fillers` | Implemented | `artifacts/fillers.json` |
 | `cutter tighten` | Implemented | `artifacts/timeline.json` |
 | `cutter export` | Implemented | `out/<project>.fcpxml` |
 | `cutter run` | Implemented | FCPXML plus the artifacts above |
