@@ -150,6 +150,16 @@ def test_words_between_formats_words_whose_start_is_in_range():
     assert words_between(words, 1.2, 2.0) == "So, 1.200 1.380\nthere 1.400 1.600"
 
 
+def test_words_between_limits_one_source():
+    words = [
+        Word(i=0, source="s01", w="Hello", norm="hello", start=1.0, end=1.2, sent=0),
+        Word(i=1, source="s02", w="there", norm="there", start=1.1, end=1.3, sent=0),
+    ]
+    assert words_between(words, 0.0, 2.0) == "Hello 1.000 1.200\nthere 1.100 1.300"
+    assert words_between(words, 0.0, 2.0, source="s01") == "Hello 1.000 1.200"
+    assert words_between(words, 0.0, 2.0, source="s03") == ""
+
+
 def test_transcribe_project_writes_words_and_skips_when_cached(tmp_path: Path):
     project = tmp_path / "proj"
     wav = project / "artifacts" / "audio" / "s01.16k.wav"

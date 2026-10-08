@@ -4,9 +4,28 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from cutter.evaluate import diff_metrics, evaluate_gold, load_metrics, predicted_spans, score
+from cutter.evaluate import (
+    count_filler_drops,
+    diff_metrics,
+    evaluate_gold,
+    information,
+    load_metrics,
+    predicted_spans,
+    score,
+)
 from cutter.fcpxml_parse import SourceSpan
-from cutter.models import Range, Source, SourcesData, TimelineData, Word
+from cutter.models import (
+    Decision,
+    DecisionsArtifact,
+    DecisionsData,
+    Range,
+    Source,
+    SourcesData,
+    TimelineData,
+    Word,
+    make_meta,
+    write_artifact,
+)
 
 
 def _word(
@@ -184,6 +203,9 @@ def test_evaluate_gold_writes_eval_and_second_call_shows_delta(tmp_path: Path):
     assert metrics.false_cut_sentences == 0
     assert load_metrics(eval_json) == metrics
     assert "delta" not in table
+    written = eval_json.read_text(encoding="utf-8")
+    assert "fillers_dropped" not in written
+    assert "fillers_dropped" not in table
 
     later, delta_table = evaluate_gold(
         words=words,
@@ -198,3 +220,45 @@ def test_evaluate_gold_writes_eval_and_second_call_shows_delta(tmp_path: Path):
     assert "delta" in delta_table
     assert "-" in delta_table
     assert diff_metrics(metrics, later) == delta_table
+
+
+def test_information_lines_are_not_part_of_the_score(tmp_path: Path):
+    assert information(fillers_dropped=3, chapters=2) == "fillers_dropped: 3\nchapters: 2"
+    assert count_filler_drops(tmp_path / "missing.json") == 0
+    write_artifact(
+        tmp_path / "fillers.json",
+        DecisionsArtifact(
+            meta=make_meta(
+                stage="fillers",
+                stage_version=1,
+                inputs_hash="sha256:fillers",
+                config_hash="sha256:fillers-config",
+            ),
+            data=DecisionsData(
+                decisions=[
+                    Decision(
+                        id="f001",
+                        kind="filler",
+                        dropped_words=(0, 0),
+                        kept_from_word=1,
+                        match_words=0,
+                        dropped_duration_s=0.2,
+                        action="drop",
+                        flag=False,
+                    ),
+                    Decision(
+                        id="f002",
+                        kind="filler",
+                        dropped_words=(1, 1),
+                        kept_from_word=2,
+                        match_words=0,
+                        dropped_duration_s=2.0,
+                        action="keep",
+                        flag=True,
+                        flag_reason="filler_long",
+                    ),
+                ]
+            ),
+        ),
+    )
+    assert count_filler_drops(tmp_path / "fillers.json") == 1

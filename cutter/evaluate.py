@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from cutter.fcpxml_parse import SourceSpan, parse_fcpxml
-from cutter.models import SourcesData, StrictModel, TimelineData, Word
+from cutter.models import DecisionsArtifact, SourcesData, StrictModel, TimelineData, Word
 
 _FIELDS = (
     "precision",
@@ -175,6 +175,19 @@ def load_metrics(path: Path) -> Metrics | None:
 def write_metrics(path: Path, metrics: Metrics) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(metrics.model_dump_json(indent=2) + "\n", encoding="utf-8")
+
+
+def information(*, fillers_dropped: int, chapters: int) -> str:
+    """Two lines printed with a gold score. They are not part of the metrics."""
+    return f"fillers_dropped: {fillers_dropped}\nchapters: {chapters}"
+
+
+def count_filler_drops(path: Path) -> int:
+    """Filler decisions whose action is drop. A missing file is zero."""
+    if not path.is_file():
+        return 0
+    artifact = DecisionsArtifact.model_validate_json(path.read_text(encoding="utf-8"))
+    return sum(decision.action == "drop" for decision in artifact.data.decisions)
 
 
 def evaluate_gold(
