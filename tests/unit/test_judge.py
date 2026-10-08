@@ -6,13 +6,16 @@ import logging
 from pathlib import Path
 
 import pytest
+from tests.unit.test_retakes_phase2 import _alignment, _neuron_pair, _neuron_takes
 
 from cutter.config import load_profile
 from cutter.judge import STAGE_VERSION, judge_decisions, run_judge
 from cutter.llm import EndpointUnreachable
 from cutter.models import (
+    AlignmentArtifact,
     Decision,
     DecisionsArtifact,
+    ScriptSentence,
     Word,
     WordsArtifact,
     WordsData,
@@ -340,6 +343,40 @@ def test_no_llm_cache_does_not_satisfy_a_later_llm_run(
     assert third.meta.config_hash == first.meta.config_hash
     assert third.data.decisions[0].action == "drop"
     assert third.data.decisions[0].flag is False
+
+
+def test_no_llm_judge_keeps_a_script_decision(tmp_path: Path) -> None:
+    words = _neuron_pair()
+    _write_words(tmp_path, words)
+    plain = run_judge(tmp_path, no_llm=True)
+    assert plain.data.decisions[0].evidence == "transcript"
+
+    write_artifact(
+        tmp_path / "artifacts" / "alignment.json",
+        AlignmentArtifact(
+            meta=make_meta(
+                stage="align",
+                stage_version=1,
+                inputs_hash="sha256:align",
+                config_hash="sha256:cfg",
+            ),
+            data=_alignment(
+                [
+                    ScriptSentence(
+                        id=0,
+                        chapter=None,
+                        text="A neuron is a weighted vote.",
+                        takes=_neuron_takes(100.0, 95.0),
+                    )
+                ]
+            ),
+        ),
+    )
+    scripted = run_judge(tmp_path, no_llm=True)
+    assert scripted.meta.inputs_hash != plain.meta.inputs_hash
+    assert scripted.data.decisions[0].evidence == "script"
+    assert scripted.data.decisions[0].dropped_words == (6, 11)
+    assert scripted.data.decisions[0].flag is False
 
 
 def test_judge_cache_misses_when_a_retakes_input_section_changes(tmp_path: Path) -> None:

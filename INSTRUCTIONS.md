@@ -324,7 +324,9 @@ decisions. Flagged decisions become `CHECK` markers during tightening.
 
 ## 7. Judge ambiguous takes
 
-Run retakes first, or let `cutter judge` recompute them from the transcript:
+Run retakes first, or let `cutter judge` recompute them. The recompute reads
+the transcript, and also `alignment.json` and `audio_events.json` when those
+files exist, so a script take and a clap anchor survive the judge stage:
 
 ```bash
 uv run cutter judge projects/my-video
