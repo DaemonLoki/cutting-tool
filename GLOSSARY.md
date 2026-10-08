@@ -20,12 +20,12 @@ _Avoid_: Clip, input video
 One attempt at a passage of speech.
 
 **Retake**:
-A later take that repeats an earlier take. The later take is the one that stays. An exact repeat of a finished sentence is a retake.
+A take that repeats an earlier take. Without a script, the later take stays. An exact repeat of a finished sentence is a retake. With a script, the chosen take stays, even when an alternate take is later.
 _Avoid_: Restart
 
 **Failed take**:
-An earlier take that a retake replaces: an aborted attempt, or a finished sentence repeated with the same words.
-_Avoid_: a finished sentence whose next take uses different words
+The take a retake replaces: an aborted attempt, a finished sentence repeated with the same words, or, with a script, an alternate take.
+_Avoid_: without a script, a finished sentence whose next take uses different words
 
 **Decision**:
 The judgment on one candidate repeat: drop the failed take, or keep the earlier span for a person to review.
@@ -57,7 +57,7 @@ The named thresholds for one recording shape. `long` is the horizontal cut.
 `short` is the vertical cut. When `--profile` is omitted, the frame decides.
 
 **Clap**:
-A short broadband sound the speaker makes to mark a mistake.
+A short broadband sound the speaker makes to mark a mistake. It can anchor a retake. A clap with no retake after it stays in the cut with a CHECK marker.
 _Avoid_: Snap
 
 **Filler**:
