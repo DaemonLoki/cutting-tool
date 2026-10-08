@@ -629,7 +629,7 @@ and `alignment.json`. Its config hash covers the `retakes`, `claps`, and
 `script` sections. `tighten` hashes `words.json`, `decisions.json`,
 `sources.json`, the analysis WAVs, and `fillers.json`, `audio_events.json`,
 and `alignment.json` when those files exist. It also hashes `vad`, `claps`,
-and `chapters`. Export stores a stamp at `artifacts/export.json` so an
+`chapters`, and `script.flag_unscripted_s`. Other `script` keys do not. Export stores a stamp at `artifacts/export.json` so an
 unchanged timeline is not written again. Use `--force` on ingest, transcribe,
 audio, align, retakes, judge, fillers, tighten, or run when you need to bypass
 a valid cache entry.

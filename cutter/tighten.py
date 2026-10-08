@@ -14,6 +14,7 @@ A clap zone is not played. A script chapter marks the chosen take.
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import math
 from fractions import Fraction
@@ -208,7 +209,7 @@ def run_tighten(
     hashed_inputs = inputs_hash(
         artifacts=[words_path, decisions_path, sources_path, *wav_paths, *optional_paths]
     )
-    hashed_config = config_hash(loaded, STAGE_CONFIG_SECTIONS[STAGE])
+    hashed_config = _config_hash(loaded)
     if not force and cache_hit(
         timeline_path,
         stage=STAGE,
@@ -254,6 +255,17 @@ def run_tighten(
     )
     write_artifact(timeline_path, artifact)
     return artifact
+
+
+def _config_hash(profile: Profile) -> str:
+    """Hash the tighten sections, plus the unscripted-marker threshold.
+
+    ``flag_unscripted_s`` lives on ``script``. The rest of that section is
+    alignment and retakes, and does not move a cut.
+    """
+    hashed = config_hash(profile, STAGE_CONFIG_SECTIONS[STAGE])
+    payload = f"{hashed}\0{profile.script.flag_unscripted_s}"
+    return f"sha256:{hashlib.sha256(payload.encode()).hexdigest()}"
 
 
 def _load_optional[T: DecisionsArtifact | AudioEventsArtifact | AlignmentArtifact](

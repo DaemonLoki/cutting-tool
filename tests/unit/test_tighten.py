@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Literal
 
 import numpy as np
+import pytest
 import soundfile as sf
 from hypothesis import given, settings
 from hypothesis import strategies as st
@@ -333,6 +334,51 @@ def test_run_tighten_cache_hit_keeps_the_file_bytes(tmp_path: Path):
     assert second.data == first.data
     assert second.meta == first.meta
     assert timeline_path.read_bytes() == raw
+
+
+def test_unscripted_threshold_misses_the_tighten_cache(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    artifacts = tmp_path / "artifacts"
+    wav_path = artifacts / "audio" / "s01.48k.wav"
+    wav_path.parent.mkdir(parents=True)
+    sf.write(wav_path, np.zeros(48_000, dtype=np.float32), 48_000)
+    words = [_word(0, 0.0, 0.4)]
+    meta = make_meta(
+        stage="transcribe",
+        stage_version=1,
+        inputs_hash="sha256:in",
+        config_hash="sha256:cfg",
+    )
+    write_artifact(artifacts / "words.json", WordsArtifact(meta=meta, data=WordsData(words=words)))
+    write_artifact(
+        artifacts / "decisions.json",
+        DecisionsArtifact(meta=meta, data=DecisionsData(decisions=[])),
+    )
+    write_artifact(
+        artifacts / "sources.json",
+        SourcesArtifact(meta=meta.model_copy(update={"stage": "ingest"}), data=_sources(2.0)),
+    )
+
+    profile = load_profile("long")
+    first = run_tighten(tmp_path, profile)
+    changed = profile.model_copy(
+        update={"script": profile.script.model_copy(update={"flag_unscripted_s": 1.0})}
+    )
+    second = run_tighten(tmp_path, changed)
+    assert second.meta.inputs_hash == first.meta.inputs_hash
+    assert second.meta.config_hash != first.meta.config_hash
+
+    score_only = changed.model_copy(
+        update={"script": changed.script.model_copy(update={"min_take_score": 40})}
+    )
+
+    def _unexpected_meta(**_kwargs: object) -> None:
+        raise AssertionError("cache miss")
+
+    monkeypatch.setattr("cutter.tighten.make_meta", _unexpected_meta)
+    third = run_tighten(tmp_path, score_only)
+    assert third.meta.created_at == second.meta.created_at
 
 
 def _events(
