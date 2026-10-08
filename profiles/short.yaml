@@ -10,6 +10,10 @@ ingest:
   asr_sample_rate: 16000
   # Mono WAV used to snap cut points, in Hz. Source video is not re-encoded.
   analysis_sample_rate: 48000
+  # never | auto | always. auto is only sources with a VFR warning. Not applied yet.
+  cfr_proxy: "never"
+  # prores_proxy | h264. Codec of a constant-frame-rate proxy, when one is made.
+  proxy_codec: "prores_proxy"
 
 transcribe:
   # Hugging Face id. The first run downloads this model.
@@ -50,6 +54,70 @@ judge:
   # Seconds to wait for one verdict. A timeout leaves decisions unchanged.
   timeout_s: 60
 
+vad:
+  # false leaves speech empty. The audio stage still writes its artifact.
+  enabled: true
+  # silero | energy. energy reuses the loudness already measured for cut points.
+  backend: "silero"
+  # Silero speech probability. A chunk at or above this counts as voice.
+  threshold: 0.5
+  # Shorter speech blips are dropped. A clap is about 30 ms, so it does not count.
+  min_speech_ms: 100
+  # Shorter silences inside speech are bridged into the surrounding segment.
+  min_silence_ms: 150
+  # Milliseconds added to both ends of each speech segment.
+  pad_ms: 30
+  # Speech this long, in seconds, with no transcript word inside gets a CHECK marker.
+  flag_unheard_speech_s: 2.0
+
+claps:
+  # false leaves claps empty. The audio stage still writes its artifact.
+  enabled: true
+  # Peak above the 1 s rolling median of the 2 ms envelope, in dB.
+  min_rise_db: 20
+  # The level must fall back within this many milliseconds or the event is rejected.
+  max_duration_ms: 60
+  # Transients closer than this merge into one clap.
+  min_gap_ms: 300
+  # Transcript words that must match after a clap. Retakes use their own minimum.
+  min_match_words: 2
+  # No range may play this many milliseconds before the clap onset.
+  exclude_before_ms: 100
+  # No range may play this many milliseconds after the clap onset.
+  exclude_after_ms: 250
+
+fillers:
+  # false writes no filler decisions. The stage still writes its artifact.
+  enabled: true
+  # Normalized words dropped wherever they occur, except as a sentence's only word.
+  words: ["um", "uh", "uhm", "umm", "erm", "hmm", "mhm", "mm", "ah", "eh", "er"]
+  # Consecutive normalized words, such as "you know". Empty keeps every phrase.
+  phrases: []
+  # Dropped only as the first word of a sentence, and only when another word follows.
+  sentence_start_words: []
+  # A filler run longer than this, in seconds, is kept and flagged filler_long.
+  max_duration_s: 1.5
+
+script:
+  # Path relative to the project folder. A missing file makes alignment a no-op.
+  path: "script.md"
+  # Rapidfuzz ratio of a transcript window against a script sentence.
+  min_take_score: 80
+  # best | last. best keeps the highest score. Ties go to the later take.
+  prefer: "best"
+  # A smaller gap between the chosen take and an alternate is dropped with a CHECK.
+  min_score_gap: 5
+  # false keeps an alternate that follows the chosen take and flags it.
+  drop_later_takes: true
+  # An unscripted passage this long, in seconds, gets a CHECK marker.
+  flag_unscripted_s: 20
+
+chapters:
+  # false writes no chapter markers. Alignment still records headings it parsed.
+  enabled: true
+  # Heading levels that become chapter markers. 1 is `#`, 2 is `##`.
+  levels: [1, 2]
+
 tighten:
   # Gaps longer than this, in ms, start a new range. long.yaml uses 400.
   # 150 removes a breath. Word-to-word gaps under that stay in the phrase.
@@ -73,6 +141,8 @@ tighten:
   voice_quiet_ms: 300
   # Shorter ranges are merged into a neighbour or removed with a CHECK marker.
   min_range_frames: 6
+  # false keeps Phase 1 cut points even when speech segments exist.
+  use_vad: true
 
 fcpxml:
   # Must match the DTD below.
@@ -85,3 +155,7 @@ fcpxml:
   rejects_project_name: "{project} – rejects"
   # audioRole on each clip in Final Cut.
   audio_role: "dialogue"
+  # true includes filler drops in the rejects project. false leaves them out.
+  rejects_include_fillers: false
+  # original | proxy. proxy is only valid when the source has one.
+  vfr_media: "original"

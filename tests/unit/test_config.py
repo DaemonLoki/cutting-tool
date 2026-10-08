@@ -89,6 +89,66 @@ def test_set_rejects_unknown_paths_and_bad_values():
         load_profile("long", ["ingest=1"])
 
 
+def test_phase2_sections_match_long_unless_documented():
+    long_form = load_profile("long")
+    short_form = load_profile("short")
+    assert long_form.ingest.cfr_proxy == "never"
+    assert long_form.ingest.proxy_codec == "prores_proxy"
+    assert long_form.vad.enabled is True
+    assert long_form.vad.backend == "silero"
+    assert long_form.vad.threshold == 0.5
+    assert long_form.claps.min_match_words == 2
+    assert long_form.fillers.words[0] == "um"
+    assert long_form.fillers.phrases == []
+    assert long_form.script.path == "script.md"
+    assert long_form.script.prefer == "best"
+    assert long_form.chapters.levels == [1, 2]
+    assert long_form.tighten.use_vad is True
+    assert long_form.fcpxml.rejects_include_fillers is False
+    assert long_form.fcpxml.vfr_media == "original"
+    assert short_form.vad == long_form.vad
+    assert short_form.claps == long_form.claps
+    assert short_form.fillers == long_form.fillers
+    assert short_form.script == long_form.script
+    assert short_form.chapters == long_form.chapters
+    assert short_form.ingest.cfr_proxy == long_form.ingest.cfr_proxy
+    assert short_form.ingest.proxy_codec == long_form.ingest.proxy_codec
+    assert short_form.tighten.use_vad == long_form.tighten.use_vad
+    assert short_form.fcpxml.rejects_include_fillers == long_form.fcpxml.rejects_include_fillers
+    assert short_form.fcpxml.vfr_media == long_form.fcpxml.vfr_media
+
+
+def test_set_overrides_phase2_keys_including_lists():
+    profile = load_profile(
+        "long",
+        [
+            "ingest.cfr_proxy=auto",
+            "ingest.proxy_codec=h264",
+            "vad.threshold=0.2",
+            "tighten.use_vad=false",
+            "fcpxml.vfr_media=proxy",
+            "fcpxml.rejects_include_fillers=true",
+            "chapters.levels=[1]",
+            "fillers.words=['um', 'uh']",
+            "script.prefer=last",
+        ],
+    )
+    assert profile.ingest.cfr_proxy == "auto"
+    assert profile.ingest.proxy_codec == "h264"
+    assert profile.vad.threshold == 0.2
+    assert profile.tighten.use_vad is False
+    assert profile.fcpxml.vfr_media == "proxy"
+    assert profile.fcpxml.rejects_include_fillers is True
+    assert profile.chapters.levels == [1]
+    assert profile.fillers.words == ["um", "uh"]
+    assert profile.script.prefer == "last"
+
+
+def test_set_rejects_an_unknown_proxy_mode():
+    with pytest.raises(ConfigError, match="cfr_proxy"):
+        load_profile("long", ["ingest.cfr_proxy=sometimes"])
+
+
 def test_missing_profile():
     with pytest.raises(ConfigError, match="not found"):
         load_profile("missing")

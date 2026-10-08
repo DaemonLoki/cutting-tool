@@ -44,6 +44,22 @@ def test_config_hash_ignores_sections_the_stage_does_not_read():
     )
 
 
+def test_vad_threshold_misses_audio_and_tighten_but_not_retakes():
+    profile = load_profile("long")
+    audio = config_hash(profile, STAGE_CONFIG_SECTIONS["audio"])
+    tighten = config_hash(profile, STAGE_CONFIG_SECTIONS["tighten"])
+    retakes = config_hash(profile, STAGE_CONFIG_SECTIONS["retakes"])
+    padded = profile.model_copy(
+        update={"tighten": profile.tighten.model_copy(update={"pad_head_ms": 10})}
+    )
+    assert config_hash(padded, STAGE_CONFIG_SECTIONS["audio"]) == audio
+
+    voiced = profile.model_copy(update={"vad": profile.vad.model_copy(update={"threshold": 0.2})})
+    assert config_hash(voiced, STAGE_CONFIG_SECTIONS["audio"]) != audio
+    assert config_hash(voiced, STAGE_CONFIG_SECTIONS["tighten"]) != tighten
+    assert config_hash(voiced, STAGE_CONFIG_SECTIONS["retakes"]) == retakes
+
+
 def test_cache_hit_requires_stage_version_inputs_and_config(tmp_path: Path):
     path = tmp_path / "sources.json"
     meta = make_meta(
