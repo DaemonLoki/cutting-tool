@@ -197,15 +197,24 @@ def normalize_word(text: str) -> str:
     return "".join(ch for ch in normalized if not unicodedata.category(ch).startswith("P"))
 
 
-def words_between(words: list[Word], from_s: float, to_s: float) -> str:
+def words_between(
+    words: list[Word],
+    from_s: float,
+    to_s: float,
+    *,
+    source: str | None = None,
+) -> str:
     """Lines a person can check by ear: word text, start, and end.
 
     Includes words whose start is in ``[from_s, to_s)``. Times are seconds
     from the start of each word's source, so the same window matches every
-    source. One word per line, three decimal places, no trailing newline.
+    source. ``source`` limits the lines to that source id. One word per line,
+    three decimal places, no trailing newline.
     """
     lines = [
-        f"{word.w} {word.start:.3f} {word.end:.3f}" for word in words if from_s <= word.start < to_s
+        f"{word.w} {word.start:.3f} {word.end:.3f}"
+        for word in words
+        if from_s <= word.start < to_s and (source is None or word.source == source)
     ]
     return "\n".join(lines)
 

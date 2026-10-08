@@ -253,19 +253,19 @@ range:
 
 ```bash
 uv run cutter words projects/my-video --from 12.0 --to 30.0
+uv run cutter words projects/my-video --from 12.0 --to 30.0 --source s01
 ```
 
-Output is one word per line:
+`--from` and `--to` are required. Output is one word per line:
 
 ```text
 Hello 12.120 12.430
 world. 12.460 12.910
 ```
 
-Times are source-relative. If a project has multiple sources, the same time
-window is applied independently to every source. The output currently does not
-include the source id, so use `artifacts/words.json` when that distinction is
-needed.
+Times are source-relative. Without `--source`, the same window is applied
+independently to every source. `--source s01` prints only words from that
+source id. The lines still do not include the source id.
 
 This command is useful for comparing word timestamps against the source audio
 or video.
@@ -584,7 +584,25 @@ projects/my-video/
 ```
 
 The summary reports source count, raw duration, output duration, how many
-decisions were dropped, kept, and flagged, and the FCPXML path.
+decisions were dropped, kept, and flagged, and the FCPXML path. It also
+reports the Phase 2 counts from the artifacts this run wrote:
+
+```text
+2 sources, 18.400s raw, 12.100s output
+4 dropped, 3 kept, 1 flagged
+speech share 0.640, claps 2, filler drops 3
+script sentences found 8, missing 1, unscripted spans 0, chapters 2
+wrote projects/my-video/out/my-video.fcpxml
+```
+
+Speech share is the total speech-segment duration divided by raw duration,
+printed to three decimal places. It is 0 when there is no speech. Claps are
+the onsets in `audio_events.json`. Filler drops are filler decisions whose
+action is `drop`. Script sentences found are sentences that have a take;
+missing sentences and unscripted spans come from `alignment.json`. Chapters
+are the markers on `timeline.json`. A missing `audio_events.json`,
+`fillers.json`, `alignment.json`, or `timeline.json` counts as zero for the
+fields that file would have supplied. It is not an error.
 
 ## 12. Score a gold edit
 
@@ -616,6 +634,25 @@ storyline.
 It writes `eval.json` in the gold folder and prints precision, recall, F1,
 false cuts, and missed retakes, including counts per 10 minutes of gold
 duration. A second run also prints the change since the previous `eval.json`.
+Those metrics are the score. `eval.json` does not gain new fields.
+
+After the table, eval prints two information lines that are not part of the
+score:
+
+```text
+fillers_dropped: 3
+chapters: 2
+```
+
+`fillers_dropped` is how many filler decisions have action `drop`. `chapters`
+is how many chapter markers are on the timeline. A missing `fillers.json`
+counts as zero filler drops.
+
+When the gold folder contains `script.md`, the eval run aligns against that
+script. If `raw/` is inside the gold folder, the file is already in the
+project. If the camera files are in `test/fixtures/sample/`, eval copies
+`script.md` into that project when the copy is missing or different. A
+byte-identical copy is left in place.
 
 Unsupported storyline items (`sync-clip`, `mc-clip`, `ref-clip`) are skipped
 with a warning. Gaps, titles, and generators are ignored.

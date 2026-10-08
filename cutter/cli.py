@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from cutter.align import run_align
 from cutter.choose import FrameUnknown, choose_profile
 from cutter.config import REPO_ROOT, ConfigError, Profile, load_profile
-from cutter.evaluate import evaluate_gold
+from cutter.evaluate import count_filler_drops, evaluate_gold, information
 from cutter.events import run_audio
 from cutter.fcpxml import FcpxmlValidationError, export_fcpxml
 from cutter.fillers import run_fillers
@@ -310,8 +310,9 @@ def evaluate(
         load_profile("long", set_values)
         manual = _manual_fcpxml(gold_dir)
         project_dir = _eval_project(gold_dir)
+        _stage_gold_script(gold_dir, project_dir)
         loaded = _resolve_profile(project_dir, overrides=set_values)
-    except (ConfigError, FileNotFoundError) as exc:
+    except (ConfigError, OSError) as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
     try:
@@ -333,6 +334,10 @@ def evaluate(
             manual_fcpxml=manual,
             eval_json=gold_dir / "eval.json",
         )
+        notes = information(
+            fillers_dropped=count_filler_drops(artifacts / "fillers.json"),
+            chapters=len(timeline.data.chapters),
+        )
     except IngestError as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
@@ -349,6 +354,7 @@ def evaluate(
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
     typer.echo(table)
+    typer.echo(notes)
     typer.echo(f"wrote {gold_dir / 'eval.json'}")
 
 
@@ -357,6 +363,10 @@ def words(
     project_dir: Annotated[Path, typer.Argument(help="Project folder.")],
     from_s: Annotated[float, typer.Option("--from", help="Start time in seconds.")],
     to_s: Annotated[float, typer.Option("--to", help="End time in seconds.")],
+    source: Annotated[
+        str | None,
+        typer.Option("--source", help="Only words from this source id."),
+    ] = None,
 ) -> None:
     """Print words between two times."""
     path = project_dir / "artifacts" / "words.json"
@@ -368,7 +378,7 @@ def words(
     except ValidationError as exc:
         typer.echo(str(exc), err=True)
         raise typer.Exit(1) from exc
-    typer.echo(words_between(artifact.data.words, from_s, to_s))
+    typer.echo(words_between(artifact.data.words, from_s, to_s, source=source))
 
 
 def _word_starts(path: Path) -> dict[int, float] | None:
@@ -406,7 +416,35 @@ def _echo_summary(summary: RunSummary) -> None:
         f"{summary.output_duration_s:.3f}s output"
     )
     typer.echo(f"{summary.dropped} dropped, {summary.kept} kept, {summary.flagged} flagged")
+    typer.echo(
+        f"speech share {summary.speech_share:.3f}, claps {summary.claps}, "
+        f"filler drops {summary.filler_drops}"
+    )
+    typer.echo(
+        "script sentences found "
+        f"{summary.script_sentences_found}, missing {summary.script_sentences_missing}, "
+        f"unscripted spans {summary.unscripted_spans}, chapters {summary.chapters}"
+    )
     typer.echo(f"wrote {summary.fcpxml}")
+
+
+def _stage_gold_script(gold_dir: Path, project_dir: Path) -> None:
+    """Copy ``script.md`` from the gold folder when the project is elsewhere.
+
+    Align reads the script from the project that holds ``raw/``. When that
+    project is the gold folder, the file is already in place. A byte-identical
+    copy is left untouched so a later eval can still hit the align cache.
+    """
+    script = gold_dir / "script.md"
+    if not script.is_file():
+        return
+    dest = project_dir / "script.md"
+    if dest.exists() and dest.samefile(script):
+        return
+    payload = script.read_bytes()
+    if dest.is_file() and dest.read_bytes() == payload:
+        return
+    dest.write_bytes(payload)
 
 
 def _resolve_profile(

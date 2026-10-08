@@ -15,10 +15,13 @@ from cutter.fillers import run_fillers
 from cutter.ingest import ingest_project
 from cutter.judge import judge_cached, run_judge
 from cutter.models import (
+    AlignmentArtifact,
     Artifact,
+    AudioEventsArtifact,
     DecisionsArtifact,
     SourcesData,
     StrictModel,
+    TimelineArtifact,
     TimelineData,
     Word,
     make_meta,
@@ -42,7 +45,12 @@ class _ExportArtifact(Artifact[_ExportData]):
 
 @dataclass(frozen=True)
 class RunSummary:
-    """What ``cutter run`` prints after the rough cut is written."""
+    """What ``cutter run`` prints after the rough cut is written.
+
+    ``speech_share`` is speech-segment duration divided by raw duration, or 0
+    when there is no speech. The other Phase 2 counts are read from the
+    artifacts this run wrote. A missing optional artifact counts as zero.
+    """
 
     sources: int
     raw_duration_s: float
@@ -51,6 +59,13 @@ class RunSummary:
     kept: int
     flagged: int
     fcpxml: Path
+    speech_share: float
+    claps: int
+    filler_drops: int
+    script_sentences_found: int
+    script_sentences_missing: int
+    unscripted_spans: int
+    chapters: int
 
 
 def run_project(
@@ -86,14 +101,23 @@ def run_project(
         force=force,
     )
     choices = decisions.data.decisions
+    raw_duration_s = sum(source.duration_s for source in sources.sources)
+    counts = _phase2_counts(project_dir, raw_duration_s)
     return RunSummary(
         sources=len(sources.sources),
-        raw_duration_s=sum(source.duration_s for source in sources.sources),
+        raw_duration_s=raw_duration_s,
         output_duration_s=sum(item.out_s - item.in_s for item in timeline.data.ranges),
         dropped=sum(decision.action == "drop" for decision in choices),
         kept=sum(decision.action == "keep" for decision in choices),
         flagged=sum(decision.flag for decision in choices),
         fcpxml=exported.path,
+        speech_share=counts.speech_share,
+        claps=counts.claps,
+        filler_drops=counts.filler_drops,
+        script_sentences_found=counts.script_sentences_found,
+        script_sentences_missing=counts.script_sentences_missing,
+        unscripted_spans=counts.unscripted_spans,
+        chapters=counts.chapters,
     )
 
 
@@ -172,3 +196,72 @@ def _export_inputs(artifacts: Path) -> str:
     if words.is_file():
         paths.append(words)
     return inputs_hash(artifacts=paths)
+
+
+@dataclass(frozen=True)
+class _Phase2Counts:
+    speech_share: float
+    claps: int
+    filler_drops: int
+    script_sentences_found: int
+    script_sentences_missing: int
+    unscripted_spans: int
+    chapters: int
+
+
+def _phase2_counts(project_dir: Path, raw_duration_s: float) -> _Phase2Counts:
+    """Read the Phase 2 summary from artifacts already on disk.
+
+    Speech share is the total speech-segment duration divided by raw duration.
+    It is 0 when there is no speech. Claps come from ``audio_events.json``.
+    Filler drops are filler decisions whose action is drop. Script sentences
+    found are sentences that have a take; missing and unscripted spans come
+    from ``alignment.json``. Chapters are the markers on ``timeline.json``.
+    Each of those files is optional here: a missing file counts as zero.
+    """
+    artifacts = project_dir / "artifacts"
+    speech_s = 0.0
+    claps = 0
+    audio_path = artifacts / "audio_events.json"
+    if audio_path.is_file():
+        audio = AudioEventsArtifact.model_validate_json(audio_path.read_text(encoding="utf-8"))
+        speech_s = sum(segment.end - segment.start for segment in audio.data.speech)
+        claps = len(audio.data.claps)
+    if speech_s == 0.0 or raw_duration_s == 0.0:
+        speech_share = 0.0
+    else:
+        speech_share = speech_s / raw_duration_s
+
+    filler_drops = 0
+    fillers_path = artifacts / "fillers.json"
+    if fillers_path.is_file():
+        fillers = DecisionsArtifact.model_validate_json(fillers_path.read_text(encoding="utf-8"))
+        filler_drops = sum(decision.action == "drop" for decision in fillers.data.decisions)
+
+    found = 0
+    missing = 0
+    unscripted = 0
+    alignment_path = artifacts / "alignment.json"
+    if alignment_path.is_file():
+        alignment = AlignmentArtifact.model_validate_json(
+            alignment_path.read_text(encoding="utf-8")
+        )
+        found = sum(1 for sentence in alignment.data.sentences if sentence.takes)
+        missing = len(alignment.data.missing)
+        unscripted = len(alignment.data.unscripted)
+
+    chapters = 0
+    timeline_path = artifacts / "timeline.json"
+    if timeline_path.is_file():
+        timeline = TimelineArtifact.model_validate_json(timeline_path.read_text(encoding="utf-8"))
+        chapters = len(timeline.data.chapters)
+
+    return _Phase2Counts(
+        speech_share=speech_share,
+        claps=claps,
+        filler_drops=filler_drops,
+        script_sentences_found=found,
+        script_sentences_missing=missing,
+        unscripted_spans=unscripted,
+        chapters=chapters,
+    )
