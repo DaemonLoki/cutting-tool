@@ -128,6 +128,21 @@ def test_voice_end_none_without_voice_or_when_voice_continues():
     )
 
 
+def test_snap_time_skips_a_forbidden_quiet_frame():
+    envelope = np.array([1.0, 0.0, 1.0, 0.2, 1.0], dtype=np.float64)
+    snapped = snap_time(
+        envelope,
+        sample_rate=48_000,
+        frame_ms=10,
+        raw_s=0.015,
+        window_ms=40,
+        earliest_s=0.0,
+        latest_s=1.0,
+        forbidden=[(0.005, 0.025)],
+    )
+    assert snapped == (3 + 0.5) * 10 / 1000
+
+
 def test_snap_time_returns_raw_when_the_legal_interval_is_empty():
     envelope = np.array([0.0, 0.0, 0.0, 0.0], dtype=np.float64)
     snapped = snap_time(

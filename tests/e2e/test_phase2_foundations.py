@@ -69,8 +69,8 @@ def test_speech_alignment_and_fillers_and_a_second_run_is_cached(tmp_path: Path)
             continue
         first, last = decision.dropped_words
         dropped_norms.update(word.norm for word in words.data.words if first <= word.i <= last)
-    # The fixture says "Um" and "uh" in the kept sentence. Tighten does not
-    # remove them from the rough cut yet; this checks the filler decisions.
+    # The fixture says "Um" and "uh" in the kept sentence. This checks the
+    # filler decisions; tighten drops those words from the rough cut.
     assert {"um", "uh"} <= spoken
     assert {"um", "uh"} <= dropped_norms
 

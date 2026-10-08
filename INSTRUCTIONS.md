@@ -9,7 +9,7 @@ Cutter currently supports these pipeline stages:
 5. Inspect transcribed words in a time range.
 6. Detect aborted failed takes and decide which ones should be dropped.
 7. Ask a local model about ambiguous aborted takes.
-8. Mark filler words. The rough cut does not remove them yet.
+8. Mark filler words and drop them from the rough cut.
 9. Tighten the kept words into a rough cut.
 10. Export the timeline as editable FCPXML.
 11. Run the whole pipeline.
@@ -58,10 +58,14 @@ and `fcpxml.vfr_media` (`original` or `proxy`). What each key will do is in
 `profiles/long.md`. `cutter audio` writes speech segments when `vad.enabled`
 is true, and records claps. Set `claps.enabled` to `false` to record none,
 and change `claps.min_rise_db` when a real clap is missed or a knock is marked
-as one. Those events do not move cut points yet. `fillers` writes drop
-decisions, and tighten does not apply them yet, so the rough cut is unchanged.
-`cutter align` writes `alignment.json` from `script.md` and does not drop
-words. The new keys do change the cache for the
+as one. Tighten uses speech segments when `tighten.use_vad` is true, so a
+range starts and ends with the voice. `fillers` writes drop decisions, and
+tighten removes those fillers from the rough cut when `fillers.json` is
+present. `cutter align` writes `alignment.json` from `script.md` and does not
+drop words. When that alignment has chapters and `chapters.enabled` is true,
+tighten places a chapter marker on the chosen take. When `audio_events.json`
+lists claps, tighten keeps each clap out of the rough cut. The rough cut
+changes when those artifacts exist. The new keys do change the cache for the
 stages that read them. `short` uses the same values as `long` for every new key.
 
 ## Create a project
@@ -392,8 +396,9 @@ The summary is `filler decisions: N`. A second run with the same words,
 decisions, and `fillers` settings is a cache hit. `cutter run` writes this
 file after the judged decisions are on disk, and before tighten.
 
-Tighten does not read these decisions yet, so the rough cut still plays the
-filler words. Removing them from the timeline lands with tighten.
+Tighten reads these decisions. A filler whose action is drop leaves the rough
+cut, and its span is listed with the dropped retakes. A filler that stays and
+is flagged `filler_long` remains in the rough cut with a CHECK marker.
 
 ## 9. Tighten the rough cut
 
@@ -410,7 +415,9 @@ uv run cutter tighten projects/my-video --force
 ```
 
 The command reads `artifacts/words.json`, `artifacts/decisions.json`,
-`artifacts/sources.json`, and the 48 kHz analysis wavs. It writes:
+`artifacts/sources.json`, and the 48 kHz analysis wavs. When they exist it
+also reads `artifacts/fillers.json`, `artifacts/audio_events.json`, and
+`artifacts/alignment.json`. It writes:
 
 ```text
 projects/my-video/artifacts/timeline.json
@@ -427,9 +434,42 @@ that stay within 12 dB of the source's background. A range then ends at most
 that starts a new range. A word is never cut before the midpoint of its
 transcript timestamps. Tune this with `tighten.voice_margin_db` and
 `tighten.voice_quiet_ms`; see `profiles/long.md`. Flagged
-decisions become `CHECK` markers. Dropped retakes are listed for the rejects
-sequence. A very short range is merged into a neighbour or removed with a
-`CHECK: tiny fragment removed` marker.
+decisions become `CHECK` markers. Dropped retakes and dropped fillers are
+listed for the rejects sequence. A very short range is merged into a
+neighbour or removed with a `CHECK: tiny fragment removed` marker.
+
+The rough cut changes when the optional artifacts exist.
+
+A filler drop is removed like a failed take. Its midpoint stays outside
+every range.
+
+With `tighten.use_vad` true and speech segments in `audio_events.json`, each
+kept word ends at the speech segment that contains its midpoint, between
+that midpoint and the transcript end. A word in no segment keeps the
+transcript rule: a sentence-final word ends where the voice measurement
+stops, and any other word ends at its transcript time. Gaps use that spoken
+end. The in-point of a range moves back to the segment start when that start
+is within 200 ms before the first word, and it never starts before the
+previous word's spoken end. `tighten.use_vad: false` keeps the transcript
+cut points even when speech segments exist.
+
+A clap is excluded. The forbidden zone runs from `claps.exclude_before_ms`
+before the onset to `claps.exclude_after_ms` after it. A range with kept
+words on both sides of the zone splits there. A range with words on one
+side moves its in-point or out-point outside the zone. The silence snap
+skips frames inside the zone. A range that cannot get clear of the zone
+stays, with a `CHECK: clap inside range` marker.
+
+A speech segment at least `vad.flag_unheard_speech_s` long, with no word
+midpoint inside it, adds `CHECK: speech without transcript` on the next
+range of that source, or on the previous range when the segment is at the
+end of the source. That speech is not added to the rough cut.
+
+An unscripted span whose words last at least `script.flag_unscripted_s`
+adds `CHECK: unscripted` at its first kept word. With `chapters.enabled`,
+each chapter marks the first kept word of the chosen take of its first
+sentence. When that sentence has no chosen take, the marker uses the first
+sentence in the chapter that has one. A chapter with none is skipped.
 
 ## 10. Export FCPXML
 
@@ -501,12 +541,14 @@ is skipped. A judged decisions file already includes the retake result, so a
 cache hit skips both retakes and judge. Fillers runs after that file is
 settled, because it hashes `decisions.json`. `--no-llm` still runs the judge
 stage, without calling the model. Audio records speech segments and claps.
-Neither changes which words are kept yet. Fillers writes decisions for
-configured filler words; tighten does not remove those words yet. Align writes
-`alignment.json` from `script.md` when that file is present, and does not drop
-words. Retakes reads that alignment and any claps in `audio_events.json`. A
-chosen take can drop an alternate take. A clap can drop the failed take it
-anchors.
+Audio alone does not change which words are kept. Fillers writes decisions for
+configured filler words, and tighten drops those words from the rough cut.
+Align writes `alignment.json` from `script.md` when that file is present, and
+does not drop words. Retakes reads that alignment and any claps in
+`audio_events.json`. A chosen take can drop an alternate take. A clap can drop
+the failed take it anchors. Tighten places a chapter marker on the chosen take
+when chapters are enabled. A clap listed in the audio artifact stays out of
+every range. With `tighten.use_vad` true, speech segments move the cut points.
 
 The project folder after a run looks like this:
 
@@ -519,7 +561,7 @@ projects/my-video/
 │   ├── audio_events.json      # speech segments and claps
 │   ├── alignment.json         # script takes, or no script
 │   ├── decisions.json
-│   ├── fillers.json           # filler decisions; tighten does not apply them yet
+│   ├── fillers.json           # filler drops; tighten removes them from the rough cut
 │   ├── timeline.json
 │   ├── export.json
 │   └── audio/
@@ -584,8 +626,10 @@ script hash is also stored on the alignment.
 `fillers` hashes `words.json` and `decisions.json`, and the `fillers` section.
 `retakes` hashes `words.json` and, when the files exist, `audio_events.json`
 and `alignment.json`. Its config hash covers the `retakes`, `claps`, and
-`script` sections. `tighten` also hashes `vad`, `claps`, and `chapters`. Export
-stores a stamp at `artifacts/export.json` so an
+`script` sections. `tighten` hashes `words.json`, `decisions.json`,
+`sources.json`, the analysis WAVs, and `fillers.json`, `audio_events.json`,
+and `alignment.json` when those files exist. It also hashes `vad`, `claps`,
+and `chapters`. Export stores a stamp at `artifacts/export.json` so an
 unchanged timeline is not written again. Use `--force` on ingest, transcribe,
 audio, align, retakes, judge, fillers, tighten, or run when you need to bypass
 a valid cache entry.
