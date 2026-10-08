@@ -3,6 +3,9 @@
 import logging
 from datetime import UTC, datetime
 
+import numpy as np
+import soundfile as sf
+
 from cutter.align import run_align
 from cutter.config import load_profile
 from cutter.events import run_audio
@@ -106,7 +109,7 @@ def _write_sources(project):
     audio = project / "artifacts" / "audio"
     audio.mkdir(parents=True, exist_ok=True)
     (audio / "s01.16k.wav").write_bytes(b"16k")
-    (audio / "s01.48k.wav").write_bytes(b"48k")
+    sf.write(audio / "s01.48k.wav", np.zeros(480, dtype=np.float32), 48_000)
     write_artifact(
         project / "artifacts" / "sources.json",
         SourcesArtifact(

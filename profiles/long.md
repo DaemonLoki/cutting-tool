@@ -210,8 +210,8 @@ An exact repeat of a finished sentence is already dropped and is not sent.
 ## vad
 
 Used by `cutter audio` and, once speech segments affect cut points, by
-`cutter tighten`. `cutter audio` writes one segment per run of voice.
-Changing a key here still reruns `audio` and `tighten`.
+`cutter tighten`. `cutter audio` writes one segment per run of voice and
+records claps. Changing a key here still reruns `audio` and `tighten`.
 
 `enabled`
 : `false` leaves the speech list empty and records backend `none`. `true`
@@ -252,12 +252,12 @@ Changing a key here still reruns `audio` and `tighten`.
 ## claps
 
 Used by `cutter audio` for detection, and included in the cache of `retakes`
-and `tighten` because those stages will use the onsets. Nothing reads the
-detected claps yet. The scaffold writes an empty clap list.
+and `tighten` because those stages will use the onsets. Retakes and tighten
+do not read the onsets yet.
 
 `enabled`
-: `false` leaves the clap list empty. `true` will look for transients in the
-  pauses. The scaffold writes an empty list either way.
+: `false` leaves the clap list empty. `true` looks for transients in the
+  pauses.
 
 `min_rise_db`
 : How far the 2 ms envelope must rise above its 1 second rolling median, in
