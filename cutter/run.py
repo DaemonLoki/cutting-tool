@@ -5,10 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from cutter.align import run_align
 from cutter.cache import STAGE_CONFIG_SECTIONS, cache_hit, config_hash, inputs_hash
 from cutter.config import Profile
+from cutter.events import run_audio
 from cutter.fcpxml import STAGE_VERSION as EXPORT_STAGE_VERSION
 from cutter.fcpxml import ExportResult, export_fcpxml
+from cutter.fillers import run_fillers
 from cutter.ingest import ingest_project
 from cutter.judge import judge_cached, run_judge
 from cutter.models import (
@@ -57,16 +60,22 @@ def run_project(
     no_llm: bool = False,
     force: bool = False,
 ) -> RunSummary:
-    """Ingest, transcribe, retake, judge, tighten, and export.
+    """Ingest, transcribe, then the Phase 2 scaffolds, retakes, judge, tighten, and export.
 
     A judged ``decisions.json`` already covers retakes, so a cache hit skips
     both. Running retakes again would replace that file and send the same
-    takes back to the model.
+    takes back to the model. Fillers hashes that file, so it runs only after
+    the judged artifact is the one on disk. The spec lists fillers before
+    judge; doing that would miss the filler cache on the next run, because
+    judge rewrites ``decisions.json``.
     """
     project_dir = Path(project_dir)
     sources = ingest_project(project_dir, profile, force=force)
     words = transcribe_project(project_dir, profile=profile, force=force)
+    run_audio(project_dir, profile, force=force)
+    run_align(project_dir, profile, force=force)
     decisions = _decisions(project_dir, profile, no_llm=no_llm, force=force)
+    run_fillers(project_dir, profile, force=force)
     timeline = run_tighten(project_dir, profile, force=force)
     exported = _export(
         project_dir,

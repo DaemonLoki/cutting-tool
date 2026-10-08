@@ -4,13 +4,16 @@ Cutter currently supports these pipeline stages:
 
 1. Ingest numbered video sources and extract analysis audio.
 2. Transcribe the sources into word-level timestamps.
-3. Inspect transcribed words in a time range.
-4. Detect aborted failed takes and decide which ones should be dropped.
-5. Ask a local model about ambiguous aborted takes.
-6. Tighten the kept words into a rough cut.
-7. Export the timeline as editable FCPXML.
-8. Run the whole pipeline.
-9. Score a rough cut against a gold edit.
+3. Record speech segments and claps (scaffold: writes an empty artifact).
+4. Align the transcript to an optional script (scaffold: writes an empty artifact).
+5. Inspect transcribed words in a time range.
+6. Detect aborted failed takes and decide which ones should be dropped.
+7. Ask a local model about ambiguous aborted takes.
+8. Mark filler words (scaffold: writes an empty artifact).
+9. Tighten the kept words into a rough cut.
+10. Export the timeline as editable FCPXML.
+11. Run the whole pipeline.
+12. Score a rough cut against a gold edit.
 
 ## Requirements
 
@@ -45,7 +48,16 @@ are cut, and the handles around each word are shorter. Every key is
 explained in `profiles/long.md`. The short-form numbers are explained in
 `profiles/short.md`. Change a value in the YAML, or pass
 `--set key.path=value` for one run. A stage reruns when the keys it reads
-have changed.
+have changed. List values use YAML, for example `--set 'chapters.levels=[1]'`
+or `--set 'fillers.words=["um", "uh"]'`.
+
+Phase 2 adds the sections `vad`, `claps`, `fillers`, `script`, and `chapters`,
+plus `ingest.cfr_proxy` (`never`, `auto`, or `always`), `ingest.proxy_codec`
+(`prores_proxy` or `h264`), `tighten.use_vad`, `fcpxml.rejects_include_fillers`,
+and `fcpxml.vfr_media` (`original` or `proxy`). What each key will do is in
+`profiles/long.md`. The new stages are scaffolds, so these keys do not change
+the cut yet. They do change the cache for the stages that read them. `short`
+uses the same values as `long` for every new key.
 
 ## Create a project
 
@@ -70,6 +82,11 @@ Phase 1 expects:
 - one camera;
 - sources with the same frame rate, width, height, and audio sample rate;
 - non-drop-frame timecode.
+
+An optional `script.md` in the project folder is the speaker's script.
+`cutter align` reads that path (`script.path`, `script.md` by default). Without
+the file, alignment writes an empty artifact and logs `no script at <path>`
+once.
 
 Source files are never modified or re-encoded. Cutter only reads them and
 extracts mono WAV files for analysis.
@@ -153,7 +170,50 @@ The stage validates timestamp order and source duration. Violations under
 50 ms are clamped and logged; larger violations stop the command. An unchanged
 sources artifact, WAV input, and transcription profile produces a cache hit.
 
-## 3. Inspect word timestamps
+## 3. Record speech and claps
+
+Run ingest first, then:
+
+```bash
+uv run cutter audio projects/my-video
+uv run cutter audio projects/my-video --profile long --force
+```
+
+This command is a scaffold. It reads `artifacts/sources.json` and the 16 kHz
+and 48 kHz WAV files, and writes:
+
+```text
+projects/my-video/artifacts/audio_events.json
+```
+
+The file records backend `none`, no speech segments, and no claps. A second
+run with the same inputs and the same `vad` and `claps` settings is a cache
+hit. The summary is `speech segments: 0, claps: 0`.
+
+## 4. Align an optional script
+
+Run transcription first, then:
+
+```bash
+uv run cutter align projects/my-video
+uv run cutter align projects/my-video --profile long --force
+```
+
+This command is a scaffold. It reads `artifacts/words.json` and, when the file
+exists, `<project>/script.md` (or whatever `script.path` names). It writes:
+
+```text
+projects/my-video/artifacts/alignment.json
+```
+
+The file has `script: null` and empty chapter, sentence, unscripted, and
+missing lists, even when `script.md` is present. The summary is `no script`.
+When a later version stores a script, the summary counts sentences, chapters,
+and missing sentences. A missing script is logged once at info:
+`no script at <path>`. Adding or changing the script file misses the cache.
+The cache also covers `script` and `chapters`.
+
+## 5. Inspect word timestamps
 
 After transcription, print words whose start time falls in a half-open time
 range:
@@ -177,7 +237,7 @@ needed.
 This command is useful for comparing word timestamps against the source audio
 or video.
 
-## 4. Detect retakes
+## 6. Detect retakes
 
 Run transcription first, then:
 
@@ -217,7 +277,7 @@ Retake detection is conservative:
 The command summary reports total decisions, automatic drops, and flagged
 decisions. Flagged decisions become `CHECK` markers during tightening.
 
-## 5. Judge ambiguous takes
+## 7. Judge ambiguous takes
 
 Run retakes first, or let `cutter judge` recompute them from the transcript:
 
@@ -253,7 +313,28 @@ The command rewrites `artifacts/decisions.json` as a judge-stage artifact.
 `--no-llm` and `judge.enabled: false` still write that artifact, without
 calling the model.
 
-## 6. Tighten the rough cut
+## 8. Mark fillers
+
+Run retakes or judge first, so `decisions.json` exists, then:
+
+```bash
+uv run cutter fillers projects/my-video
+uv run cutter fillers projects/my-video --profile long --force
+```
+
+This command is a scaffold. It reads `artifacts/words.json` and
+`artifacts/decisions.json`, and writes:
+
+```text
+projects/my-video/artifacts/fillers.json
+```
+
+The file is a decisions artifact with no decisions. The summary is
+`filler decisions: 0`. A second run with the same words, decisions, and
+`fillers` settings is a cache hit. `cutter run` writes this file after the
+judged decisions are on disk, and before tighten.
+
+## 9. Tighten the rough cut
 
 Run retakes or judge first, then:
 
@@ -289,7 +370,7 @@ decisions become `CHECK` markers. Dropped retakes are listed for the rejects
 sequence. A very short range is merged into a neighbour or removed with a
 `CHECK: tiny fragment removed` marker.
 
-## 7. Export FCPXML
+## 10. Export FCPXML
 
 Export currently requires all of these artifacts:
 
@@ -339,7 +420,7 @@ DTD validation fails, Cutter writes
 Import the resulting `.fcpxml` file into Final Cut Pro. The XML references the
 original files; it does not contain or replace the media.
 
-## 8. Run the pipeline
+## 11. Run the pipeline
 
 ```bash
 uv run cutter run projects/my-video
@@ -353,16 +434,39 @@ uv run cutter run projects/my-video --set tighten.max_gap_ms=200
 uv run cutter run projects/my-video --force
 ```
 
-`run` executes ingest, transcribe, retakes, judge, tighten, and export. A
-stage whose inputs and profile section are unchanged is skipped. A judged
-decisions file already includes the retake result, so a cache hit skips both
-retakes and judge. `--no-llm` still runs the judge stage, without calling the
-model.
+`run` executes ingest, transcribe, audio, align, retakes, judge, fillers,
+tighten, and export. A stage whose inputs and profile section are unchanged
+is skipped. A judged decisions file already includes the retake result, so a
+cache hit skips both retakes and judge. Fillers runs after that file is
+settled, because it hashes `decisions.json`. `--no-llm` still runs the judge
+stage, without calling the model. Audio, align, and fillers are scaffolds:
+they write empty artifacts and do not change which words are kept.
+
+The project folder after a run looks like this:
+
+```text
+projects/my-video/
+├── script.md                  # optional
+├── artifacts/
+│   ├── sources.json
+│   ├── words.json
+│   ├── audio_events.json      # scaffold: no speech, no claps
+│   ├── alignment.json         # scaffold: no script
+│   ├── decisions.json
+│   ├── fillers.json           # scaffold: no filler decisions
+│   ├── timeline.json
+│   ├── export.json
+│   └── audio/
+│       ├── s01.16k.wav
+│       └── s01.48k.wav
+└── out/
+    └── my-video.fcpxml
+```
 
 The summary reports source count, raw duration, output duration, how many
 decisions were dropped, kept, and flagged, and the FCPXML path.
 
-## 9. Score a gold edit
+## 12. Score a gold edit
 
 ```bash
 uv run cutter eval test/gold/frontend-skills
@@ -407,9 +511,15 @@ Stage artifacts include metadata containing:
 
 Ingest hashes raw media by file name, size, and modification time instead of
 reading multi-gigabyte source contents. Later stages hash their input artifact
-and analysis files. Export stores a stamp at `artifacts/export.json` so an
+and analysis files. `audio` hashes `sources.json` plus the 16 kHz and 48 kHz
+WAVs, and the `vad` and `claps` sections. `align` hashes `words.json` and the
+script file when it exists, and the `script` and `chapters` sections.
+`fillers` hashes `words.json` and `decisions.json`, and the `fillers` section.
+`retakes` also hashes `claps` and `script`. `tighten` also hashes `vad`,
+`claps`, and `chapters`. Export stores a stamp at `artifacts/export.json` so an
 unchanged timeline is not written again. Use `--force` on ingest, transcribe,
-retakes, judge, tighten, or run when you need to bypass a valid cache entry.
+audio, align, retakes, judge, fillers, tighten, or run when you need to bypass
+a valid cache entry.
 
 ## Current command status
 
@@ -417,9 +527,12 @@ retakes, judge, tighten, or run when you need to bypass a valid cache entry.
 | --- | --- | --- |
 | `cutter ingest` | Implemented | `artifacts/sources.json`, WAV files |
 | `cutter transcribe` | Implemented | `artifacts/words.json` |
+| `cutter audio` | Scaffolded (writes an empty artifact) | `artifacts/audio_events.json` |
+| `cutter align` | Scaffolded (writes an empty artifact) | `artifacts/alignment.json` |
 | `cutter words` | Implemented | Console output |
 | `cutter retakes` | Implemented | `artifacts/decisions.json` |
 | `cutter judge` | Implemented | `artifacts/decisions.json` |
+| `cutter fillers` | Scaffolded (writes an empty artifact) | `artifacts/fillers.json` |
 | `cutter tighten` | Implemented | `artifacts/timeline.json` |
 | `cutter export` | Implemented | `out/<project>.fcpxml` |
 | `cutter run` | Implemented | FCPXML plus the artifacts above |
