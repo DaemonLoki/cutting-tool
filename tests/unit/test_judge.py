@@ -342,6 +342,22 @@ def test_no_llm_cache_does_not_satisfy_a_later_llm_run(
     assert third.data.decisions[0].flag is False
 
 
+def test_judge_cache_misses_when_a_retakes_input_section_changes(tmp_path: Path) -> None:
+    """Retakes reads ``claps`` and ``script`` too; a change there must rerun both stages."""
+    words = _long_words()
+    _write_words(tmp_path, words)
+    client = _Client(_verdict("B", 0.9, "cut it"))
+    first = run_judge(tmp_path, no_llm=True, client=client)
+
+    changed = PROFILE.model_copy(
+        update={"claps": PROFILE.claps.model_copy(update={"min_match_words": 4})}
+    )
+    second = run_judge(tmp_path, changed, no_llm=True, client=client)
+
+    assert second.meta.inputs_hash != first.meta.inputs_hash
+    assert second.meta.config_hash == first.meta.config_hash
+
+
 def test_disabled_judge_uses_the_config_hash(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

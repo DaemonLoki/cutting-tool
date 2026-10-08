@@ -25,6 +25,7 @@ from cutter.models import (
     make_meta,
     write_artifact,
 )
+from cutter.retakes import STAGE as RETAKES_STAGE
 from cutter.retakes import STAGE_VERSION as RETAKES_STAGE_VERSION
 from cutter.retakes import detect_retakes
 
@@ -330,7 +331,7 @@ def _optional(span: list[Word]) -> str:
 def _inputs_hash(words_path: Path, profile: Profile, *, no_llm: bool) -> str:
     mode = "no_llm" if no_llm else "llm"
     base = inputs_hash(artifacts=[words_path])
-    retakes_config = config_hash(profile, ("retakes",))
+    retakes_config = config_hash(profile, STAGE_CONFIG_SECTIONS[RETAKES_STAGE])
     payload = f"{base}\0{retakes_config}\0{RETAKES_STAGE_VERSION}\0{mode}"
     digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
     return f"sha256:{digest}"
