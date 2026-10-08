@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -20,6 +20,8 @@ class IngestConfig(StrictModel):
     allowed_extensions: list[str]
     asr_sample_rate: int
     analysis_sample_rate: int
+    cfr_proxy: Literal["never", "auto", "always"]
+    proxy_codec: Literal["prores_proxy", "h264"]
 
 
 class TranscribeConfig(StrictModel):
@@ -47,6 +49,48 @@ class JudgeConfig(StrictModel):
     timeout_s: int
 
 
+class VadConfig(StrictModel):
+    enabled: bool
+    backend: Literal["silero", "energy"]
+    threshold: float
+    min_speech_ms: int
+    min_silence_ms: int
+    pad_ms: int
+    flag_unheard_speech_s: float
+
+
+class ClapsConfig(StrictModel):
+    enabled: bool
+    min_rise_db: float
+    max_duration_ms: int
+    min_gap_ms: int
+    min_match_words: int
+    exclude_before_ms: int
+    exclude_after_ms: int
+
+
+class FillersConfig(StrictModel):
+    enabled: bool
+    words: list[str]
+    phrases: list[str]
+    sentence_start_words: list[str]
+    max_duration_s: float
+
+
+class ScriptConfig(StrictModel):
+    path: str
+    min_take_score: int
+    prefer: Literal["best", "last"]
+    min_score_gap: int
+    drop_later_takes: bool
+    flag_unscripted_s: float
+
+
+class ChaptersConfig(StrictModel):
+    enabled: bool
+    levels: list[int]
+
+
 class TightenConfig(StrictModel):
     max_gap_ms: int
     pad_head_ms: int
@@ -58,6 +102,7 @@ class TightenConfig(StrictModel):
     voice_margin_db: float
     voice_quiet_ms: int
     min_range_frames: int
+    use_vad: bool
 
 
 class FcpxmlConfig(StrictModel):
@@ -67,6 +112,8 @@ class FcpxmlConfig(StrictModel):
     project_name: str
     rejects_project_name: str
     audio_role: str
+    rejects_include_fillers: bool
+    vfr_media: Literal["original", "proxy"]
 
 
 class Profile(StrictModel):
@@ -74,6 +121,11 @@ class Profile(StrictModel):
     transcribe: TranscribeConfig
     retakes: RetakesConfig
     judge: JudgeConfig
+    vad: VadConfig
+    claps: ClapsConfig
+    fillers: FillersConfig
+    script: ScriptConfig
+    chapters: ChaptersConfig
     tighten: TightenConfig
     fcpxml: FcpxmlConfig
 

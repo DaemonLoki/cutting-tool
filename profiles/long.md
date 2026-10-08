@@ -71,6 +71,18 @@ Used by `cutter ingest`.
   rate tighten reads. This is analysis audio only. Source video is never
   re-encoded.
 
+`cfr_proxy`
+: When a constant-frame-rate proxy is made. `never` makes none. `auto` makes
+  one only for a source that printed a VFR warning. `always` makes one for
+  every source. The proxy step is not implemented yet, so every value leaves
+  the original files as the media Final Cut opens. The key is already part of
+  the ingest cache.
+
+`proxy_codec`
+: Codec of that proxy. `prores_proxy` is a light ProRes. `h264` is a small
+  H.264 file. Ignored while `cfr_proxy` is `never` and while the proxy step
+  is absent.
+
 ## transcribe
 
 Used by `cutter transcribe`.
@@ -195,6 +207,175 @@ An exact repeat of a finished sentence is already dropped and is not sent.
 : Seconds to wait for one verdict. On timeout or connection failure the
   stage logs one warning and leaves the decisions file unchanged.
 
+## vad
+
+Used by `cutter audio` and, once speech segments affect cut points, by
+`cutter tighten`. `cutter audio` is a scaffold: it writes an empty
+`audio_events.json` and does not measure speech yet. Changing a key here
+still reruns `audio` and `tighten`.
+
+`enabled`
+: `false` leaves the speech list empty and records backend `none`. `true`
+  will ask the backend below. The scaffold writes `none` either way.
+
+`backend`
+: `silero` is the neural voice detector. `energy` reuses the loudness
+  tighten already measures, with `tighten.voice_margin_db` as the speech
+  line. The scaffold does not call either backend.
+
+`threshold`
+: Silero speech probability, from 0 to 1. A chunk at or above this counts as
+  voice. The default `0.5` is the library's usual line. Lower it when quiet
+  speech is missed. Raise it when room noise becomes a segment. `energy`
+  ignores this key.
+
+`min_speech_ms`
+: Speech shorter than this is dropped. The default `100` is longer than a
+  clap, which is about 30 ms, so a clap does not become a speech segment.
+  Lower it only when a real short word is being discarded.
+
+`min_silence_ms`
+: A silence shorter than this, inside speech, is bridged into the surrounding
+  segment. The default `150` keeps a stop between syllables inside one
+  segment. Raise it when a phrase is split at every breath.
+
+`pad_ms`
+: Milliseconds added to both ends of each speech segment after the other
+  filters. The default `30` keeps the attack and release that the detector
+  trims. The segment is still clamped to the source.
+
+`flag_unheard_speech_s`
+: A speech segment at least this many seconds long, with no transcript word
+  inside it, gets a `CHECK: speech without transcript` marker. It is not
+  added to the cut. The default `2` ignores a cough. Lower it to flag shorter
+  gaps the transcript skipped.
+
+## claps
+
+Used by `cutter audio` for detection, and included in the cache of `retakes`
+and `tighten` because those stages will use the onsets. Nothing reads the
+detected claps yet. The scaffold writes an empty clap list.
+
+`enabled`
+: `false` leaves the clap list empty. `true` will look for transients in the
+  pauses. The scaffold writes an empty list either way.
+
+`min_rise_db`
+: How far the 2 ms envelope must rise above its 1 second rolling median, in
+  dB, before an onset counts. The default `20` asks for a sharp peak over the
+  room. Lower it when a real clap is missed. Raise it when desk noise is
+  marked.
+
+`max_duration_ms`
+: The level must fall back to near the background within this many
+  milliseconds. The default `60` keeps a hand clap and rejects a thud or a
+  door. Raise it when a soft clap is discarded for lasting too long.
+
+`min_gap_ms`
+: Transients closer than this are one clap. The onset kept is the first, and
+  the peak kept is the louder one. The default `300` joins the two halves of
+  one clap. Lower it when two deliberate claps land close together.
+
+`min_match_words`
+: How many transcript words must match after a clap before that clap anchors
+  a retake. The default `2` is shorter than `retakes.min_match_words`, which
+  stays the bar for a clap-free scan. Raise it when a clap is tying two
+  unrelated phrases together.
+
+`exclude_before_ms`
+: Milliseconds before the clap onset that must not play. The default `100`
+  keeps the attack of the clap out of the previous word.
+
+`exclude_after_ms`
+: Milliseconds after the clap onset that must not play. The default `250`
+  covers the decay. A range that cannot get out of this zone stays, with a
+  marker, rather than dropping speech to avoid the clap.
+
+## fillers
+
+Used by `cutter fillers`. That command is a scaffold: it writes
+`fillers.json` with no decisions, so these keys do not drop words yet.
+Changing one still reruns the stage.
+
+`enabled`
+: `false` writes no filler decisions. `true` will drop the words and phrases
+  below. The scaffold writes none either way.
+
+`words`
+: Normalized words dropped wherever they occur. The default list is um, uh,
+  and the usual hums. A filler that is the only word of its sentence stays;
+  it is content. Matching ignores case and punctuation.
+
+`phrases`
+: Consecutive normalized words, matched exactly, such as `you know`. The
+  default is empty, so no phrase is dropped. Add a phrase here when you want
+  that pair removed and not the words alone.
+
+`sentence_start_words`
+: Normalized words dropped only when they are the first word of a sentence
+  and another word in that sentence follows. The default is empty, so `so`
+  and `okay` stay. A sentence-start word that is also in `words` is still
+  dropped as a filler anywhere.
+
+`max_duration_s`
+: A filler run longer than this, measured from the first word's start to the
+  last word's end, is kept and flagged `filler_long`. The default `1.5`
+  treats a drawn-out um as something to hear. Lower it to drop those too.
+
+## script
+
+Used by `cutter align`, and included in the retakes cache because a script
+will choose which take stays. `cutter align` is a scaffold: it writes
+`alignment.json` with `script: null` until parsing lands. A missing file is
+logged once and the empty artifact is cached. Adding or editing the file
+misses that cache.
+
+`path`
+: Path of the script, relative to the project folder. The default
+  `script.md` is optional. Point it at another name when the script is not
+  called that.
+
+`min_take_score`
+: Rapidfuzz ratio, 0–100, of a transcript window against a script sentence.
+  A window below this is not a take. The default `80` allows a paraphrase
+  and rejects an aside. Lower it when sentences are marked missing that were
+  spoken in different words. Raise it when an aside is matching a sentence.
+
+`prefer`
+: `best` keeps the highest score. `last` keeps the later take, which is the
+  Phase 1 rule. Ties go to the later take either way.
+
+`min_score_gap`
+: When the chosen take beats an alternate by less than this, the drop is
+  flagged `script_close_call`. The default `5` flags a near tie. Raise it to
+  flag more often. `0` flags only an exact tie, and an exact tie still goes
+  to the later take.
+
+`drop_later_takes`
+: `true` drops an alternate that comes after the chosen take. `false` keeps
+  that later alternate and flags it. An alternate before the chosen take is
+  dropped either way when the script is the evidence.
+
+`flag_unscripted_s`
+: An unscripted passage at least this many seconds long gets a
+  `CHECK: unscripted` marker. The words stay in the cut. The default `20`
+  ignores a short aside. Lower it to mark shorter departures from the script.
+
+## chapters
+
+Used by `cutter align` and by tighten's cache. Chapter markers in the FCPXML
+are not written yet. The scaffold records no chapters.
+
+`enabled`
+: `false` writes no chapter markers. `true` will place one at the first kept
+  word of each heading whose level is listed below. A heading whose sentence
+  was never spoken is skipped.
+
+`levels`
+: Heading levels that become markers. `1` is a line starting with `# `, and
+  `2` is `## `. The default `[1, 2]` skips smaller headings. A heading of
+  another level is not a chapter and is not spoken text.
+
 ## tighten
 
 Used by `cutter tighten`. These keys move cut points. They do not decide
@@ -264,6 +445,12 @@ are already gone before this stage runs.
   range gains a `CHECK: tiny fragment removed` marker. The default `6` drops
   scraps of a few frames. `1` keeps every range that has at least one frame.
 
+`use_vad`
+: `false` keeps the Phase 1 cut points even when `audio_events.json` has
+  speech segments. `true` will use those segments for word onsets, voice
+  ends, and gaps. Tighten does not read the segments yet, so both values
+  produce the same cut. The key is already part of the tighten cache.
+
 ## fcpxml
 
 Used by `cutter export` and by the export step of `cutter run`. These keys
@@ -294,3 +481,14 @@ are kept.
 `audio_role`
 : `audioRole` written on each asset clip. The default `dialogue` is the role
   Final Cut shows for this speech.
+
+`rejects_include_fillers`
+: `false` leaves filler drops out of the rejects project. `true` will include
+  them, with a marker such as `f003: filler`. Export does not read filler
+  decisions yet, so both values write the same rejects sequence.
+
+`vfr_media`
+: Which file the FCPXML points at when a source has a proxy. `original` keeps
+  the camera file, which is the default. `proxy` will point at the proxy, and
+  only for a source that has one. No proxy is made yet, so `proxy` still
+  opens the original.

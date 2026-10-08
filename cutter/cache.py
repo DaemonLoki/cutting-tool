@@ -17,9 +17,12 @@ from cutter.models import ArtifactMeta
 STAGE_CONFIG_SECTIONS: dict[str, tuple[str, ...]] = {
     "ingest": ("ingest",),
     "transcribe": ("transcribe",),
-    "retakes": ("retakes",),
+    "audio": ("vad", "claps"),
+    "align": ("script", "chapters"),
+    "retakes": ("retakes", "claps", "script"),
+    "fillers": ("fillers",),
     "judge": ("judge",),
-    "tighten": ("tighten",),
+    "tighten": ("tighten", "vad", "claps", "chapters"),
     "export": ("fcpxml",),
 }
 
