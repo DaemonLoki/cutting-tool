@@ -5,7 +5,7 @@ Cutter currently supports these pipeline stages:
 1. Ingest numbered video sources and extract analysis audio.
 2. Transcribe the sources into word-level timestamps.
 3. Record speech segments. Claps are not detected yet.
-4. Align the transcript to an optional script (scaffold: writes an empty artifact).
+4. Align the transcript to an optional script.
 5. Inspect transcribed words in a time range.
 6. Detect aborted failed takes and decide which ones should be dropped.
 7. Ask a local model about ambiguous aborted takes.
@@ -58,7 +58,8 @@ and `fcpxml.vfr_media` (`original` or `proxy`). What each key will do is in
 `profiles/long.md`. `cutter audio` writes speech segments when `vad.enabled`
 is true. Those segments do not move cut points yet. `fillers` writes drop
 decisions, and tighten does not apply them yet, so the rough cut is unchanged.
-Align and claps are still scaffolds. The new keys do change the cache for the
+`cutter align` writes `alignment.json` from `script.md` and does not drop
+words. Claps are still a scaffold. The new keys do change the cache for the
 stages that read them. `short` uses the same values as `long` for every new key.
 
 ## Create a project
@@ -88,7 +89,8 @@ Phase 1 expects:
 An optional `script.md` in the project folder is the speaker's script.
 `cutter align` reads that path (`script.path`, `script.md` by default). Without
 the file, alignment writes an empty artifact and logs `no script at <path>`
-once.
+once. With the file, alignment records each script sentence, the spoken takes
+that match it, and which take was chosen.
 
 Source files are never modified or re-encoded. Cutter only reads them and
 extracts mono WAV files for analysis.
@@ -205,19 +207,26 @@ uv run cutter align projects/my-video
 uv run cutter align projects/my-video --profile long --force
 ```
 
-This command is a scaffold. It reads `artifacts/words.json` and, when the file
-exists, `<project>/script.md` (or whatever `script.path` names). It writes:
+It reads `artifacts/words.json` and, when the file exists, `<project>/script.md`
+(or whatever `script.path` names). It writes:
 
 ```text
 projects/my-video/artifacts/alignment.json
 ```
 
-The file has `script: null` and empty chapter, sentence, unscripted, and
-missing lists, even when `script.md` is present. The summary is `no script`.
-When a later version stores a script, the summary counts sentences, chapters,
-and missing sentences. A missing script is logged once at info:
-`no script at <path>`. Adding or changing the script file misses the cache.
-The cache also covers `script` and `chapters`.
+Without that file, the artifact has `script: null` and empty chapter, sentence,
+unscripted, and missing lists. The summary is `no script`. A missing script is
+logged once at info: `no script at <path>`. With a script, the summary counts
+sentences, chapters, and missing sentences.
+
+Chapters are headings whose level is listed in `chapters.levels`. `missing`
+lists script sentences that never matched a take. `unscripted` lists runs of
+transcript words that no take covers, not even an alternate.
+
+Adding or changing the script file misses the cache. The cache also covers the
+`script` and `chapters` settings. The script file's sha256 is stored on the
+script object and included in the stage input hash. Alignment does not drop
+words; the rough cut still comes from the retake and tighten stages.
 
 ## 5. Inspect word timestamps
 
@@ -461,8 +470,8 @@ cache hit skips both retakes and judge. Fillers runs after that file is
 settled, because it hashes `decisions.json`. `--no-llm` still runs the judge
 stage, without calling the model. Audio records speech segments and does not
 change which words are kept. Fillers writes decisions for configured filler
-words; tighten does not remove those words yet. Align is a scaffold: it writes
-an empty artifact.
+words; tighten does not remove those words yet. Align writes `alignment.json`
+from `script.md` when that file is present, and does not drop words.
 
 The project folder after a run looks like this:
 
@@ -473,7 +482,7 @@ projects/my-video/
 │   ├── sources.json
 │   ├── words.json
 │   ├── audio_events.json      # speech segments; claps none yet
-│   ├── alignment.json         # scaffold: no script
+│   ├── alignment.json         # script takes, or no script
 │   ├── decisions.json
 │   ├── fillers.json           # filler decisions; tighten does not apply them yet
 │   ├── timeline.json
@@ -535,7 +544,8 @@ Ingest hashes raw media by file name, size, and modification time instead of
 reading multi-gigabyte source contents. Later stages hash their input artifact
 and analysis files. `audio` hashes `sources.json` plus the 16 kHz and 48 kHz
 WAVs, and the `vad` and `claps` sections. `align` hashes `words.json` and the
-script file when it exists, and the `script` and `chapters` sections.
+script file when it exists, and the `script` and `chapters` sections. That
+script hash is also stored on the alignment.
 `fillers` hashes `words.json` and `decisions.json`, and the `fillers` section.
 `retakes` also hashes `claps` and `script`. `tighten` also hashes `vad`,
 `claps`, and `chapters`. Export stores a stamp at `artifacts/export.json` so an
@@ -550,7 +560,7 @@ a valid cache entry.
 | `cutter ingest` | Implemented | `artifacts/sources.json`, WAV files |
 | `cutter transcribe` | Implemented | `artifacts/words.json` |
 | `cutter audio` | Implemented (speech segments; claps none yet) | `artifacts/audio_events.json` |
-| `cutter align` | Scaffolded (writes an empty artifact) | `artifacts/alignment.json` |
+| `cutter align` | Implemented | `artifacts/alignment.json` |
 | `cutter words` | Implemented | Console output |
 | `cutter retakes` | Implemented | `artifacts/decisions.json` |
 | `cutter judge` | Implemented | `artifacts/decisions.json` |

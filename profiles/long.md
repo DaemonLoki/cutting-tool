@@ -324,10 +324,9 @@ of these keys reruns the stage.
 ## script
 
 Used by `cutter align`, and included in the retakes cache because a script
-will choose which take stays. `cutter align` is a scaffold: it writes
-`alignment.json` with `script: null` until parsing lands. A missing file is
-logged once and the empty artifact is cached. Adding or editing the file
-misses that cache.
+will choose which take stays. `cutter align` reads the file and writes
+`alignment.json`. A missing file is logged once and the empty artifact is
+cached. Adding or editing the file misses that cache.
 
 `path`
 : Path of the script, relative to the project folder. The default
@@ -362,13 +361,15 @@ misses that cache.
 
 ## chapters
 
-Used by `cutter align` and by tighten's cache. Chapter markers in the FCPXML
-are not written yet. The scaffold records no chapters.
+Used by `cutter align` and by tighten's cache. `cutter align` records a
+chapter for each heading whose level is listed below. Chapter markers in the
+FCPXML are not written yet.
 
 `enabled`
 : `false` writes no chapter markers. `true` will place one at the first kept
-  word of each heading whose level is listed below. A heading whose sentence
-  was never spoken is skipped.
+  word of each heading whose level is listed below. Alignment still records
+  those headings either way. A heading whose sentence was never spoken is
+  skipped when markers are placed.
 
 `levels`
 : Heading levels that become markers. `1` is a line starting with `# `, and

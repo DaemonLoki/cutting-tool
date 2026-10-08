@@ -74,8 +74,12 @@ def test_align_misses_the_cache_when_a_script_appears(tmp_path, caplog):
         second = run_align(tmp_path, PROFILE)
     assert caplog.text == ""
     assert second.meta.inputs_hash != first.meta.inputs_hash
-    assert second.data.script is None
-    assert second.data.sentences == []
+    assert second.data.script is not None
+    assert second.data.script.path == "script.md"
+    assert second.data.script.hash.startswith("sha256:")
+    assert len(second.data.sentences) == 1
+    assert second.data.sentences[0].text == "Hello."
+    assert second.data.sentences[0].takes[0].chosen is True
 
 
 def test_fillers_are_empty_and_cached(tmp_path):
