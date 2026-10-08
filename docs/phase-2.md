@@ -216,7 +216,9 @@ score_gap: float | None = None     # evidence == "script": chosen score − alte
 
 ## 7. Stages
 
-Pipeline order in `run`: ingest → transcribe → **audio** → **align** → retakes → **fillers** → judge → tighten → export.
+Pipeline order in `run`: ingest → transcribe → **audio** → **align** → retakes → judge → **fillers** → tighten → export.
+
+Fillers hashes `decisions.json`, and judge rewrites that file, so fillers runs after the judged artifact is on disk. The judge cache hashes every config section retakes reads (`retakes`, `claps`, `script`), not only `retakes`, so a clap or script threshold change reruns both stages.
 
 ### 7.1 Ingest: CFR proxy (`ingest.py`) — gated by T6
 
@@ -372,7 +374,7 @@ Run in this order; each step skips words already in `claimed`.
 Extend `build_project` with keyword flags, default `False`, so Phase 1's test is unchanged:
 
 - `fillers=True`: FILE_ONE's second line becomes `"Um, the cache stores the result and, uh, skips the work."`; `expected.txt` has no fillers.
-- `clap=True`: a 30 ms white-noise burst (`anoisesrc`, −3 dBFS, 25 ms fade-out) between the aborted line and its retake instead of plain silence, and one burst inside a 1 s pause with no retake after it.
+- `clap=True`: a 30 ms white-noise burst (`anoisesrc`, −3 dBFS, 25 ms fade-out) between the aborted line and its retake instead of plain silence, and one burst inside a 1 s pause with no retake after it. Onset times are written to `claps.json` as `{"01.mov": [onset, onset], "02.mov": []}`, seconds from the start of each file. The second burst starts 200 ms into a 1 s silence appended after the tail cut.
 - `script=True`: write `script.md` with `# Cache` and `# Agent` headings over the expected sentences, and one extra script sentence that is never spoken.
 
 `tests/e2e/test_phase2.py` runs `cutter run --no-llm` on the full fixture and asserts: kept text equals expected; no range contains a clap; the FCPXML has two `chapter-marker`s and one `CHECK: clap_without_retake`; `missing` has one sentence; DTD valid when available.
