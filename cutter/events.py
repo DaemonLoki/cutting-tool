@@ -1,7 +1,6 @@
-"""Phase 2 skeleton for speech segments and claps.
+"""Speech segments and claps for one project.
 
-T2 fills in voice activity and T3 fills in clap detection. Until then this
-stage writes an empty ``audio_events.json`` so later stages can cache against it.
+T3 fills in clap detection. Until then the clap list stays empty.
 """
 
 from __future__ import annotations
@@ -13,14 +12,17 @@ from cutter.config import Profile, load_profile
 from cutter.models import (
     AudioEventsArtifact,
     AudioEventsData,
+    Clap,
     Source,
     SourcesArtifact,
+    SpeechSegment,
     make_meta,
     write_artifact,
 )
+from cutter.vad import speech_segments
 
 STAGE = "audio"
-STAGE_VERSION = 1
+STAGE_VERSION = 2
 
 
 def run_audio(
@@ -33,7 +35,8 @@ def run_audio(
 
     Reads ``artifacts/sources.json`` and each source's 16 kHz and 48 kHz WAVs.
     Writes ``artifacts/audio_events.json``. A cache hit returns the artifact
-    already on disk. The skeleton records ``backend: none`` and no events.
+    already on disk. When VAD is disabled the backend is ``none`` and speech
+    is empty. Claps are not detected yet.
     """
     loaded = load_profile("long") if profile is None else profile
     project_dir = Path(project_dir)
@@ -56,6 +59,13 @@ def run_audio(
     ):
         return AudioEventsArtifact.model_validate_json(events_path.read_text(encoding="utf-8"))
 
+    if loaded.vad.enabled:
+        backend = loaded.vad.backend
+        speech = _speech(project_dir, sources.data.sources, loaded)
+    else:
+        backend = "none"
+        speech = []
+    claps: list[Clap] = []
     artifact = AudioEventsArtifact(
         meta=make_meta(
             stage=STAGE,
@@ -63,10 +73,22 @@ def run_audio(
             inputs_hash=hashed_inputs,
             config_hash=hashed_config,
         ),
-        data=AudioEventsData(backend="none", speech=[], claps=[]),
+        data=AudioEventsData(backend=backend, speech=speech, claps=claps),
     )
     write_artifact(events_path, artifact)
     return artifact
+
+
+def _speech(project_dir: Path, sources: list[Source], profile: Profile) -> list[SpeechSegment]:
+    margin = profile.tighten.voice_margin_db
+    segments: list[SpeechSegment] = []
+    for source in sources:
+        wav_name = source.asr_wav if profile.vad.backend == "silero" else source.analysis_wav
+        spans = speech_segments(project_dir / wav_name, profile.vad, voice_margin_db=margin)
+        segments.extend(
+            SpeechSegment(source=source.id, start=start, end=end) for start, end in spans
+        )
+    return segments
 
 
 def _wavs(project_dir: Path, sources: list[Source]) -> list[Path]:

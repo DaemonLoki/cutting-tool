@@ -25,8 +25,9 @@ PROFILE = load_profile("long")
 
 def test_audio_is_empty_and_cached(tmp_path):
     _write_sources(tmp_path)
-    first = run_audio(tmp_path, PROFILE)
-    second = run_audio(tmp_path, PROFILE)
+    profile = PROFILE.model_copy(update={"vad": PROFILE.vad.model_copy(update={"enabled": False})})
+    first = run_audio(tmp_path, profile)
+    second = run_audio(tmp_path, profile)
     assert first.data.backend == "none"
     assert first.data.speech == []
     assert first.data.claps == []

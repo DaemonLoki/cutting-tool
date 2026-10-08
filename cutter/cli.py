@@ -104,7 +104,7 @@ def audio(
 ) -> None:
     """Record speech segments and claps.
 
-    This stage is a scaffold. It writes an empty artifact.
+    Speech comes from the profile VAD backend. Claps are not detected yet.
     """
     sources_path = project_dir / "artifacts" / "sources.json"
     if not sources_path.is_file():

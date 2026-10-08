@@ -1,4 +1,4 @@
-"""Phase 2 scaffolds on the extended synthetic fixture. Parakeet needs a Metal GPU."""
+"""Phase 2 stages on the extended synthetic fixture. Parakeet needs a Metal GPU."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ _STAGES = (
 )
 
 
-def test_scaffolds_are_empty_and_a_second_run_skips_every_stage(tmp_path: Path) -> None:
+def test_speech_is_recorded_and_a_second_run_skips_every_stage(tmp_path: Path) -> None:
     project = tmp_path / "synthetic"
     build_project(project, fillers=True, clap=True, script=True)
 
@@ -45,8 +45,8 @@ def test_scaffolds_are_empty_and_a_second_run_skips_every_stage(tmp_path: Path) 
     fillers = DecisionsArtifact.model_validate_json(
         (artifacts / "fillers.json").read_text(encoding="utf-8")
     )
-    assert audio.data.backend == "none"
-    assert audio.data.speech == []
+    assert audio.data.backend == "silero"
+    assert audio.data.speech
     assert audio.data.claps == []
     assert alignment.data.script is None
     assert alignment.data.chapters == []
