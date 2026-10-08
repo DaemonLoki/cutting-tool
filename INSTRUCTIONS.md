@@ -198,8 +198,10 @@ When `vad.enabled` is true, the file's backend is `vad.backend` (`silero` or
 least `tighten.voice_margin_db` above that file's background. When
 `vad.enabled` is false, the backend is `none` and speech is empty.
 
-Claps are short transients on the 48 kHz WAV. An onset inside a speech
-segment is ignored. Set `claps.enabled` to `false` to record none.
+Claps are short transients on the 48 kHz WAV. An onset inside a voiced run
+is ignored, which drops a plosive. A clap in a short pause is kept, including
+when that pause is bridged into the surrounding speech segment. Set
+`claps.enabled` to `false` to record none.
 `claps.min_rise_db` is how many decibels a transient must rise above the
 one-second background; raise it when a knock is marked, lower it when a real
 clap is missed. The other `claps.*` keys are described in `profiles/long.md`.

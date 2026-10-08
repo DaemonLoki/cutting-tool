@@ -1,7 +1,8 @@
 """Speech segments and claps for one project.
 
 Voice activity comes from ``vad.py``. Claps are detected on each 48 kHz
-analysis WAV and dropped when their onset falls inside speech.
+analysis WAV and dropped when their onset falls inside a voiced run. A
+pause that speech bridging closes stays a pause, so a clap there is kept.
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ from cutter.models import (
     make_meta,
     write_artifact,
 )
-from cutter.vad import speech_segments
+from cutter.vad import speech_and_clap_gate
 
 STAGE = "audio"
 STAGE_VERSION = 3
@@ -64,20 +65,19 @@ def run_audio(
 
     if loaded.vad.enabled:
         backend = loaded.vad.backend
-        speech = _speech(project_dir, sources.data.sources, loaded)
+        speech, gate = _speech(project_dir, sources.data.sources, loaded)
     else:
         backend = "none"
         speech = []
-    # Claps use the speech segments already in `speech` (empty when VAD is off).
+        gate = {}
+    # The gate is unbridged voiced runs. The stored speech spans bridge short
+    # pauses, and a clap between two utterances lives in one of those pauses.
     claps: list[Clap] = []
     if loaded.claps.enabled:
-        speech_by_source: dict[str, list[tuple[float, float]]] = {}
-        for segment in speech:
-            speech_by_source.setdefault(segment.source, []).append((segment.start, segment.end))
         for source in sources.data.sources:
             hits = detect_claps(
                 project_dir / source.analysis_wav,
-                speech_by_source.get(source.id, []),
+                gate.get(source.id, []),
                 loaded.claps,
             )
             claps.extend(
@@ -111,16 +111,26 @@ def _config_hash(profile: Profile) -> str:
     return f"sha256:{hashlib.sha256(payload.encode()).hexdigest()}"
 
 
-def _speech(project_dir: Path, sources: list[Source], profile: Profile) -> list[SpeechSegment]:
+def _speech(
+    project_dir: Path,
+    sources: list[Source],
+    profile: Profile,
+) -> tuple[list[SpeechSegment], dict[str, list[tuple[float, float]]]]:
     margin = profile.tighten.voice_margin_db
     segments: list[SpeechSegment] = []
+    gate: dict[str, list[tuple[float, float]]] = {}
     for source in sources:
         wav_name = source.asr_wav if profile.vad.backend == "silero" else source.analysis_wav
-        spans = speech_segments(project_dir / wav_name, profile.vad, voice_margin_db=margin)
+        spans, source_gate = speech_and_clap_gate(
+            project_dir / wav_name,
+            profile.vad,
+            voice_margin_db=margin,
+        )
         segments.extend(
             SpeechSegment(source=source.id, start=start, end=end) for start, end in spans
         )
-    return segments
+        gate[source.id] = source_gate
+    return segments, gate
 
 
 def _wavs(project_dir: Path, sources: list[Source]) -> list[Path]:

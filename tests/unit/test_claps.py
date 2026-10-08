@@ -21,6 +21,7 @@ from cutter.models import (
     make_meta,
     write_artifact,
 )
+from cutter.vad import speech_and_clap_gate
 
 PROFILE = load_profile("long")
 CLAPS = PROFILE.claps
@@ -47,6 +48,27 @@ def test_bursts_covered_by_speech_are_dropped(tmp_path: Path) -> None:
     wav = _write_bursts(tmp_path / "covered.wav", _ONSETS)
     found = detect_claps(wav, [(0.0, 3.0)], CLAPS)
     assert found == []
+
+
+def test_clap_in_a_bridged_pause_is_kept(tmp_path: Path) -> None:
+    """A pause shorter than the speech bridge still holds a clap.
+
+    Stored speech joins the two utterances. Gating on that span would drop
+    the onset. The gate is the unbridged voiced runs, so the clap stays.
+    """
+    onset = 1.64
+    wav = _write_pause_clap(tmp_path / "pause.wav", onset)
+    vad = PROFILE.vad.model_copy(
+        update={"backend": "energy", "min_silence_ms": 400, "pad_ms": 0}
+    )
+    stored, gate = speech_and_clap_gate(
+        wav, vad, voice_margin_db=PROFILE.tighten.voice_margin_db
+    )
+    assert len(stored) == 1
+    assert detect_claps(wav, stored, CLAPS) == []
+    found = detect_claps(wav, gate, CLAPS)
+    assert len(found) == 1
+    assert found[0].t == pytest.approx(onset, abs=0.02)
 
 
 def test_noise_without_bursts_has_no_claps(tmp_path: Path) -> None:
@@ -130,6 +152,32 @@ def test_fixture_onsets_match_claps_json(tmp_path: Path) -> None:
     second = _extract(project / "raw" / "02.mov", tmp_path / "02.wav")
     assert detect_claps(second, [], CLAPS) == []
     assert detect_claps(second, [], tuned) == []
+
+
+def _write_pause_clap(path: Path, onset: float) -> Path:
+    """Two short voiced runs with a 30 ms burst in the pause between them.
+
+    Each run is 120 ms, long enough to be speech and short enough that the
+    one-second clap median stays on the quiet bed.
+    """
+    total = int(3.2 * SAMPLE_RATE)
+    rng = np.random.default_rng(1)
+    samples = rng.normal(0.0, _rms(-50.0), total)
+    _add_tone(samples, onset - 0.12 - 0.12, 0.12)
+    burst_n = int(round(0.03 * SAMPLE_RATE))
+    start = int(round(onset * SAMPLE_RATE))
+    samples[start : start + burst_n] += rng.normal(0.0, _rms(-3.0), burst_n)
+    _add_tone(samples, onset + 0.03 + 0.12, 0.12)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    sf.write(path, samples.astype(np.float32), SAMPLE_RATE)
+    return path
+
+
+def _add_tone(samples: np.ndarray, start_s: float, duration_s: float) -> None:
+    count = int(round(duration_s * SAMPLE_RATE))
+    start = int(round(start_s * SAMPLE_RATE))
+    times = np.arange(count) / SAMPLE_RATE
+    samples[start : start + count] += 0.4 * np.sin(2 * np.pi * 180 * times)
 
 
 def _write_bursts(path: Path, onsets: tuple[float, ...], *, duration_s: float = 0.03) -> Path:
