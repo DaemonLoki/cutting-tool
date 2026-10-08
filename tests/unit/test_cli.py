@@ -4,8 +4,6 @@ import wave
 from datetime import UTC, datetime
 from pathlib import Path
 
-import numpy as np
-import soundfile as sf
 from typer.testing import CliRunner
 
 from cutter.cli import app
