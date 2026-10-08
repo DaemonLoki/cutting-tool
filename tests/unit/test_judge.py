@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from cutter.config import load_profile
-from cutter.judge import judge_decisions, run_judge
+from cutter.judge import STAGE_VERSION, judge_decisions, run_judge
 from cutter.llm import EndpointUnreachable
 from cutter.models import (
     Decision,
@@ -321,7 +321,7 @@ def test_no_llm_cache_does_not_satisfy_a_later_llm_run(
 
     assert client.calls == []
     assert first.meta.stage == "judge"
-    assert first.meta.stage_version == 1
+    assert first.meta.stage_version == STAGE_VERSION
     assert first.data.decisions == detect_retakes(words, PROFILE.retakes)
 
     def _unexpected_meta(**_kwargs: object) -> None:

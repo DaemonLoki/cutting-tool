@@ -29,7 +29,7 @@ from cutter.retakes import STAGE_VERSION as RETAKES_STAGE_VERSION
 from cutter.retakes import detect_retakes
 
 STAGE = "judge"
-STAGE_VERSION = 1
+STAGE_VERSION = 2
 
 _ELIGIBLE_REASONS = frozenset({"long_segment", "retake_missing_content"})
 _SENTENCE_END = (".", "?", "!")

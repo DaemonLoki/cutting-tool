@@ -23,7 +23,7 @@ from cutter.models import (
     write_artifact,
 )
 
-STAGE_VERSION = 2
+STAGE_VERSION = 3
 STAGE = "retakes"
 
 # Common English function words. ``stopwords_file: null`` uses this list.
