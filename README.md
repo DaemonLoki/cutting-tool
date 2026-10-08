@@ -1,5 +1,7 @@
 # cutter — Phase 1 Implementation Spec
 
+Phase 1 is implemented. Phase 2 (VAD, claps, fillers, script alignment, chapters, CFR proxy) is specified in `docs/phase-2.md`, which builds on this document.
+
 **Goal:** A local Python CLI that takes a folder of numbered raw sources, transcribes them, removes failed takes using the transcript only, tightens the cuts, and writes an FCPXML file that Final Cut Pro imports as an editable rough cut.
 
 **Audience:** Coding agents. Every section is meant to be implementable without further context. Where something must be verified against a real tool (FCP, parakeet-mlx), the spec says so explicitly. Do not guess in those places; verify.
