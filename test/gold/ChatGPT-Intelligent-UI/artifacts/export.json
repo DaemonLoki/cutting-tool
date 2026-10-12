@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "stage": "export",
+    "stage_version": 2,
+    "inputs_hash": "sha256:4025b8e9cfbe3f8693074b6c57164fca93cd7a7d19c40e0478df8be92755e26c",
+    "config_hash": "sha256:e0d150181a2540fbbcf5f88308d25b4f11a1a96b2e344d9cce64fe691d6b704e",
+    "created_at": "2026-10-12T10:27:27Z"
+  },
+  "data": {
+    "dtd_validated": true,
+    "warning": null
+  }
+}

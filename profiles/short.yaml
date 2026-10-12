@@ -1,7 +1,8 @@
 # Thresholds for one English speaker, one camera, short-form.
 # Same keys as profiles/long.yaml. Key meanings are in profiles/long.md.
 # What changed for pacing is in profiles/short.md.
-# Retake detection matches long.yaml. Only the cut is tighter.
+# Retake detection matches long.yaml. The cut is tighter, and two keys were
+# re-tuned against two real gold-standard reel edits: see profiles/short.md.
 
 ingest:
   # Extensions in raw/. Case is ignored. Hidden files are ignored either way.
@@ -74,7 +75,11 @@ claps:
   # false leaves claps empty. The audio stage still writes its artifact.
   enabled: true
   # Peak above the 1 s rolling median of the 2 ms envelope, in dB.
-  min_rise_db: 20
+  # long.yaml uses 20. Two real phone-mic reels with no real claps still
+  # measured 31 and 85 "claps" at 20 dB, all plosives in normal speech;
+  # at 36 dB that drops to a handful and the tighten clap zones no longer
+  # clip into kept words. See profiles/short.md.
+  min_rise_db: 36
   # The level must fall back within this many milliseconds or the event is rejected.
   max_duration_ms: 60
   # Transients closer than this merge into one clap.
@@ -140,7 +145,11 @@ tighten:
   # This much background inside a word, after its voice, ends the word there.
   voice_quiet_ms: 300
   # Shorter ranges are merged into a neighbour or removed with a CHECK marker.
-  min_range_frames: 6
+  # long.yaml uses 6. short's tighter pad/gap values isolate single short
+  # words into their own sub-6-frame range more often than long does; a real
+  # gold reel had exactly that happen to a kept word. 15 merges those into
+  # their neighbour instead of dropping them. See profiles/short.md.
+  min_range_frames: 15
   # false keeps Phase 1 cut points even when speech segments exist.
   use_vad: true
 

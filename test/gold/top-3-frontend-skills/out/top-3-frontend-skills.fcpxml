@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.14">
+  <resources>
+    <format id="r1" name="FFVideoFormat3840x2160p2398" frameDuration="1001/24000s" width="3840" height="2160" colorSpace="1-1-1 (Rec. 709)"/>
+    <asset id="r2" name="1-talking-head" start="3896893/800s" duration="343343/1500s" hasVideo="1" format="r1" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="file:///Users/stefanblos/Developer/Stream/cutting-tool/test/gold/top-3-frontend-skills/raw/1-talking-head.MP4"/>
+    </asset>
+  </resources>
+  <library>
+    <event name="top-3-frontend-skills – cutter">
+      <project name="top-3-frontend-skills – rough cut">
+        <sequence format="r1" duration="439439/3000s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+          <spine>
+            <asset-clip ref="r2" offset="0s" name="1-talking-head" start="117049933/24000s" duration="7007/2400s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="117049933/24000s" duration="1001/24000s" value="CHECK: unscripted"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="7007/2400s" name="1-talking-head" start="117124007/24000s" duration="1001/1500s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="43043/12000s" name="1-talking-head" start="117148031/24000s" duration="13013/4800s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="151151/24000s" name="1-talking-head" start="58641583/12000s" duration="23023/4800s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="117296179/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d001)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="133133/12000s" name="1-talking-head" start="9792783/2000s" duration="47047/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="39176137/8000s" duration="1001/24000s" value="CHECK: complete_sentence (d002)"/>
+              <marker start="58757699/12000s" duration="1001/24000s" value="CHECK: speech without transcript"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="313313/24000s" name="1-talking-head" start="58781723/12000s" duration="17017/12000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="347347/24000s" name="1-talking-head" start="39208169/8000s" duration="1001/1500s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="121121/8000s" name="1-talking-head" start="117814697/24000s" duration="21021/4000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="117814697/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d003)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="163163/8000s" name="1-talking-head" start="59076017/12000s" duration="29029/8000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="59076017/12000s" duration="1001/24000s" value="CHECK: tiny fragment removed"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="3003/125s" name="1-talking-head" start="59122063/12000s" duration="23023/12000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="311311/12000s" name="1-talking-head" start="59146087/12000s" duration="3003/1600s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="667667/24000s" name="1-talking-head" start="2465463/500s" duration="11011/12000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="689689/24000s" name="1-talking-head" start="118367249/24000s" duration="3003/4000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="707707/24000s" name="1-talking-head" start="39468429/8000s" duration="19019/12000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="39468429/8000s" duration="1001/24000s" value="CHECK: tiny fragment removed"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="149149/4800s" name="1-talking-head" start="39506467/8000s" duration="37037/6000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="893893/24000s" name="1-talking-head" start="118815697/24000s" duration="7007/800s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="118815697/24000s" duration="1001/24000s" value="CHECK: tiny fragment removed"/>
+              <marker start="118815697/24000s" duration="1001/24000s" value="CHECK: tiny fragment removed"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="1104103/24000s" name="1-talking-head" start="11902891/2400s" duration="19019/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="187187/4000s" name="1-talking-head" start="39780741/8000s" duration="7007/1500s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="39780741/8000s" duration="1001/24000s" value="CHECK: tiny fragment removed"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="617617/12000s" name="1-talking-head" start="119560441/24000s" duration="27027/8000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="263263/4800s" name="1-talking-head" start="19940921/4000s" duration="31031/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="5982977/1200s" duration="1001/24000s" value="CHECK: complete_sentence (d011)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="673673/12000s" name="1-talking-head" start="39896857/8000s" duration="1001/250s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="721721/12000s" name="1-talking-head" start="119796677/24000s" duration="23023/12000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="31031/500s" name="1-talking-head" start="9988979/2000s" duration="71071/12000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="163163/2400s" name="1-talking-head" start="8000993/1600s" duration="43043/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="1674673/24000s" name="1-talking-head" start="60048989/12000s" duration="3003/4000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="60048989/12000s" duration="1001/24000s" value="CHECK: tiny fragment removed"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="1692691/24000s" name="1-talking-head" start="120151031/24000s" duration="143143/12000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="659659/8000s" name="1-talking-head" start="4017013/800s" duration="101101/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="1040039/12000s" name="1-talking-head" start="120613493/24000s" duration="7007/2400s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="179179/2000s" name="1-talking-head" start="40239199/8000s" duration="13013/1200s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="301301/3000s" name="1-talking-head" start="60499439/12000s" duration="1001/250s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="313313/3000s" name="1-talking-head" start="7568561/1500s" duration="1001/240s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="217217/2000s" name="1-talking-head" start="7580573/1500s" duration="31031/8000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="7580573/1500s" duration="1001/24000s" value="CHECK: tiny fragment removed"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="899899/8000s" name="1-talking-head" start="24277253/4800s" duration="19019/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="679679/6000s" name="1-talking-head" start="121410289/24000s" duration="1001/320s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="2793791/24000s" name="1-talking-head" start="10129119/2000s" duration="21021/8000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="121592471/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d013)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="1428427/12000s" name="1-talking-head" start="40541501/8000s" duration="73073/4800s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="24325301/4800s" duration="1001/24000s" value="CHECK: clap_without_retake (d014)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="1074073/8000s" name="1-talking-head" start="2541539/500s" duration="27027/8000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="11011/80s" name="1-talking-head" start="40697657/8000s" duration="61061/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="3364361/24000s" name="1-talking-head" start="24431407/4800s" duration="151151/24000s" tcFormat="NDF" audioRole="dialogue"/>
+          </spine>
+        </sequence>
+      </project>
+      <project name="top-3-frontend-skills – rejects">
+        <sequence format="r1" duration="719719/24000s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+          <spine>
+            <asset-clip ref="r2" offset="0s" name="1-talking-head" start="19606587/4000s" duration="7007/2400s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="19606587/4000s" duration="1001/24000s" value="d004: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="7007/2400s" name="1-talking-head" start="39236197/8000s" duration="107107/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="39236197/8000s" duration="1001/24000s" value="d005: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="59059/8000s" name="1-talking-head" start="5898893/1200s" duration="19019/4800s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="5898893/1200s" duration="1001/24000s" value="d006: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="17017/1500s" name="1-talking-head" start="39566527/8000s" duration="101101/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="39566527/8000s" duration="1001/24000s" value="d007: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="373373/24000s" name="1-talking-head" start="7440433/1500s" duration="61061/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="7440433/1500s" duration="1001/24000s" value="d008: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="217217/12000s" name="1-talking-head" start="29776747/6000s" duration="143143/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="29776747/6000s" duration="1001/24000s" value="d009: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="577577/24000s" name="1-talking-head" start="3974971/800s" duration="17017/6000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="3974971/800s" duration="1001/24000s" value="d010: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="43043/1600s" name="1-talking-head" start="4847843/960s" duration="37037/12000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="4847843/960s" duration="1001/24000s" value="d012: retake"/>
+            </asset-clip>
+          </spine>
+        </sequence>
+      </project>
+    </event>
+  </library>
+</fcpxml>

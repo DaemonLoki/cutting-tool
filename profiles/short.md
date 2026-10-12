@@ -36,9 +36,36 @@ each word.
 `rms_frame_ms` stays 10, so the snap is still measured in 10 ms steps.
 `voice_margin_db` stays 12 and `voice_quiet_ms` stays 300, so a range ends
 where the voice stops in both profiles.
-`min_range_frames` stays 6, so a scrap of a few frames is still removed
-instead of becoming a click.
 
 If a cut clips a word, raise `pad_head_ms` or `min_head_ms` before raising
 `max_gap_ms`. If the pace is still slow, lower `max_gap_ms` toward 100.
 Below that, the gap between two words in one phrase starts to split.
+
+## Two keys tuned against real reel edits
+
+`test/gold/top-3-frontend-skills` and `test/gold/ChatGPT-Intelligent-UI` are
+gold-standard reel edits (vertical phone footage, hand-cut in Final Cut).
+Running `cutter eval` against both turned up two values where `long.yaml`'s
+numbers do not fit short-form footage, independent of pacing:
+
+| Key | `long` | `short` | Why |
+| --- | --- | --- | --- |
+| `claps.min_rise_db` | 20 | 36 | Neither reel used a marking clap, yet the 20 dB default measured 31 and 85 "claps" on two totally ordinary takes — all plosive consonants in normal speech, not claps. Those false claps occasionally sat inside a kept range tighten could not route around (`CHECK: clap inside range`, a path the spec calls "should not happen"), clipping into a word the gold edit kept. 36 dB cuts the false-positive rate to a handful and the clipping stopped on both reels, at no cost to word-level F1. |
+| `tighten.min_range_frames` | 6 | 15 | short's tighter `max_gap_ms` and pads isolate a single short word into its own range more often than long's wider ones do. On `top-3-frontend-skills`, exactly that happened to a word the gold edit kept, and at 6 frames it was short enough to be dropped as a scrap with `CHECK: tiny fragment removed`. Sweeping `min_range_frames` from 6 to 40 on both reels: F1 keeps improving through 15 on both, then starts trading a new false cut for a smaller `missed_retake_words` count past 15 on `ChatGPT-Intelligent-UI`. 15 is the largest value that still only merges fragments rather than cutting into content. |
+
+`max_gap_ms`, the pads, and `snap_window_ms` were swept the same way
+(`max_gap_ms` 100–300, pads and `min_head_ms`/`min_tail_ms` each at a few
+values) and none of them moved either reel's score — this eval scores word
+midpoints, which is too coarse to see sub-100ms pacing changes. Their current
+values are unchanged; judging those still needs a listen test, not `cutter
+eval`.
+
+Both reels still show a large `missed_retake_words` count (66 and 286) that
+neither of these keys touches. In both gold edits the speaker re-takes an
+opening line two or three times with each attempt worded slightly
+differently, never as an exact repeat. `retakes.py`'s `complete_sentence`
+guard only auto-drops an exact repeat of a finished sentence; a reworded
+retake is kept and flagged for the editor instead, by design (ADR 0002, ADR
+0005) — no config key changes that. This is a retake-detection behavior
+shared with `long.yaml`, not a `short`-specific pacing gap, so it is reported
+here rather than patched.

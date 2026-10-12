@@ -1,0 +1,265 @@
+{
+  "meta": {
+    "stage": "judge",
+    "stage_version": 3,
+    "inputs_hash": "sha256:926c7074e72f15493f179db503b55fa9594878959d266a9add202c749c2e6d9c",
+    "config_hash": "sha256:656d7221c6953156b2db0fb3d4d64249a2473afbbeb24a2f899b77cf6aee2446",
+    "created_at": "2026-10-12T10:24:24Z"
+  },
+  "data": {
+    "decisions": [
+      {
+        "id": "d001",
+        "kind": "retake",
+        "dropped_words": [
+          13,
+          20
+        ],
+        "kept_from_word": 21,
+        "match_words": 4,
+        "dropped_duration_s": 5.760000000000002,
+        "action": "keep",
+        "flag": true,
+        "flag_reason": "complete_sentence",
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d002",
+        "kind": "retake",
+        "dropped_words": [
+          21,
+          32
+        ],
+        "kept_from_word": 33,
+        "match_words": 4,
+        "dropped_duration_s": 9.68,
+        "action": "keep",
+        "flag": true,
+        "flag_reason": "complete_sentence",
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d003",
+        "kind": "retake",
+        "dropped_words": [
+          33,
+          41
+        ],
+        "kept_from_word": 42,
+        "match_words": 3,
+        "dropped_duration_s": 4.640000000000001,
+        "action": "keep",
+        "flag": true,
+        "flag_reason": "complete_sentence",
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d004",
+        "kind": "retake",
+        "dropped_words": [
+          42,
+          47
+        ],
+        "kept_from_word": 48,
+        "match_words": 3,
+        "dropped_duration_s": 2.8799999999999955,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d005",
+        "kind": "retake",
+        "dropped_words": [
+          48,
+          56
+        ],
+        "kept_from_word": 57,
+        "match_words": 4,
+        "dropped_duration_s": 4.399999999999999,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d006",
+        "kind": "retake",
+        "dropped_words": [
+          69,
+          81
+        ],
+        "kept_from_word": 82,
+        "match_words": 11,
+        "dropped_duration_s": 3.9200000000000017,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d007",
+        "kind": "retake",
+        "dropped_words": [
+          125,
+          129
+        ],
+        "kept_from_word": 130,
+        "match_words": 4,
+        "dropped_duration_s": 4.159999999999997,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d008",
+        "kind": "retake",
+        "dropped_words": [
+          151,
+          156
+        ],
+        "kept_from_word": 157,
+        "match_words": 5,
+        "dropped_duration_s": 2.4799999999999898,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d009",
+        "kind": "retake",
+        "dropped_words": [
+          157,
+          168
+        ],
+        "kept_from_word": 169,
+        "match_words": 5,
+        "dropped_duration_s": 5.9199999999999875,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d010",
+        "kind": "retake",
+        "dropped_words": [
+          169,
+          173
+        ],
+        "kept_from_word": 174,
+        "match_words": 4,
+        "dropped_duration_s": 2.799999999999983,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d011",
+        "kind": "retake",
+        "dropped_words": [
+          186,
+          198
+        ],
+        "kept_from_word": 199,
+        "match_words": 12,
+        "dropped_duration_s": 9.200000000000003,
+        "action": "keep",
+        "flag": true,
+        "flag_reason": "complete_sentence",
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d012",
+        "kind": "retake",
+        "dropped_words": [
+          331,
+          337
+        ],
+        "kept_from_word": 338,
+        "match_words": 5,
+        "dropped_duration_s": 3.039999999999992,
+        "action": "drop",
+        "flag": false,
+        "flag_reason": null,
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d013",
+        "kind": "retake",
+        "dropped_words": [
+          353,
+          360
+        ],
+        "kept_from_word": 361,
+        "match_words": 7,
+        "dropped_duration_s": 5.439999999999998,
+        "action": "keep",
+        "flag": true,
+        "flag_reason": "complete_sentence",
+        "judge": null,
+        "evidence": "transcript",
+        "clap_s": null,
+        "score_gap": null
+      },
+      {
+        "id": "d014",
+        "kind": "retake",
+        "dropped_words": [
+          361,
+          361
+        ],
+        "kept_from_word": 362,
+        "match_words": 0,
+        "dropped_duration_s": 1.4399999999999977,
+        "action": "keep",
+        "flag": true,
+        "flag_reason": "clap_without_retake",
+        "judge": null,
+        "evidence": "clap",
+        "clap_s": 196.276,
+        "score_gap": null
+      }
+    ]
+  }
+}

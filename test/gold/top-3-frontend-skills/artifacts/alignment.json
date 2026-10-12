@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "stage": "align",
+    "stage_version": 2,
+    "inputs_hash": "sha256:2ba6e3d4972d4b829a7d602d5b549180a026b6fe67958356f118261b3bdad283",
+    "config_hash": "sha256:bf005593b665ae82242c1a4ff0f03f603544db8edf65164df936dad6c88dce8c",
+    "created_at": "2026-10-12T10:14:53Z"
+  },
+  "data": {
+    "script": {
+      "path": "script.md",
+      "hash": "sha256:5b58a44a326b5fc655f3346580a193068dca1d18918b6b77275a2f36ec1aeb45"
+    },
+    "chapters": [
+      {
+        "id": "c01",
+        "title": "Basics",
+        "level": 2,
+        "first_sentence": 0
+      },
+      {
+        "id": "c02",
+        "title": "Script",
+        "level": 2,
+        "first_sentence": 3
+      },
+      {
+        "id": "c03",
+        "title": "Prompt to generate other media",
+        "level": 2,
+        "first_sentence": 6
+      }
+    ],
+    "sentences": [
+      {
+        "id": 0,
+        "chapter": "c01",
+        "text": "Top 3 skills to install for any frontend-related repo - installing skills is super easy - you need node installed - and then use the npx skills add <skills-url> command - recommendation: skills.sh - Next.js projects - Vercel React Best Practices (for Vercel projects) - Vercel composition patterns - Next best practices - Web design guidelines - Frontend design - Web Accessibility",
+        "takes": []
+      },
+      {
+        "id": 1,
+        "chapter": "c01",
+        "text": "Show a basic design first and then transition it into an advanced one that looks fantastic",
+        "takes": []
+      },
+      {
+        "id": 2,
+        "chapter": "c01",
+        "text": "Let me know if I missed an essential skill that leveled up YOUR designs",
+        "takes": []
+      },
+      {
+        "id": 3,
+        "chapter": "c02",
+        "text": "| | Script | Footage | | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | | Hook | Do you want your designs to go from this to THIS?",
+        "takes": []
+      },
+      {
+        "id": 4,
+        "chapter": "c02",
+        "text": "| Talking head, animating to a boring basic design to transition into a fantastic one with a cool animation | | | Then you need to install these 3 skills into every frontend project you have | Talking head, holding up 3 fingers that animate in 3 numbers with sound effects, adding a zoom-in effect | | Intro | Just quickly before we start: these work for web projects, but they are generally applicable for mobile, web, desktop, and basically everywhere | Start with talking head, then animate between mobile, web, desktop and something that says \"everywhere\" | | Skill 1 | The first one is the OG basic skill and it is frontend-design by Anthropic | Start with talking head, then show \"frontend-design\" as large text with blurry background, animating to skills.sh with the frontend-design skill selected | | | It gives your agent a general guidance for a more distinctive and intentional designs by touching topics like Typography, aesthetic direction and a process to go beyond the default designs by the LLM | Start with talking head, then Scroll through the skill on Github, then show terms like \"typography\", | | Skill 2 | The second skill I want to recommend is ui-ux-pro-max from nextlevelbuilder | Start with talking head, then show \"ui-ux-pro-max\" as large text with blurry background, animating to skills.sh with the skill selected | | | It is more sophisticated and ships with an intelligent design system generator which goes from your project requirements to a complete design system (taking industry-specific rules into account) | Show me scrolling through the page and then showing an animation that shows that it goes from project requirements to a complete design system, adding that it has industry specific rules for the designs | | Skill 3 | The third one is my absolute favorite and it's called emil-design-eng by Emil Kowalski | Start with talking head, then show \"emil-design-eng\" as large text with blurry background, animating to skills.sh with the skill selected | | | Emil is a design engineer at Linear and puts out a ton of resources around design and animations | Show Emil's site, scrolling through, maybe a snippet from his course | | | The skill teaches your agents about basics of polishing UI, how components should be designed and some overall details that make software actually FEEL great | Show the skill scrolling through | | Summary | Skill 1 gives your agent basic design knowledge | Start with talking head, then have an animation that goes quickly through the 3 skills morphing from one (showing the name) to the next to the last | | | Skill 2 adds a more complex design system tailored for your specific project | | | | Skill 3 brings life to your UIs with purposeful, intentional animations | | | | Let me know what you build with it and which essential skills I missed here | | | | See you in the next one!",
+        "takes": []
+      },
+      {
+        "id": 5,
+        "chapter": "c02",
+        "text": "| |",
+        "takes": []
+      },
+      {
+        "id": 6,
+        "chapter": "c03",
+        "text": "Animations to create for \"Top 3 Frontend Skills\"; they should be vertical, 4k and all should have a nice background (e.g.",
+        "takes": []
+      },
+      {
+        "id": 7,
+        "chapter": "c03",
+        "text": "NoiseDotGrid) that animates during the entire animation phase.",
+        "takes": []
+      },
+      {
+        "id": 8,
+        "chapter": "c03",
+        "text": "Make it minimal, look great, clean and use the installed skills to make design and animation decisions.",
+        "takes": []
+      },
+      {
+        "id": 9,
+        "chapter": "c03",
+        "text": "Here are the three animations to create:",
+        "takes": []
+      },
+      {
+        "id": 10,
+        "chapter": "c03",
+        "text": "- Have a fullscreen animation that animates between between mobile, web, desktop and something that says \"everywhere\" (use iconography and one of the existing backgrounds to make it look interesting) - Show an animation that shows that it goes from project requirements to a complete design system, adding that it has industry specific rules for the designs (make it fullscreen, ensure it has a nice background and clean, minimal visuals) - Have an animationthat goes quickly through the 3 skills morphing from one (showing the name) to the next to the last, being fullscreen and with a nice background; here are the 3 skills: \"frontend-design\", \"ui-ux-pro-max\" and then \"emil-design-eng\"",
+        "takes": []
+      }
+    ],
+    "unscripted": [
+      {
+        "first_word": 0,
+        "last_word": 432
+      }
+    ],
+    "missing": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  }
+}

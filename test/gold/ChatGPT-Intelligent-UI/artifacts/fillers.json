@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "stage": "fillers",
+    "stage_version": 2,
+    "inputs_hash": "sha256:9b3aaa81610979fd277865db52a322cd4104256d156732ea806ffe2d77772947",
+    "config_hash": "sha256:fa5f416638ab5d39d2b95ac45b412b79c5637e2cd2feabedda3125d65732f80c",
+    "created_at": "2026-10-12T10:24:27Z"
+  },
+  "data": {
+    "decisions": []
+  }
+}

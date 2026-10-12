@@ -1,10 +1,104 @@
 # cutter — Phase 1 Implementation Spec
 
-Phase 1 is implemented. Phase 2 (VAD, claps, fillers, script alignment, chapters, CFR proxy) is specified in `docs/phase-2.md`, which builds on this document.
+Phase 1 is implemented. The live pipeline also includes the Phase 2 editing stages in `docs/phase-2.md`: speech segments, claps, script alignment, fillers, and chapter markers. The constant-frame-rate proxy is specified there and is not built yet. The diagram below is the process `cutter run` executes today. The numbered sections after it are the Phase 1 spec.
 
-**Goal:** A local Python CLI that takes a folder of numbered raw sources, transcribes them, removes failed takes using the transcript only, tightens the cuts, and writes an FCPXML file that Final Cut Pro imports as an editable rough cut.
+**Goal:** A local Python CLI that takes a folder of numbered raw sources, transcribes them, removes failed takes, tightens the cuts, and writes an FCPXML file that Final Cut Pro imports as an editable rough cut.
 
-**Audience:** Coding agents. Every section is meant to be implementable without further context. Where something must be verified against a real tool (FCP, parakeet-mlx), the spec says so explicitly. Do not guess in those places; verify.
+**Audience:** Coding agents. Every section below "How it works now" is meant to be implementable without further context. Where something must be verified against a real tool (FCP, parakeet-mlx), the spec says so explicitly. Do not guess in those places; verify.
+
+## How it works now
+
+One project is one output video, in its own folder. `cutter run` walks the stages below. Each stage reads artifacts from disk and writes one artifact. A later run skips a stage whose inputs and settings are unchanged. A horizontal or square frame uses `profiles/long.yaml`. A vertical frame uses `profiles/short.yaml`.
+
+```mermaid
+flowchart TD
+  raw["raw/*.mov, *.mp4, *.m4v"] --> ingest
+  ingest["ingest<br/>ffprobe + mono WAV"] --> sources["sources.json<br/>16 kHz and 48 kHz WAV"]
+  sources --> transcribe
+  sources --> audio
+  transcribe["transcribe<br/>Parakeet, word times"] --> words["words.json"]
+  audio["audio<br/>Silero speech + claps"] --> events["audio_events.json"]
+  words --> align
+  script["script.md<br/>optional"] --> align
+  align["align<br/>takes, chapters, gaps"] --> alignment["alignment.json"]
+
+  words --> retakes
+  events --> retakes
+  alignment --> retakes
+  retakes["retakes<br/>which span failed"] --> decisions["decisions.json"]
+  decisions --> judge
+  words --> judge
+  judge["judge<br/>local model, ambiguous aborts only"] --> judged["decisions.json<br/>verdicts applied"]
+
+  judged --> fillers
+  words --> fillers
+  fillers["fillers<br/>um, uh, configured phrases"] --> fillerFile["fillers.json"]
+
+  judged --> tighten
+  fillerFile --> tighten
+  events --> tighten
+  alignment --> tighten
+  words --> tighten
+  sources --> tighten
+  tighten["tighten<br/>ranges, silence, frames"] --> timeline["timeline.json"]
+  timeline --> export
+  sources --> export
+  words --> export
+  export["export<br/>FCPXML 1.14"] --> out["out/project.fcpxml<br/>rough cut + rejects"]
+```
+
+Source video is never re-encoded. The FCPXML points at the original files. ffmpeg only extracts the analysis WAVs.
+
+`cutter eval` is outside this chain. It runs the same pipeline on a gold folder and scores kept words against a human Final Cut edit.
+
+### Where a word is dropped
+
+Retakes run in four passes. A word claimed by an earlier pass is left alone.
+
+```mermaid
+flowchart TD
+  passes["1 script, 2 same-source transcript, 3 claps, 4 cross-file"] --> kind{Which evidence matched?}
+
+  kind -->|script sentence| scriptTake["Keep the closest take<br/>Drop each alternate"]
+  kind -->|same opening words, no script| guards{What kind of repeat?}
+  kind -->|clap, then a short repeat| clapDrop["Drop the attempt before the clap"]
+  kind -->|clap, no repeat after it| clapKeep["Keep it<br/>CHECK: clap_without_retake"]
+  kind -->|no match| leave["Leave the words in the cut"]
+
+  guards -->|one finished sentence, repeated exactly| dropExact["Drop the earlier sentence"]
+  guards -->|finished sentence, then different words| keepSentence["Keep both<br/>CHECK: complete_sentence"]
+  guards -->|aborted, longer than auto_drop_max_s| longSeg["Keep it<br/>CHECK: long_segment"]
+  guards -->|aborted, the retake may omit content| missing["Drop it<br/>CHECK: retake_missing_content"]
+  guards -->|aborted, inside the limits| dropAbort["Drop the earlier attempt"]
+
+  longSeg --> judgeIn
+  missing --> judgeIn
+  judgeIn["Judge, only these two flags"] --> verdict{LM Studio verdict}
+  verdict -->|"B, confidence at least min_confidence"| dropB["Drop the earlier attempt<br/>clear the flag"]
+  verdict -->|"both, confident"| both["Keep both<br/>clear the flag"]
+  verdict -->|"A, confident"| preferA["Keep both<br/>CHECK: judge_prefers_first_take"]
+  verdict -->|"below min_confidence"| stayFlag["Keep the flag already on the decision"]
+  verdict -->|endpoint down| unchanged["Leave decisions.json as it was"]
+```
+
+Without a script, the later take wins. With a script, the take closest to the script wins, including when it is the earlier one. A finished sentence followed by different words stays in the cut. The judge never sees that case, and it never sees script decisions or clap decisions.
+
+The judge reads up to two sentences before the candidate, the earlier span (A), the later span (B), and one sentence after. It answers whether A should be cut (`B`), whether the first take should stay (`A`), or whether this is not a retake (`both`). Choice `A` does not reverse the cut. It leaves a `CHECK` marker for Final Cut. `--no-llm` and `judge.enabled: false` still run the stage and write `decisions.json` without calling the model.
+
+After that file is settled, fillers mark configured words on whatever the retake stage kept. A filler that is the only word of its sentence stays. A run longer than `fillers.max_duration_s` stays with `CHECK: filler_long`.
+
+### How the rough cut is built
+
+Tighten keeps every word that no drop decision covers. It opens a new range when the source changes, when a dropped word sits between two kept words, or when the gap is longer than the profile allows (`400 ms` on `long`, `150 ms` on `short`). Cut points are padded, snapped to the quietest moment in the 48 kHz WAV, then rounded to frames once.
+
+Speech segments move those cut points onto the voice when `tighten.use_vad` is true. Each clap is kept out of playback: the range splits around it, or the in-point or out-point moves past it. Flagged decisions, unscripted stretches, and speech the transcript missed become `CHECK` markers. Script headings in `chapters.levels` become chapter markers on the first kept word of that section.
+
+Export writes two projects in one event:
+
+- **rough cut** — the kept ranges, in source order
+- **rejects** — every dropped failed take, with its decision id
+
+Filler drops stay out of the rejects project unless `fcpxml.rejects_include_fillers` is true. A flagged decision the judge did not clear is a `CHECK` marker. The editor resolves it in Final Cut. Cutter has no accept or reject command.
 
 ---
 

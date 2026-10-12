@@ -107,7 +107,13 @@ def test_phase2_sections_match_long_unless_documented():
     assert long_form.fcpxml.rejects_include_fillers is False
     assert long_form.fcpxml.vfr_media == "original"
     assert short_form.vad == long_form.vad
-    assert short_form.claps == long_form.claps
+    # claps.min_rise_db is the one intentional difference: tuned against real
+    # gold reel edits in profiles/short.md, where long's 20 dB measured dozens
+    # of false claps from ordinary speech plosives.
+    assert short_form.claps.model_copy(update={"min_rise_db": long_form.claps.min_rise_db}) == (
+        long_form.claps
+    )
+    assert short_form.claps.min_rise_db != long_form.claps.min_rise_db
     assert short_form.fillers == long_form.fillers
     assert short_form.script == long_form.script
     assert short_form.chapters == long_form.chapters

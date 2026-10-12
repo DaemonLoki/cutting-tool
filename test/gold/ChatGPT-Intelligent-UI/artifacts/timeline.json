@@ -1,0 +1,656 @@
+{
+  "meta": {
+    "stage": "tighten",
+    "stage_version": 4,
+    "inputs_hash": "sha256:5f7d0c34dabc62a27a056029692b6faaf5ef866854bf7081c980013ae285e9d6",
+    "config_hash": "sha256:c40c0baa18419abf6583b85c9e41d8014a3f84e49a051c1c67f51842a958e492",
+    "created_at": "2026-10-12T10:27:26Z"
+  },
+  "data": {
+    "ranges": [
+      {
+        "id": "r001",
+        "source": "s01",
+        "in_s": 7.885,
+        "out_s": 10.665000000000001,
+        "in_frame": 189,
+        "out_frame": 256,
+        "first_word": 0,
+        "last_word": 4,
+        "markers": [
+          {
+            "at_word": 0,
+            "text": "CHECK: unscripted"
+          }
+        ]
+      },
+      {
+        "id": "r002",
+        "source": "s01",
+        "in_s": 16.225,
+        "out_s": 20.915,
+        "in_frame": 389,
+        "out_frame": 502,
+        "first_word": 5,
+        "last_word": 15,
+        "markers": [
+          {
+            "at_word": 5,
+            "text": "CHECK: complete_sentence (d003)"
+          }
+        ]
+      },
+      {
+        "id": "r003",
+        "source": "s01",
+        "in_s": 23.105,
+        "out_s": 26.025000000000002,
+        "in_frame": 553,
+        "out_frame": 624,
+        "first_word": 16,
+        "last_word": 20,
+        "markers": [
+          {
+            "at_word": 16,
+            "text": "CHECK: complete_sentence (d004)"
+          }
+        ]
+      },
+      {
+        "id": "r004",
+        "source": "s01",
+        "in_s": 27.335,
+        "out_s": 29.085,
+        "in_frame": 655,
+        "out_frame": 698,
+        "first_word": 21,
+        "last_word": 24,
+        "markers": []
+      },
+      {
+        "id": "r005",
+        "source": "s01",
+        "in_s": 29.265,
+        "out_s": 35.675000000000004,
+        "in_frame": 701,
+        "out_frame": 856,
+        "first_word": 25,
+        "last_word": 39,
+        "markers": [
+          {
+            "at_word": 25,
+            "text": "CHECK: complete_sentence (d005)"
+          }
+        ]
+      },
+      {
+        "id": "r006",
+        "source": "s01",
+        "in_s": 37.375,
+        "out_s": 42.495,
+        "in_frame": 896,
+        "out_frame": 1019,
+        "first_word": 40,
+        "last_word": 56,
+        "markers": []
+      },
+      {
+        "id": "r007",
+        "source": "s01",
+        "in_s": 42.665,
+        "out_s": 45.645,
+        "in_frame": 1022,
+        "out_frame": 1095,
+        "first_word": 57,
+        "last_word": 60,
+        "markers": []
+      },
+      {
+        "id": "r008",
+        "source": "s01",
+        "in_s": 45.805,
+        "out_s": 47.945,
+        "in_frame": 1098,
+        "out_frame": 1150,
+        "first_word": 61,
+        "last_word": 64,
+        "markers": []
+      },
+      {
+        "id": "r009",
+        "source": "s01",
+        "in_s": 52.215,
+        "out_s": 57.085,
+        "in_frame": 1251,
+        "out_frame": 1369,
+        "first_word": 65,
+        "last_word": 78,
+        "markers": [
+          {
+            "at_word": 65,
+            "text": "CHECK: unscripted"
+          }
+        ]
+      },
+      {
+        "id": "r010",
+        "source": "s01",
+        "in_s": 57.315,
+        "out_s": 61.245000000000005,
+        "in_frame": 1374,
+        "out_frame": 1469,
+        "first_word": 79,
+        "last_word": 87,
+        "markers": []
+      },
+      {
+        "id": "r011",
+        "source": "s01",
+        "in_s": 63.175000000000004,
+        "out_s": 65.69500000000001,
+        "in_frame": 1514,
+        "out_frame": 1576,
+        "first_word": 88,
+        "last_word": 91,
+        "markers": [
+          {
+            "at_word": 91,
+            "text": "CHECK: complete_sentence (d006)"
+          }
+        ]
+      },
+      {
+        "id": "r012",
+        "source": "s01",
+        "in_s": 66.315,
+        "out_s": 69.245,
+        "in_frame": 1589,
+        "out_frame": 1661,
+        "first_word": 92,
+        "last_word": 96,
+        "markers": []
+      },
+      {
+        "id": "r013",
+        "source": "s01",
+        "in_s": 70.525,
+        "out_s": 74.135,
+        "in_frame": 1690,
+        "out_frame": 1778,
+        "first_word": 97,
+        "last_word": 103,
+        "markers": [
+          {
+            "at_word": 103,
+            "text": "CHECK: complete_sentence (d007)"
+          }
+        ]
+      },
+      {
+        "id": "r014",
+        "source": "s01",
+        "in_s": 74.455,
+        "out_s": 81.115,
+        "in_frame": 1785,
+        "out_frame": 1945,
+        "first_word": 104,
+        "last_word": 121,
+        "markers": [
+          {
+            "at_word": 110,
+            "text": "CHECK: complete_sentence (d008)"
+          }
+        ]
+      },
+      {
+        "id": "r015",
+        "source": "s01",
+        "in_s": 83.415,
+        "out_s": 86.88,
+        "in_frame": 1999,
+        "out_frame": 2084,
+        "first_word": 122,
+        "last_word": 132,
+        "markers": []
+      },
+      {
+        "id": "r016",
+        "source": "s01",
+        "in_s": 101.92,
+        "out_s": 104.825,
+        "in_frame": 2443,
+        "out_frame": 2514,
+        "first_word": 164,
+        "last_word": 171,
+        "markers": [
+          {
+            "at_word": 164,
+            "text": "CHECK: script_close_call (d001)"
+          },
+          {
+            "at_word": 164,
+            "text": "CHECK: script_close_call (d002)"
+          },
+          {
+            "at_word": 165,
+            "text": "CHECK: unscripted"
+          }
+        ]
+      },
+      {
+        "id": "r017",
+        "source": "s01",
+        "in_s": 105.095,
+        "out_s": 109.385,
+        "in_frame": 2519,
+        "out_frame": 2623,
+        "first_word": 172,
+        "last_word": 181,
+        "markers": []
+      },
+      {
+        "id": "r018",
+        "source": "s01",
+        "in_s": 116.345,
+        "out_s": 120.69500000000001,
+        "in_frame": 2789,
+        "out_frame": 2894,
+        "first_word": 182,
+        "last_word": 193,
+        "markers": [
+          {
+            "at_word": 193,
+            "text": "CHECK: complete_sentence (d009)"
+          }
+        ]
+      },
+      {
+        "id": "r019",
+        "source": "s01",
+        "in_s": 122.735,
+        "out_s": 126.465,
+        "in_frame": 2942,
+        "out_frame": 3033,
+        "first_word": 194,
+        "last_word": 205,
+        "markers": []
+      },
+      {
+        "id": "r020",
+        "source": "s01",
+        "in_s": 126.895,
+        "out_s": 132.51500000000001,
+        "in_frame": 3042,
+        "out_frame": 3178,
+        "first_word": 206,
+        "last_word": 215,
+        "markers": []
+      },
+      {
+        "id": "r021",
+        "source": "s01",
+        "in_s": 136.345,
+        "out_s": 147.32500000000002,
+        "in_frame": 3269,
+        "out_frame": 3533,
+        "first_word": 216,
+        "last_word": 238,
+        "markers": [
+          {
+            "at_word": 220,
+            "text": "CHECK: complete_sentence (d010)"
+          },
+          {
+            "at_word": 216,
+            "text": "CHECK: unscripted"
+          }
+        ]
+      },
+      {
+        "id": "r022",
+        "source": "s01",
+        "in_s": 154.595,
+        "out_s": 160.415,
+        "in_frame": 3706,
+        "out_frame": 3847,
+        "first_word": 239,
+        "last_word": 254,
+        "markers": []
+      },
+      {
+        "id": "r023",
+        "source": "s01",
+        "in_s": 160.655,
+        "out_s": 164.605,
+        "in_frame": 3851,
+        "out_frame": 3947,
+        "first_word": 255,
+        "last_word": 264,
+        "markers": [
+          {
+            "at_word": 264,
+            "text": "CHECK: complete_sentence (d011)"
+          }
+        ]
+      },
+      {
+        "id": "r024",
+        "source": "s01",
+        "in_s": 166.01500000000001,
+        "out_s": 172.715,
+        "in_frame": 3980,
+        "out_frame": 4142,
+        "first_word": 265,
+        "last_word": 280,
+        "markers": []
+      },
+      {
+        "id": "r025",
+        "source": "s01",
+        "in_s": 205.505,
+        "out_s": 210.995,
+        "in_frame": 4927,
+        "out_frame": 5059,
+        "first_word": 281,
+        "last_word": 296,
+        "markers": []
+      },
+      {
+        "id": "r026",
+        "source": "s01",
+        "in_s": 212.895,
+        "out_s": 217.29500000000002,
+        "in_frame": 5104,
+        "out_frame": 5210,
+        "first_word": 297,
+        "last_word": 310,
+        "markers": [
+          {
+            "at_word": 305,
+            "text": "CHECK: complete_sentence (d012)"
+          }
+        ]
+      },
+      {
+        "id": "r027",
+        "source": "s01",
+        "in_s": 219.865,
+        "out_s": 224.79500000000002,
+        "in_frame": 5271,
+        "out_frame": 5390,
+        "first_word": 311,
+        "last_word": 322,
+        "markers": []
+      },
+      {
+        "id": "r028",
+        "source": "s01",
+        "in_s": 233.01500000000001,
+        "out_s": 238.745,
+        "in_frame": 5586,
+        "out_frame": 5725,
+        "first_word": 324,
+        "last_word": 341,
+        "markers": [
+          {
+            "at_word": 323,
+            "text": "CHECK: tiny fragment removed"
+          },
+          {
+            "at_word": 336,
+            "text": "CHECK: complete_sentence (d013)"
+          }
+        ]
+      },
+      {
+        "id": "r029",
+        "source": "s01",
+        "in_s": 238.955,
+        "out_s": 243.435,
+        "in_frame": 5729,
+        "out_frame": 5837,
+        "first_word": 342,
+        "last_word": 351,
+        "markers": []
+      },
+      {
+        "id": "r030",
+        "source": "s01",
+        "in_s": 243.535,
+        "out_s": 247.63500000000002,
+        "in_frame": 5839,
+        "out_frame": 5938,
+        "first_word": 352,
+        "last_word": 361,
+        "markers": []
+      },
+      {
+        "id": "r031",
+        "source": "s01",
+        "in_s": 247.805,
+        "out_s": 252.595,
+        "in_frame": 5941,
+        "out_frame": 6057,
+        "first_word": 362,
+        "last_word": 372,
+        "markers": []
+      },
+      {
+        "id": "r032",
+        "source": "s01",
+        "in_s": 266.225,
+        "out_s": 279.705,
+        "in_frame": 6383,
+        "out_frame": 6707,
+        "first_word": 373,
+        "last_word": 412,
+        "markers": [
+          {
+            "at_word": 376,
+            "text": "CHECK: complete_sentence (d014)"
+          }
+        ]
+      },
+      {
+        "id": "r033",
+        "source": "s01",
+        "in_s": 297.255,
+        "out_s": 298.995,
+        "in_frame": 7126,
+        "out_frame": 7169,
+        "first_word": 413,
+        "last_word": 420,
+        "markers": []
+      },
+      {
+        "id": "r034",
+        "source": "s01",
+        "in_s": 301.445,
+        "out_s": 310.385,
+        "in_frame": 7227,
+        "out_frame": 7442,
+        "first_word": 421,
+        "last_word": 445,
+        "markers": [
+          {
+            "at_word": 445,
+            "text": "CHECK: complete_sentence (d015)"
+          }
+        ]
+      },
+      {
+        "id": "r035",
+        "source": "s01",
+        "in_s": 312.945,
+        "out_s": 322.995,
+        "in_frame": 7503,
+        "out_frame": 7745,
+        "first_word": 446,
+        "last_word": 478,
+        "markers": []
+      },
+      {
+        "id": "r036",
+        "source": "s01",
+        "in_s": 323.225,
+        "out_s": 326.145,
+        "in_frame": 7749,
+        "out_frame": 7820,
+        "first_word": 479,
+        "last_word": 484,
+        "markers": []
+      },
+      {
+        "id": "r037",
+        "source": "s01",
+        "in_s": 326.455,
+        "out_s": 327.075,
+        "in_frame": 7827,
+        "out_frame": 7842,
+        "first_word": 485,
+        "last_word": 486,
+        "markers": []
+      },
+      {
+        "id": "r038",
+        "source": "s01",
+        "in_s": 327.265,
+        "out_s": 329.135,
+        "in_frame": 7846,
+        "out_frame": 7892,
+        "first_word": 487,
+        "last_word": 489,
+        "markers": []
+      },
+      {
+        "id": "r039",
+        "source": "s01",
+        "in_s": 329.455,
+        "out_s": 330.805,
+        "in_frame": 7899,
+        "out_frame": 7932,
+        "first_word": 490,
+        "last_word": 495,
+        "markers": []
+      },
+      {
+        "id": "r040",
+        "source": "s01",
+        "in_s": 330.955,
+        "out_s": 333.835,
+        "in_frame": 7934,
+        "out_frame": 8005,
+        "first_word": 496,
+        "last_word": 503,
+        "markers": []
+      },
+      {
+        "id": "r041",
+        "source": "s01",
+        "in_s": 334.02500000000003,
+        "out_s": 334.705,
+        "in_frame": 8008,
+        "out_frame": 8025,
+        "first_word": 504,
+        "last_word": 504,
+        "markers": [
+          {
+            "at_word": 504,
+            "text": "CHECK: complete_sentence (d016)"
+          }
+        ]
+      },
+      {
+        "id": "r042",
+        "source": "s01",
+        "in_s": 335.225,
+        "out_s": 338.40500000000003,
+        "in_frame": 8037,
+        "out_frame": 8114,
+        "first_word": 505,
+        "last_word": 517,
+        "markers": [
+          {
+            "at_word": 517,
+            "text": "CHECK: complete_sentence (d017)"
+          }
+        ]
+      },
+      {
+        "id": "r043",
+        "source": "s01",
+        "in_s": 339.865,
+        "out_s": 344.96500000000003,
+        "in_frame": 8148,
+        "out_frame": 8271,
+        "first_word": 518,
+        "last_word": 533,
+        "markers": [
+          {
+            "at_word": 533,
+            "text": "CHECK: complete_sentence (d018)"
+          }
+        ]
+      },
+      {
+        "id": "r044",
+        "source": "s01",
+        "in_s": 345.785,
+        "out_s": 349.725,
+        "in_frame": 8290,
+        "out_frame": 8386,
+        "first_word": 534,
+        "last_word": 551,
+        "markers": [
+          {
+            "at_word": 551,
+            "text": "CHECK: complete_sentence (d019)"
+          }
+        ]
+      },
+      {
+        "id": "r045",
+        "source": "s01",
+        "in_s": 350.365,
+        "out_s": 354.995,
+        "in_frame": 8400,
+        "out_frame": 8512,
+        "first_word": 552,
+        "last_word": 570,
+        "markers": []
+      },
+      {
+        "id": "r046",
+        "source": "s01",
+        "in_s": 355.375,
+        "out_s": 359.02500000000003,
+        "in_frame": 8520,
+        "out_frame": 8608,
+        "first_word": 571,
+        "last_word": 586,
+        "markers": []
+      }
+    ],
+    "dropped": [
+      {
+        "source": "s01",
+        "in_s": 86.88,
+        "out_s": 93.67999999999999,
+        "decision": "d001"
+      },
+      {
+        "source": "s01",
+        "in_s": 93.68,
+        "out_s": 101.92,
+        "decision": "d002"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "c01",
+        "title": "Script (about 1:45)",
+        "at_word": 55
+      }
+    ]
+  }
+}

@@ -1,0 +1,5883 @@
+{
+  "meta": {
+    "stage": "transcribe",
+    "stage_version": 1,
+    "inputs_hash": "sha256:a9ffda4c0c739b4c7bf51e27b0e704c9db6face780d9c5e8e842df30775232d5",
+    "config_hash": "sha256:22c82210d91cc7713ec15494c9e86d1a63f8d2ebb47ceeee66c2a2c4d63286d6",
+    "created_at": "2026-10-12T10:15:15Z"
+  },
+  "data": {
+    "words": [
+      {
+        "i": 0,
+        "source": "s01",
+        "w": "ChatGPT",
+        "norm": "chatgpt",
+        "start": 7.92,
+        "end": 8.8,
+        "conf": 0.9657580824042729,
+        "sent": 0
+      },
+      {
+        "i": 1,
+        "source": "s01",
+        "w": "doesn't",
+        "norm": "doesnt",
+        "start": 8.8,
+        "end": 9.120000000000001,
+        "conf": 0.9996513608783896,
+        "sent": 0
+      },
+      {
+        "i": 2,
+        "source": "s01",
+        "w": "just",
+        "norm": "just",
+        "start": 9.120000000000001,
+        "end": 9.360000000000001,
+        "conf": 0.999458909034729,
+        "sent": 0
+      },
+      {
+        "i": 3,
+        "source": "s01",
+        "w": "answer",
+        "norm": "answer",
+        "start": 9.36,
+        "end": 9.92,
+        "conf": 0.9997015659537385,
+        "sent": 0
+      },
+      {
+        "i": 4,
+        "source": "s01",
+        "w": "anymore.",
+        "norm": "anymore",
+        "start": 9.92,
+        "end": 11.360000000000001,
+        "conf": 0.9713032117439961,
+        "sent": 0
+      },
+      {
+        "i": 5,
+        "source": "s01",
+        "w": "ChatGPT",
+        "norm": "chatgpt",
+        "start": 16.32,
+        "end": 17.12,
+        "conf": 0.9728235319506912,
+        "sent": 1
+      },
+      {
+        "i": 6,
+        "source": "s01",
+        "w": "doesn't",
+        "norm": "doesnt",
+        "start": 17.12,
+        "end": 17.44,
+        "conf": 0.9997297475122314,
+        "sent": 1
+      },
+      {
+        "i": 7,
+        "source": "s01",
+        "w": "just",
+        "norm": "just",
+        "start": 17.44,
+        "end": 17.6,
+        "conf": 0.9995203614234924,
+        "sent": 1
+      },
+      {
+        "i": 8,
+        "source": "s01",
+        "w": "answer",
+        "norm": "answer",
+        "start": 17.6,
+        "end": 18.080000000000002,
+        "conf": 0.9998079096878895,
+        "sent": 1
+      },
+      {
+        "i": 9,
+        "source": "s01",
+        "w": "anymore,",
+        "norm": "anymore",
+        "start": 18.080000000000002,
+        "end": 18.560000000000002,
+        "conf": 0.9805818582035193,
+        "sent": 1
+      },
+      {
+        "i": 10,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 18.56,
+        "end": 18.72,
+        "conf": 0.9994570016860962,
+        "sent": 1
+      },
+      {
+        "i": 11,
+        "source": "s01",
+        "w": "now",
+        "norm": "now",
+        "start": 18.72,
+        "end": 18.88,
+        "conf": 0.9995746612548828,
+        "sent": 1
+      },
+      {
+        "i": 12,
+        "source": "s01",
+        "w": "ships",
+        "norm": "ships",
+        "start": 18.88,
+        "end": 19.36,
+        "conf": 0.9998534630852376,
+        "sent": 1
+      },
+      {
+        "i": 13,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 19.36,
+        "end": 19.52,
+        "conf": 0.9999459981918335,
+        "sent": 1
+      },
+      {
+        "i": 14,
+        "source": "s01",
+        "w": "entire",
+        "norm": "entire",
+        "start": 19.52,
+        "end": 20.16,
+        "conf": 0.9999441489047731,
+        "sent": 1
+      },
+      {
+        "i": 15,
+        "source": "s01",
+        "w": "interface.",
+        "norm": "interface",
+        "start": 20.16,
+        "end": 21.6,
+        "conf": 0.9747038089977768,
+        "sent": 1
+      },
+      {
+        "i": 16,
+        "source": "s01",
+        "w": "ChatGPT",
+        "norm": "chatgpt",
+        "start": 23.2,
+        "end": 24.16,
+        "conf": 0.9768460815387787,
+        "sent": 2
+      },
+      {
+        "i": 17,
+        "source": "s01",
+        "w": "doesn't",
+        "norm": "doesnt",
+        "start": 24.16,
+        "end": 24.48,
+        "conf": 0.9995660116126718,
+        "sent": 2
+      },
+      {
+        "i": 18,
+        "source": "s01",
+        "w": "just",
+        "norm": "just",
+        "start": 24.48,
+        "end": 24.72,
+        "conf": 0.999713122844696,
+        "sent": 2
+      },
+      {
+        "i": 19,
+        "source": "s01",
+        "w": "answer",
+        "norm": "answer",
+        "start": 24.72,
+        "end": 25.28,
+        "conf": 0.9998765670478866,
+        "sent": 2
+      },
+      {
+        "i": 20,
+        "source": "s01",
+        "w": "anymore.",
+        "norm": "anymore",
+        "start": 25.28,
+        "end": 26.720000000000002,
+        "conf": 0.972971613405387,
+        "sent": 2
+      },
+      {
+        "i": 21,
+        "source": "s01",
+        "w": "With",
+        "norm": "with",
+        "start": 27.36,
+        "end": 27.68,
+        "conf": 0.9653190716687918,
+        "sent": 3
+      },
+      {
+        "i": 22,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 27.68,
+        "end": 27.84,
+        "conf": 0.9759836792945862,
+        "sent": 3
+      },
+      {
+        "i": 23,
+        "source": "s01",
+        "w": "latest",
+        "norm": "latest",
+        "start": 27.84,
+        "end": 28.240000000000002,
+        "conf": 0.9993250195715291,
+        "sent": 3
+      },
+      {
+        "i": 24,
+        "source": "s01",
+        "w": "update.",
+        "norm": "update",
+        "start": 28.240000000000002,
+        "end": 29.04,
+        "conf": 0.955094653365163,
+        "sent": 3
+      },
+      {
+        "i": 25,
+        "source": "s01",
+        "w": "With",
+        "norm": "with",
+        "start": 29.36,
+        "end": 29.6,
+        "conf": 0.9947136778551217,
+        "sent": 4
+      },
+      {
+        "i": 26,
+        "source": "s01",
+        "w": "its",
+        "norm": "its",
+        "start": 29.6,
+        "end": 29.84,
+        "conf": 0.9046332836151123,
+        "sent": 4
+      },
+      {
+        "i": 27,
+        "source": "s01",
+        "w": "latest",
+        "norm": "latest",
+        "start": 29.84,
+        "end": 30.16,
+        "conf": 0.99989268122619,
+        "sent": 4
+      },
+      {
+        "i": 28,
+        "source": "s01",
+        "w": "update,",
+        "norm": "update",
+        "start": 30.16,
+        "end": 30.64,
+        "conf": 0.9933683878893268,
+        "sent": 4
+      },
+      {
+        "i": 29,
+        "source": "s01",
+        "w": "ChatGPT",
+        "norm": "chatgpt",
+        "start": 30.64,
+        "end": 31.52,
+        "conf": 0.9784964708279102,
+        "sent": 4
+      },
+      {
+        "i": 30,
+        "source": "s01",
+        "w": "doesn't",
+        "norm": "doesnt",
+        "start": 31.52,
+        "end": 31.759999999999998,
+        "conf": 0.9996954590974138,
+        "sent": 4
+      },
+      {
+        "i": 31,
+        "source": "s01",
+        "w": "just",
+        "norm": "just",
+        "start": 31.76,
+        "end": 32.0,
+        "conf": 0.9997028708457947,
+        "sent": 4
+      },
+      {
+        "i": 32,
+        "source": "s01",
+        "w": "answer",
+        "norm": "answer",
+        "start": 32.0,
+        "end": 32.48,
+        "conf": 0.9997810896678079,
+        "sent": 4
+      },
+      {
+        "i": 33,
+        "source": "s01",
+        "w": "anymore,",
+        "norm": "anymore",
+        "start": 32.480000000000004,
+        "end": 33.04,
+        "conf": 0.9813357947000814,
+        "sent": 4
+      },
+      {
+        "i": 34,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 33.04,
+        "end": 33.199999999999996,
+        "conf": 0.9989764094352722,
+        "sent": 4
+      },
+      {
+        "i": 35,
+        "source": "s01",
+        "w": "now",
+        "norm": "now",
+        "start": 33.2,
+        "end": 33.440000000000005,
+        "conf": 0.999769926071167,
+        "sent": 4
+      },
+      {
+        "i": 36,
+        "source": "s01",
+        "w": "ships",
+        "norm": "ships",
+        "start": 33.44,
+        "end": 33.919999999999995,
+        "conf": 0.9998865098060553,
+        "sent": 4
+      },
+      {
+        "i": 37,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 33.92,
+        "end": 34.160000000000004,
+        "conf": 0.9999717473983765,
+        "sent": 4
+      },
+      {
+        "i": 38,
+        "source": "s01",
+        "w": "entire",
+        "norm": "entire",
+        "start": 34.160000000000004,
+        "end": 34.800000000000004,
+        "conf": 0.9999793169780516,
+        "sent": 4
+      },
+      {
+        "i": 39,
+        "source": "s01",
+        "w": "interface.",
+        "norm": "interface",
+        "start": 34.800000000000004,
+        "end": 36.480000000000004,
+        "conf": 0.9508052003290601,
+        "sent": 4
+      },
+      {
+        "i": 40,
+        "source": "s01",
+        "w": "Ask",
+        "norm": "ask",
+        "start": 37.44,
+        "end": 37.84,
+        "conf": 0.9992767250665725,
+        "sent": 5
+      },
+      {
+        "i": 41,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 37.84,
+        "end": 38.0,
+        "conf": 0.9998250603675842,
+        "sent": 5
+      },
+      {
+        "i": 42,
+        "source": "s01",
+        "w": "to",
+        "norm": "to",
+        "start": 38.0,
+        "end": 38.16,
+        "conf": 0.9999781847000122,
+        "sent": 5
+      },
+      {
+        "i": 43,
+        "source": "s01",
+        "w": "split",
+        "norm": "split",
+        "start": 38.160000000000004,
+        "end": 38.559999999999995,
+        "conf": 0.9997930038644371,
+        "sent": 5
+      },
+      {
+        "i": 44,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 38.56,
+        "end": 38.72,
+        "conf": 0.9995293021202087,
+        "sent": 5
+      },
+      {
+        "i": 45,
+        "source": "s01",
+        "w": "bill",
+        "norm": "bill",
+        "start": 38.72,
+        "end": 38.96,
+        "conf": 0.996635594075479,
+        "sent": 5
+      },
+      {
+        "i": 46,
+        "source": "s01",
+        "w": "and",
+        "norm": "and",
+        "start": 39.04,
+        "end": 39.199999999999996,
+        "conf": 0.9991533756256104,
+        "sent": 5
+      },
+      {
+        "i": 47,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 39.2,
+        "end": 39.28,
+        "conf": 0.998820424079895,
+        "sent": 5
+      },
+      {
+        "i": 48,
+        "source": "s01",
+        "w": "doesn't",
+        "norm": "doesnt",
+        "start": 39.28,
+        "end": 39.519999999999996,
+        "conf": 0.9997818368949966,
+        "sent": 5
+      },
+      {
+        "i": 49,
+        "source": "s01",
+        "w": "just",
+        "norm": "just",
+        "start": 39.52,
+        "end": 39.68,
+        "conf": 0.999871551990509,
+        "sent": 5
+      },
+      {
+        "i": 50,
+        "source": "s01",
+        "w": "describe",
+        "norm": "describe",
+        "start": 39.68,
+        "end": 40.239999999999995,
+        "conf": 0.9999807919074056,
+        "sent": 5
+      },
+      {
+        "i": 51,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 40.24,
+        "end": 40.4,
+        "conf": 0.9998193979263306,
+        "sent": 5
+      },
+      {
+        "i": 52,
+        "source": "s01",
+        "w": "calculator,",
+        "norm": "calculator",
+        "start": 40.4,
+        "end": 41.12,
+        "conf": 0.9889158550763348,
+        "sent": 5
+      },
+      {
+        "i": 53,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 41.12,
+        "end": 41.279999999999994,
+        "conf": 0.9994460344314575,
+        "sent": 5
+      },
+      {
+        "i": 54,
+        "source": "s01",
+        "w": "actually",
+        "norm": "actually",
+        "start": 41.28,
+        "end": 41.6,
+        "conf": 0.9999693632125854,
+        "sent": 5
+      },
+      {
+        "i": 55,
+        "source": "s01",
+        "w": "builds",
+        "norm": "builds",
+        "start": 41.6,
+        "end": 42.160000000000004,
+        "conf": 0.9997964881165278,
+        "sent": 5
+      },
+      {
+        "i": 56,
+        "source": "s01",
+        "w": "one.",
+        "norm": "one",
+        "start": 42.160000000000004,
+        "end": 42.72,
+        "conf": 0.9631373553854875,
+        "sent": 5
+      },
+      {
+        "i": 57,
+        "source": "s01",
+        "w": "Tips,",
+        "norm": "tips",
+        "start": 42.72,
+        "end": 43.52,
+        "conf": 0.9989015388281287,
+        "sent": 6
+      },
+      {
+        "i": 58,
+        "source": "s01",
+        "w": "headcounts,",
+        "norm": "headcounts",
+        "start": 43.52,
+        "end": 44.480000000000004,
+        "conf": 0.9838642762076941,
+        "sent": 6
+      },
+      {
+        "i": 59,
+        "source": "s01",
+        "w": "total,",
+        "norm": "total",
+        "start": 44.480000000000004,
+        "end": 45.36,
+        "conf": 0.9701203666455623,
+        "sent": 6
+      },
+      {
+        "i": 60,
+        "source": "s01",
+        "w": "everything",
+        "norm": "everything",
+        "start": 45.36,
+        "end": 45.6,
+        "conf": 0.9997833371162415,
+        "sent": 6
+      },
+      {
+        "i": 61,
+        "source": "s01",
+        "w": "lives",
+        "norm": "lives",
+        "start": 45.84,
+        "end": 46.400000000000006,
+        "conf": 0.9999240624380011,
+        "sent": 6
+      },
+      {
+        "i": 62,
+        "source": "s01",
+        "w": "inside",
+        "norm": "inside",
+        "start": 46.4,
+        "end": 46.96,
+        "conf": 0.9998853439268908,
+        "sent": 6
+      },
+      {
+        "i": 63,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 46.96,
+        "end": 47.12,
+        "conf": 0.99986332654953,
+        "sent": 6
+      },
+      {
+        "i": 64,
+        "source": "s01",
+        "w": "message.",
+        "norm": "message",
+        "start": 47.12,
+        "end": 48.72,
+        "conf": 0.9770206729641943,
+        "sent": 6
+      },
+      {
+        "i": 65,
+        "source": "s01",
+        "w": "Now",
+        "norm": "now",
+        "start": 52.24,
+        "end": 52.32,
+        "conf": 0.9823619723320007,
+        "sent": 7
+      },
+      {
+        "i": 66,
+        "source": "s01",
+        "w": "OpenAI",
+        "norm": "openai",
+        "start": 52.4,
+        "end": 53.120000000000005,
+        "conf": 0.9934191476427003,
+        "sent": 7
+      },
+      {
+        "i": 67,
+        "source": "s01",
+        "w": "calls",
+        "norm": "calls",
+        "start": 53.120000000000005,
+        "end": 53.52,
+        "conf": 0.9999150011106782,
+        "sent": 7
+      },
+      {
+        "i": 68,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 53.52,
+        "end": 53.760000000000005,
+        "conf": 0.9998148083686829,
+        "sent": 7
+      },
+      {
+        "i": 69,
+        "source": "s01",
+        "w": "intelligent",
+        "norm": "intelligent",
+        "start": 53.76,
+        "end": 54.48,
+        "conf": 0.9852633459799067,
+        "sent": 7
+      },
+      {
+        "i": 70,
+        "source": "s01",
+        "w": "UI.",
+        "norm": "ui",
+        "start": 54.480000000000004,
+        "end": 54.96,
+        "conf": 0.9689483434567646,
+        "sent": 7
+      },
+      {
+        "i": 71,
+        "source": "s01",
+        "w": "And",
+        "norm": "and",
+        "start": 54.96,
+        "end": 55.04,
+        "conf": 0.9754480719566345,
+        "sent": 8
+      },
+      {
+        "i": 72,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 55.04,
+        "end": 55.12,
+        "conf": 0.9999541640281677,
+        "sent": 8
+      },
+      {
+        "i": 73,
+        "source": "s01",
+        "w": "way",
+        "norm": "way",
+        "start": 55.120000000000005,
+        "end": 55.28,
+        "conf": 0.9999794363975525,
+        "sent": 8
+      },
+      {
+        "i": 74,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 55.28,
+        "end": 55.52,
+        "conf": 0.9999473690986633,
+        "sent": 8
+      },
+      {
+        "i": 75,
+        "source": "s01",
+        "w": "works",
+        "norm": "works",
+        "start": 55.52,
+        "end": 55.839999999999996,
+        "conf": 0.9999862610682535,
+        "sent": 8
+      },
+      {
+        "i": 76,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 55.84,
+        "end": 56.080000000000005,
+        "conf": 0.99998539686203,
+        "sent": 8
+      },
+      {
+        "i": 77,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 56.08,
+        "end": 56.32,
+        "conf": 0.9997804760932922,
+        "sent": 8
+      },
+      {
+        "i": 78,
+        "source": "s01",
+        "w": "GPT-6",
+        "norm": "gpt6",
+        "start": 56.32,
+        "end": 57.04,
+        "conf": 0.9773085034304579,
+        "sent": 8
+      },
+      {
+        "i": 79,
+        "source": "s01",
+        "w": "can",
+        "norm": "can",
+        "start": 57.36,
+        "end": 57.519999999999996,
+        "conf": 0.9999258518218994,
+        "sent": 8
+      },
+      {
+        "i": 80,
+        "source": "s01",
+        "w": "now",
+        "norm": "now",
+        "start": 57.52,
+        "end": 57.760000000000005,
+        "conf": 0.9998732209205627,
+        "sent": 8
+      },
+      {
+        "i": 81,
+        "source": "s01",
+        "w": "pick",
+        "norm": "pick",
+        "start": 57.76,
+        "end": 58.16,
+        "conf": 0.9999662041453068,
+        "sent": 8
+      },
+      {
+        "i": 82,
+        "source": "s01",
+        "w": "from",
+        "norm": "from",
+        "start": 58.160000000000004,
+        "end": 58.400000000000006,
+        "conf": 0.9999611973762512,
+        "sent": 8
+      },
+      {
+        "i": 83,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 58.4,
+        "end": 58.72,
+        "conf": 0.9994650483131409,
+        "sent": 8
+      },
+      {
+        "i": 84,
+        "source": "s01",
+        "w": "set",
+        "norm": "set",
+        "start": 58.72,
+        "end": 58.96,
+        "conf": 0.9999901652336121,
+        "sent": 8
+      },
+      {
+        "i": 85,
+        "source": "s01",
+        "w": "of",
+        "norm": "of",
+        "start": 58.96,
+        "end": 59.2,
+        "conf": 0.9999943971633911,
+        "sent": 8
+      },
+      {
+        "i": 86,
+        "source": "s01",
+        "w": "pre-built",
+        "norm": "prebuilt",
+        "start": 59.2,
+        "end": 60.08,
+        "conf": 0.9989099786698303,
+        "sent": 8
+      },
+      {
+        "i": 87,
+        "source": "s01",
+        "w": "components.",
+        "norm": "components",
+        "start": 60.08,
+        "end": 61.2,
+        "conf": 0.9971844151458291,
+        "sent": 8
+      },
+      {
+        "i": 88,
+        "source": "s01",
+        "w": "Think",
+        "norm": "think",
+        "start": 63.2,
+        "end": 63.52,
+        "conf": 0.9880281541545209,
+        "sent": 9
+      },
+      {
+        "i": 89,
+        "source": "s01",
+        "w": "of",
+        "norm": "of",
+        "start": 63.52,
+        "end": 63.84,
+        "conf": 0.9996460676193237,
+        "sent": 9
+      },
+      {
+        "i": 90,
+        "source": "s01",
+        "w": "buttons,",
+        "norm": "buttons",
+        "start": 63.84,
+        "end": 64.88,
+        "conf": 0.9990457694614268,
+        "sent": 9
+      },
+      {
+        "i": 91,
+        "source": "s01",
+        "w": "forms.",
+        "norm": "forms",
+        "start": 64.88,
+        "end": 66.08,
+        "conf": 0.9479954204088686,
+        "sent": 9
+      },
+      {
+        "i": 92,
+        "source": "s01",
+        "w": "Think",
+        "norm": "think",
+        "start": 66.4,
+        "end": 66.64,
+        "conf": 0.9984924402324429,
+        "sent": 10
+      },
+      {
+        "i": 93,
+        "source": "s01",
+        "w": "of",
+        "norm": "of",
+        "start": 66.64,
+        "end": 66.88,
+        "conf": 0.999897837638855,
+        "sent": 10
+      },
+      {
+        "i": 94,
+        "source": "s01",
+        "w": "buttons,",
+        "norm": "buttons",
+        "start": 66.88,
+        "end": 67.75999999999999,
+        "conf": 0.9988310835463097,
+        "sent": 10
+      },
+      {
+        "i": 95,
+        "source": "s01",
+        "w": "forms,",
+        "norm": "forms",
+        "start": 67.76,
+        "end": 68.47999999999999,
+        "conf": 0.9993986624034289,
+        "sent": 10
+      },
+      {
+        "i": 96,
+        "source": "s01",
+        "w": "charts.",
+        "norm": "charts",
+        "start": 68.48,
+        "end": 69.92,
+        "conf": 0.9679933132342554,
+        "sent": 10
+      },
+      {
+        "i": 97,
+        "source": "s01",
+        "w": "And",
+        "norm": "and",
+        "start": 70.56,
+        "end": 70.8,
+        "conf": 0.9935423731803894,
+        "sent": 11
+      },
+      {
+        "i": 98,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 70.8,
+        "end": 70.96,
+        "conf": 0.9846597909927368,
+        "sent": 11
+      },
+      {
+        "i": 99,
+        "source": "s01",
+        "w": "compiler",
+        "norm": "compiler",
+        "start": 70.96000000000001,
+        "end": 71.75999999999999,
+        "conf": 0.9995764388428361,
+        "sent": 11
+      },
+      {
+        "i": 100,
+        "source": "s01",
+        "w": "then",
+        "norm": "then",
+        "start": 71.76,
+        "end": 72.0,
+        "conf": 0.9997218251228333,
+        "sent": 11
+      },
+      {
+        "i": 101,
+        "source": "s01",
+        "w": "streams",
+        "norm": "streams",
+        "start": 72.0,
+        "end": 73.19999999999999,
+        "conf": 0.9997495369654349,
+        "sent": 11
+      },
+      {
+        "i": 102,
+        "source": "s01",
+        "w": "them",
+        "norm": "them",
+        "start": 73.2,
+        "end": 73.52,
+        "conf": 0.9998196959495544,
+        "sent": 11
+      },
+      {
+        "i": 103,
+        "source": "s01",
+        "w": "in.",
+        "norm": "in",
+        "start": 73.52,
+        "end": 74.47999999999999,
+        "conf": 0.9310705720398096,
+        "sent": 11
+      },
+      {
+        "i": 104,
+        "source": "s01",
+        "w": "And",
+        "norm": "and",
+        "start": 74.48,
+        "end": 74.64,
+        "conf": 0.9873954653739929,
+        "sent": 12
+      },
+      {
+        "i": 105,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 74.64,
+        "end": 74.8,
+        "conf": 0.9323369860649109,
+        "sent": 12
+      },
+      {
+        "i": 106,
+        "source": "s01",
+        "w": "compiler",
+        "norm": "compiler",
+        "start": 74.8,
+        "end": 75.36,
+        "conf": 0.9997814685361878,
+        "sent": 12
+      },
+      {
+        "i": 107,
+        "source": "s01",
+        "w": "then",
+        "norm": "then",
+        "start": 75.36,
+        "end": 75.6,
+        "conf": 0.9996720552444458,
+        "sent": 12
+      },
+      {
+        "i": 108,
+        "source": "s01",
+        "w": "streams",
+        "norm": "streams",
+        "start": 75.60000000000001,
+        "end": 76.08,
+        "conf": 0.9998323566566796,
+        "sent": 12
+      },
+      {
+        "i": 109,
+        "source": "s01",
+        "w": "them",
+        "norm": "them",
+        "start": 76.08,
+        "end": 76.39999999999999,
+        "conf": 0.9581996202468872,
+        "sent": 12
+      },
+      {
+        "i": 110,
+        "source": "s01",
+        "w": "in.",
+        "norm": "in",
+        "start": 76.4,
+        "end": 77.03999999999999,
+        "conf": 0.9294791990575763,
+        "sent": 12
+      },
+      {
+        "i": 111,
+        "source": "s01",
+        "w": "And",
+        "norm": "and",
+        "start": 77.36,
+        "end": 77.52,
+        "conf": 0.9876165986061096,
+        "sent": 13
+      },
+      {
+        "i": 112,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 77.52,
+        "end": 77.67999999999999,
+        "conf": 0.9152044653892517,
+        "sent": 13
+      },
+      {
+        "i": 113,
+        "source": "s01",
+        "w": "compiler",
+        "norm": "compiler",
+        "start": 77.68,
+        "end": 78.39999999999999,
+        "conf": 0.9997705347116524,
+        "sent": 13
+      },
+      {
+        "i": 114,
+        "source": "s01",
+        "w": "then",
+        "norm": "then",
+        "start": 78.4,
+        "end": 78.64,
+        "conf": 0.9997895359992981,
+        "sent": 13
+      },
+      {
+        "i": 115,
+        "source": "s01",
+        "w": "streams",
+        "norm": "streams",
+        "start": 78.64,
+        "end": 79.12,
+        "conf": 0.9999100760522508,
+        "sent": 13
+      },
+      {
+        "i": 116,
+        "source": "s01",
+        "w": "them",
+        "norm": "them",
+        "start": 79.12,
+        "end": 79.28,
+        "conf": 0.9998785257339478,
+        "sent": 13
+      },
+      {
+        "i": 117,
+        "source": "s01",
+        "w": "in",
+        "norm": "in",
+        "start": 79.28,
+        "end": 79.52,
+        "conf": 0.9998866319656372,
+        "sent": 13
+      },
+      {
+        "i": 118,
+        "source": "s01",
+        "w": "as",
+        "norm": "as",
+        "start": 79.52,
+        "end": 79.67999999999999,
+        "conf": 0.9999112486839294,
+        "sent": 13
+      },
+      {
+        "i": 119,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 79.68,
+        "end": 79.76,
+        "conf": 0.997141420841217,
+        "sent": 13
+      },
+      {
+        "i": 120,
+        "source": "s01",
+        "w": "tokens",
+        "norm": "tokens",
+        "start": 79.76,
+        "end": 80.24,
+        "conf": 0.9999407921215518,
+        "sent": 13
+      },
+      {
+        "i": 121,
+        "source": "s01",
+        "w": "arrive.",
+        "norm": "arrive",
+        "start": 80.24,
+        "end": 81.52,
+        "conf": 0.9889370931514161,
+        "sent": 13
+      },
+      {
+        "i": 122,
+        "source": "s01",
+        "w": "Now",
+        "norm": "now",
+        "start": 83.44,
+        "end": 83.6,
+        "conf": 0.9931902885437012,
+        "sent": 14
+      },
+      {
+        "i": 123,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 83.76,
+        "end": 84.0,
+        "conf": 0.9999691843986511,
+        "sent": 14
+      },
+      {
+        "i": 124,
+        "source": "s01",
+        "w": "lives",
+        "norm": "lives",
+        "start": 84.0,
+        "end": 84.47999999999999,
+        "conf": 0.9999829232616507,
+        "sent": 14
+      },
+      {
+        "i": 125,
+        "source": "s01",
+        "w": "inside",
+        "norm": "inside",
+        "start": 84.48,
+        "end": 84.88,
+        "conf": 0.9999504375243757,
+        "sent": 14
+      },
+      {
+        "i": 126,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 84.88,
+        "end": 85.03999999999999,
+        "conf": 0.9999698996543884,
+        "sent": 14
+      },
+      {
+        "i": 127,
+        "source": "s01",
+        "w": "same",
+        "norm": "same",
+        "start": 85.04,
+        "end": 85.28,
+        "conf": 0.999901294708252,
+        "sent": 14
+      },
+      {
+        "i": 128,
+        "source": "s01",
+        "w": "bubble.",
+        "norm": "bubble",
+        "start": 85.28,
+        "end": 85.84,
+        "conf": 0.9916233624336233,
+        "sent": 14
+      },
+      {
+        "i": 129,
+        "source": "s01",
+        "w": "It's",
+        "norm": "its",
+        "start": 85.84,
+        "end": 86.0,
+        "conf": 0.9986755567096414,
+        "sent": 15
+      },
+      {
+        "i": 130,
+        "source": "s01",
+        "w": "not",
+        "norm": "not",
+        "start": 86.0,
+        "end": 86.16,
+        "conf": 0.9999490976333618,
+        "sent": 15
+      },
+      {
+        "i": 131,
+        "source": "s01",
+        "w": "an",
+        "norm": "an",
+        "start": 86.16,
+        "end": 86.32,
+        "conf": 0.9999390244483948,
+        "sent": 15
+      },
+      {
+        "i": 132,
+        "source": "s01",
+        "w": "embedded",
+        "norm": "embedded",
+        "start": 86.32000000000001,
+        "end": 86.88,
+        "conf": 0.9999655226534508,
+        "sent": 15
+      },
+      {
+        "i": 133,
+        "source": "s01",
+        "w": "iframe.",
+        "norm": "iframe",
+        "start": 86.88,
+        "end": 88.55999999999999,
+        "conf": 0.9727195540678059,
+        "sent": 15
+      },
+      {
+        "i": 134,
+        "source": "s01",
+        "w": "Now",
+        "norm": "now",
+        "start": 89.2,
+        "end": 89.44,
+        "conf": 0.9947153329849243,
+        "sent": 16
+      },
+      {
+        "i": 135,
+        "source": "s01",
+        "w": "everything",
+        "norm": "everything",
+        "start": 89.76,
+        "end": 90.08,
+        "conf": 0.9999407529830933,
+        "sent": 16
+      },
+      {
+        "i": 136,
+        "source": "s01",
+        "w": "here",
+        "norm": "here",
+        "start": 90.08,
+        "end": 90.39999999999999,
+        "conf": 0.9996327757835388,
+        "sent": 16
+      },
+      {
+        "i": 137,
+        "source": "s01",
+        "w": "lives",
+        "norm": "lives",
+        "start": 90.4,
+        "end": 90.96,
+        "conf": 0.9999720749892022,
+        "sent": 16
+      },
+      {
+        "i": 138,
+        "source": "s01",
+        "w": "inside",
+        "norm": "inside",
+        "start": 90.96000000000001,
+        "end": 91.36,
+        "conf": 0.9998875197228033,
+        "sent": 16
+      },
+      {
+        "i": 139,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 91.36,
+        "end": 91.52,
+        "conf": 0.9997113943099976,
+        "sent": 16
+      },
+      {
+        "i": 140,
+        "source": "s01",
+        "w": "chat",
+        "norm": "chat",
+        "start": 91.52,
+        "end": 91.84,
+        "conf": 0.9988347740607165,
+        "sent": 16
+      },
+      {
+        "i": 141,
+        "source": "s01",
+        "w": "bubble.",
+        "norm": "bubble",
+        "start": 91.84,
+        "end": 92.39999999999999,
+        "conf": 0.9957331060078263,
+        "sent": 16
+      },
+      {
+        "i": 142,
+        "source": "s01",
+        "w": "It's",
+        "norm": "its",
+        "start": 92.4,
+        "end": 92.72,
+        "conf": 0.9988404046871044,
+        "sent": 17
+      },
+      {
+        "i": 143,
+        "source": "s01",
+        "w": "no",
+        "norm": "no",
+        "start": 92.72,
+        "end": 93.03999999999999,
+        "conf": 0.9992479085922241,
+        "sent": 17
+      },
+      {
+        "i": 144,
+        "source": "s01",
+        "w": "embedded",
+        "norm": "embedded",
+        "start": 93.04,
+        "end": 93.67999999999999,
+        "conf": 0.9999782792964,
+        "sent": 17
+      },
+      {
+        "i": 145,
+        "source": "s01",
+        "w": "iframe,",
+        "norm": "iframe",
+        "start": 93.68,
+        "end": 94.88,
+        "conf": 0.9835135335850665,
+        "sent": 17
+      },
+      {
+        "i": 146,
+        "source": "s01",
+        "w": "no",
+        "norm": "no",
+        "start": 94.88,
+        "end": 95.19999999999999,
+        "conf": 0.9989748001098633,
+        "sent": 17
+      },
+      {
+        "i": 147,
+        "source": "s01",
+        "w": "open.",
+        "norm": "open",
+        "start": 95.52,
+        "end": 96.72,
+        "conf": 0.9454206874099795,
+        "sent": 17
+      },
+      {
+        "i": 148,
+        "source": "s01",
+        "w": "Now",
+        "norm": "now",
+        "start": 97.04,
+        "end": 97.2,
+        "conf": 0.9929962754249573,
+        "sent": 18
+      },
+      {
+        "i": 149,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 97.28,
+        "end": 97.44,
+        "conf": 0.9999216794967651,
+        "sent": 18
+      },
+      {
+        "i": 150,
+        "source": "s01",
+        "w": "interesting",
+        "norm": "interesting",
+        "start": 97.44,
+        "end": 97.84,
+        "conf": 0.9999731776340891,
+        "sent": 18
+      },
+      {
+        "i": 151,
+        "source": "s01",
+        "w": "thing",
+        "norm": "thing",
+        "start": 97.84,
+        "end": 98.08,
+        "conf": 0.9999315142631531,
+        "sent": 18
+      },
+      {
+        "i": 152,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 98.08,
+        "end": 98.24,
+        "conf": 0.9999373555183411,
+        "sent": 18
+      },
+      {
+        "i": 153,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 98.24000000000001,
+        "end": 98.4,
+        "conf": 0.9998656511306763,
+        "sent": 18
+      },
+      {
+        "i": 154,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 98.4,
+        "end": 98.64,
+        "conf": 0.9998791217803955,
+        "sent": 18
+      },
+      {
+        "i": 155,
+        "source": "s01",
+        "w": "lives",
+        "norm": "lives",
+        "start": 98.64,
+        "end": 99.11999999999999,
+        "conf": 0.9999702273966704,
+        "sent": 18
+      },
+      {
+        "i": 156,
+        "source": "s01",
+        "w": "inside",
+        "norm": "inside",
+        "start": 99.12,
+        "end": 99.6,
+        "conf": 0.9997534449559334,
+        "sent": 18
+      },
+      {
+        "i": 157,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 99.60000000000001,
+        "end": 99.76,
+        "conf": 0.9999254941940308,
+        "sent": 18
+      },
+      {
+        "i": 158,
+        "source": "s01",
+        "w": "message",
+        "norm": "message",
+        "start": 99.76,
+        "end": 100.16,
+        "conf": 0.9993414758231196,
+        "sent": 18
+      },
+      {
+        "i": 159,
+        "source": "s01",
+        "w": "bubble",
+        "norm": "bubble",
+        "start": 100.16,
+        "end": 100.64,
+        "conf": 0.99970607106151,
+        "sent": 18
+      },
+      {
+        "i": 160,
+        "source": "s01",
+        "w": "itself.",
+        "norm": "itself",
+        "start": 100.64,
+        "end": 101.11999999999999,
+        "conf": 0.995226366576895,
+        "sent": 18
+      },
+      {
+        "i": 161,
+        "source": "s01",
+        "w": "It's",
+        "norm": "its",
+        "start": 101.12,
+        "end": 101.44,
+        "conf": 0.998365390237544,
+        "sent": 19
+      },
+      {
+        "i": 162,
+        "source": "s01",
+        "w": "not",
+        "norm": "not",
+        "start": 101.44,
+        "end": 101.67999999999999,
+        "conf": 0.999923050403595,
+        "sent": 19
+      },
+      {
+        "i": 163,
+        "source": "s01",
+        "w": "an",
+        "norm": "an",
+        "start": 101.68,
+        "end": 101.92,
+        "conf": 0.999645471572876,
+        "sent": 19
+      },
+      {
+        "i": 164,
+        "source": "s01",
+        "w": "iframe",
+        "norm": "iframe",
+        "start": 101.92,
+        "end": 102.64,
+        "conf": 0.9842766114156213,
+        "sent": 19
+      },
+      {
+        "i": 165,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 102.64,
+        "end": 102.72,
+        "conf": 0.999903678894043,
+        "sent": 19
+      },
+      {
+        "i": 166,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 102.72,
+        "end": 102.88,
+        "conf": 0.9997363686561584,
+        "sent": 19
+      },
+      {
+        "i": 167,
+        "source": "s01",
+        "w": "embedded.",
+        "norm": "embedded",
+        "start": 102.88,
+        "end": 103.6,
+        "conf": 0.9868294324444846,
+        "sent": 19
+      },
+      {
+        "i": 168,
+        "source": "s01",
+        "w": "It",
+        "norm": "it",
+        "start": 103.60000000000001,
+        "end": 103.92,
+        "conf": 0.9989246726036072,
+        "sent": 20
+      },
+      {
+        "i": 169,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 103.92,
+        "end": 104.24,
+        "conf": 0.9995926022529602,
+        "sent": 20
+      },
+      {
+        "i": 170,
+        "source": "s01",
+        "w": "not",
+        "norm": "not",
+        "start": 104.24000000000001,
+        "end": 104.56,
+        "conf": 0.9999653100967407,
+        "sent": 20
+      },
+      {
+        "i": 171,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 104.56,
+        "end": 104.8,
+        "conf": 0.9997720718383789,
+        "sent": 20
+      },
+      {
+        "i": 172,
+        "source": "s01",
+        "w": "link",
+        "norm": "link",
+        "start": 105.12,
+        "end": 105.6,
+        "conf": 0.9991691841483995,
+        "sent": 20
+      },
+      {
+        "i": 173,
+        "source": "s01",
+        "w": "to",
+        "norm": "to",
+        "start": 105.60000000000001,
+        "end": 105.84,
+        "conf": 0.9999948740005493,
+        "sent": 20
+      },
+      {
+        "i": 174,
+        "source": "s01",
+        "w": "click",
+        "norm": "click",
+        "start": 105.84,
+        "end": 106.32,
+        "conf": 0.999949603495501,
+        "sent": 20
+      },
+      {
+        "i": 175,
+        "source": "s01",
+        "w": "to",
+        "norm": "to",
+        "start": 106.32000000000001,
+        "end": 106.48,
+        "conf": 0.9998831152915955,
+        "sent": 20
+      },
+      {
+        "i": 176,
+        "source": "s01",
+        "w": "learn",
+        "norm": "learn",
+        "start": 106.48,
+        "end": 106.88,
+        "conf": 0.9999888340314786,
+        "sent": 20
+      },
+      {
+        "i": 177,
+        "source": "s01",
+        "w": "more.",
+        "norm": "more",
+        "start": 106.88,
+        "end": 107.44,
+        "conf": 0.9789140227561892,
+        "sent": 20
+      },
+      {
+        "i": 178,
+        "source": "s01",
+        "w": "It's",
+        "norm": "its",
+        "start": 107.44,
+        "end": 107.76,
+        "conf": 0.9953821196087674,
+        "sent": 21
+      },
+      {
+        "i": 179,
+        "source": "s01",
+        "w": "built",
+        "norm": "built",
+        "start": 107.76,
+        "end": 108.47999999999999,
+        "conf": 0.9984000315460093,
+        "sent": 21
+      },
+      {
+        "i": 180,
+        "source": "s01",
+        "w": "right",
+        "norm": "right",
+        "start": 108.48,
+        "end": 108.8,
+        "conf": 0.9998276233673096,
+        "sent": 21
+      },
+      {
+        "i": 181,
+        "source": "s01",
+        "w": "in.",
+        "norm": "in",
+        "start": 108.8,
+        "end": 109.36,
+        "conf": 0.9487755545569797,
+        "sent": 21
+      },
+      {
+        "i": 182,
+        "source": "s01",
+        "w": "And",
+        "norm": "and",
+        "start": 116.4,
+        "end": 116.56,
+        "conf": 0.9907885789871216,
+        "sent": 22
+      },
+      {
+        "i": 183,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 116.56,
+        "end": 116.64,
+        "conf": 0.9996918439865112,
+        "sent": 22
+      },
+      {
+        "i": 184,
+        "source": "s01",
+        "w": "cool",
+        "norm": "cool",
+        "start": 116.64,
+        "end": 116.88,
+        "conf": 0.9997051007462265,
+        "sent": 22
+      },
+      {
+        "i": 185,
+        "source": "s01",
+        "w": "thing",
+        "norm": "thing",
+        "start": 116.88,
+        "end": 117.03999999999999,
+        "conf": 0.9994462132453918,
+        "sent": 22
+      },
+      {
+        "i": 186,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 117.04,
+        "end": 117.2,
+        "conf": 0.9999148845672607,
+        "sent": 22
+      },
+      {
+        "i": 187,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 117.2,
+        "end": 117.36,
+        "conf": 0.999423623085022,
+        "sent": 22
+      },
+      {
+        "i": 188,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 117.36,
+        "end": 117.52,
+        "conf": 0.9998663067817688,
+        "sent": 22
+      },
+      {
+        "i": 189,
+        "source": "s01",
+        "w": "works",
+        "norm": "works",
+        "start": 117.52,
+        "end": 117.76,
+        "conf": 0.9999195021168171,
+        "sent": 22
+      },
+      {
+        "i": 190,
+        "source": "s01",
+        "w": "with",
+        "norm": "with",
+        "start": 117.76,
+        "end": 118.0,
+        "conf": 0.9999088048934937,
+        "sent": 22
+      },
+      {
+        "i": 191,
+        "source": "s01",
+        "w": "any",
+        "norm": "any",
+        "start": 118.0,
+        "end": 118.24,
+        "conf": 0.998822808265686,
+        "sent": 22
+      },
+      {
+        "i": 192,
+        "source": "s01",
+        "w": "visual,",
+        "norm": "visual",
+        "start": 118.24000000000001,
+        "end": 118.92,
+        "conf": 0.969005260200621,
+        "sent": 22
+      },
+      {
+        "i": 193,
+        "source": "s01",
+        "w": "really.",
+        "norm": "really",
+        "start": 118.88,
+        "end": 122.44,
+        "conf": 0.9298843354663958,
+        "sent": 22
+      },
+      {
+        "i": 194,
+        "source": "s01",
+        "w": "And",
+        "norm": "and",
+        "start": 122.76,
+        "end": 122.92,
+        "conf": 0.9818762540817261,
+        "sent": 23
+      },
+      {
+        "i": 195,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 122.92,
+        "end": 123.0,
+        "conf": 0.9993265271186829,
+        "sent": 23
+      },
+      {
+        "i": 196,
+        "source": "s01",
+        "w": "cool",
+        "norm": "cool",
+        "start": 123.0,
+        "end": 123.32,
+        "conf": 0.9998983691320047,
+        "sent": 23
+      },
+      {
+        "i": 197,
+        "source": "s01",
+        "w": "thing",
+        "norm": "thing",
+        "start": 123.32,
+        "end": 123.47999999999999,
+        "conf": 0.9998549222946167,
+        "sent": 23
+      },
+      {
+        "i": 198,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 123.48,
+        "end": 123.72,
+        "conf": 0.9999562501907349,
+        "sent": 23
+      },
+      {
+        "i": 199,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 123.72,
+        "end": 123.96,
+        "conf": 0.9999249577522278,
+        "sent": 23
+      },
+      {
+        "i": 200,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 123.96000000000001,
+        "end": 124.2,
+        "conf": 0.9999284744262695,
+        "sent": 23
+      },
+      {
+        "i": 201,
+        "source": "s01",
+        "w": "trick",
+        "norm": "trick",
+        "start": 124.2,
+        "end": 124.67999999999999,
+        "conf": 0.9999536867817179,
+        "sent": 23
+      },
+      {
+        "i": 202,
+        "source": "s01",
+        "w": "works",
+        "norm": "works",
+        "start": 124.68,
+        "end": 125.16,
+        "conf": 0.9998430311612643,
+        "sent": 23
+      },
+      {
+        "i": 203,
+        "source": "s01",
+        "w": "with",
+        "norm": "with",
+        "start": 125.16,
+        "end": 125.39999999999999,
+        "conf": 0.9999883770942688,
+        "sent": 23
+      },
+      {
+        "i": 204,
+        "source": "s01",
+        "w": "anything",
+        "norm": "anything",
+        "start": 125.4,
+        "end": 125.88,
+        "conf": 0.9999848603594303,
+        "sent": 23
+      },
+      {
+        "i": 205,
+        "source": "s01",
+        "w": "visual.",
+        "norm": "visual",
+        "start": 125.88,
+        "end": 126.6,
+        "conf": 0.9855815858854318,
+        "sent": 23
+      },
+      {
+        "i": 206,
+        "source": "s01",
+        "w": "Think",
+        "norm": "think",
+        "start": 126.92,
+        "end": 127.39999999999999,
+        "conf": 0.9995505484041078,
+        "sent": 24
+      },
+      {
+        "i": 207,
+        "source": "s01",
+        "w": "of",
+        "norm": "of",
+        "start": 127.4,
+        "end": 127.72,
+        "conf": 0.9998283386230469,
+        "sent": 24
+      },
+      {
+        "i": 208,
+        "source": "s01",
+        "w": "pricing,",
+        "norm": "pricing",
+        "start": 127.72,
+        "end": 128.76,
+        "conf": 0.9950405631043031,
+        "sent": 24
+      },
+      {
+        "i": 209,
+        "source": "s01",
+        "w": "architecture,",
+        "norm": "architecture",
+        "start": 128.76,
+        "end": 129.88,
+        "conf": 0.9981199536771903,
+        "sent": 24
+      },
+      {
+        "i": 210,
+        "source": "s01",
+        "w": "or",
+        "norm": "or",
+        "start": 129.88,
+        "end": 130.12,
+        "conf": 0.9996894598007202,
+        "sent": 24
+      },
+      {
+        "i": 211,
+        "source": "s01",
+        "w": "even",
+        "norm": "even",
+        "start": 130.12,
+        "end": 130.44,
+        "conf": 0.999982476234436,
+        "sent": 24
+      },
+      {
+        "i": 212,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 130.44,
+        "end": 130.68,
+        "conf": 0.9998981356620789,
+        "sent": 24
+      },
+      {
+        "i": 213,
+        "source": "s01",
+        "w": "recipe",
+        "norm": "recipe",
+        "start": 130.68,
+        "end": 131.32000000000002,
+        "conf": 0.9999863702346842,
+        "sent": 24
+      },
+      {
+        "i": 214,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 131.32,
+        "end": 131.56,
+        "conf": 0.9998919367790222,
+        "sent": 24
+      },
+      {
+        "i": 215,
+        "source": "s01",
+        "w": "rescales.",
+        "norm": "rescales",
+        "start": 131.56,
+        "end": 133.24,
+        "conf": 0.9721699564740888,
+        "sent": 24
+      },
+      {
+        "i": 216,
+        "source": "s01",
+        "w": "For",
+        "norm": "for",
+        "start": 136.44,
+        "end": 136.68,
+        "conf": 0.9065960049629211,
+        "sent": 25
+      },
+      {
+        "i": 217,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 136.68,
+        "end": 136.84,
+        "conf": 0.9358029365539551,
+        "sent": 25
+      },
+      {
+        "i": 218,
+        "source": "s01",
+        "w": "longest",
+        "norm": "longest",
+        "start": 136.84,
+        "end": 137.16,
+        "conf": 0.9995727853887854,
+        "sent": 25
+      },
+      {
+        "i": 219,
+        "source": "s01",
+        "w": "part,",
+        "norm": "part",
+        "start": 137.16,
+        "end": 137.48,
+        "conf": 0.9944106395958915,
+        "sent": 25
+      },
+      {
+        "i": 220,
+        "source": "s01",
+        "w": "developers,",
+        "norm": "developers",
+        "start": 137.48000000000002,
+        "end": 139.95999999999998,
+        "conf": 0.9366119061525261,
+        "sent": 25
+      },
+      {
+        "i": 221,
+        "source": "s01",
+        "w": "for",
+        "norm": "for",
+        "start": 139.96,
+        "end": 140.12,
+        "conf": 0.9549465179443359,
+        "sent": 25
+      },
+      {
+        "i": 222,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 140.12,
+        "end": 140.28,
+        "conf": 0.9997398257255554,
+        "sent": 25
+      },
+      {
+        "i": 223,
+        "source": "s01",
+        "w": "longest",
+        "norm": "longest",
+        "start": 140.28,
+        "end": 140.6,
+        "conf": 0.9997726815091986,
+        "sent": 25
+      },
+      {
+        "i": 224,
+        "source": "s01",
+        "w": "part,",
+        "norm": "part",
+        "start": 140.6,
+        "end": 140.92,
+        "conf": 0.9961607605622906,
+        "sent": 25
+      },
+      {
+        "i": 225,
+        "source": "s01",
+        "w": "developers",
+        "norm": "developers",
+        "start": 140.92000000000002,
+        "end": 141.48,
+        "conf": 0.999742292460274,
+        "sent": 25
+      },
+      {
+        "i": 226,
+        "source": "s01",
+        "w": "have",
+        "norm": "have",
+        "start": 141.48000000000002,
+        "end": 141.64000000000001,
+        "conf": 0.9998599886894226,
+        "sent": 25
+      },
+      {
+        "i": 227,
+        "source": "s01",
+        "w": "been",
+        "norm": "been",
+        "start": 141.64,
+        "end": 141.88,
+        "conf": 0.9999778866767883,
+        "sent": 25
+      },
+      {
+        "i": 228,
+        "source": "s01",
+        "w": "handwriting",
+        "norm": "handwriting",
+        "start": 141.88,
+        "end": 142.92000000000002,
+        "conf": 0.9976787724477924,
+        "sent": 25
+      },
+      {
+        "i": 229,
+        "source": "s01",
+        "w": "these",
+        "norm": "these",
+        "start": 142.92000000000002,
+        "end": 143.24,
+        "conf": 0.9998927116394043,
+        "sent": 25
+      },
+      {
+        "i": 230,
+        "source": "s01",
+        "w": "components,",
+        "norm": "components",
+        "start": 143.24,
+        "end": 144.28,
+        "conf": 0.9928720976714324,
+        "sent": 25
+      },
+      {
+        "i": 231,
+        "source": "s01",
+        "w": "but",
+        "norm": "but",
+        "start": 144.28,
+        "end": 144.52,
+        "conf": 0.9996219277381897,
+        "sent": 25
+      },
+      {
+        "i": 232,
+        "source": "s01",
+        "w": "now",
+        "norm": "now",
+        "start": 144.52,
+        "end": 144.76000000000002,
+        "conf": 0.9999145865440369,
+        "sent": 25
+      },
+      {
+        "i": 233,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 144.76,
+        "end": 145.0,
+        "conf": 0.9999859929084778,
+        "sent": 25
+      },
+      {
+        "i": 234,
+        "source": "s01",
+        "w": "model",
+        "norm": "model",
+        "start": 145.0,
+        "end": 145.4,
+        "conf": 0.9999912678982412,
+        "sent": 25
+      },
+      {
+        "i": 235,
+        "source": "s01",
+        "w": "itself",
+        "norm": "itself",
+        "start": 145.4,
+        "end": 145.95999999999998,
+        "conf": 0.9999657267500691,
+        "sent": 25
+      },
+      {
+        "i": 236,
+        "source": "s01",
+        "w": "emits",
+        "norm": "emits",
+        "start": 145.96,
+        "end": 146.44,
+        "conf": 0.9998862898340676,
+        "sent": 25
+      },
+      {
+        "i": 237,
+        "source": "s01",
+        "w": "them",
+        "norm": "them",
+        "start": 146.44,
+        "end": 146.6,
+        "conf": 0.9999886751174927,
+        "sent": 25
+      },
+      {
+        "i": 238,
+        "source": "s01",
+        "w": "directly.",
+        "norm": "directly",
+        "start": 146.6,
+        "end": 147.96,
+        "conf": 0.9789450711957872,
+        "sent": 25
+      },
+      {
+        "i": 239,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 154.68,
+        "end": 154.92000000000002,
+        "conf": 0.9987322688102722,
+        "sent": 26
+      },
+      {
+        "i": 240,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 154.92000000000002,
+        "end": 155.08,
+        "conf": 0.9999536275863647,
+        "sent": 26
+      },
+      {
+        "i": 241,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 155.07999999999998,
+        "end": 155.32,
+        "conf": 0.9999589323997498,
+        "sent": 26
+      },
+      {
+        "i": 242,
+        "source": "s01",
+        "w": "interesting",
+        "norm": "interesting",
+        "start": 155.32,
+        "end": 155.72,
+        "conf": 0.999990761252304,
+        "sent": 26
+      },
+      {
+        "i": 243,
+        "source": "s01",
+        "w": "development",
+        "norm": "development",
+        "start": 155.72,
+        "end": 156.36,
+        "conf": 0.9999888985387906,
+        "sent": 26
+      },
+      {
+        "i": 244,
+        "source": "s01",
+        "w": "here",
+        "norm": "here",
+        "start": 156.36,
+        "end": 156.60000000000002,
+        "conf": 0.9998916387557983,
+        "sent": 26
+      },
+      {
+        "i": 245,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 156.6,
+        "end": 156.84,
+        "conf": 0.9999814033508301,
+        "sent": 26
+      },
+      {
+        "i": 246,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 156.84,
+        "end": 157.16,
+        "conf": 0.9999810457229614,
+        "sent": 26
+      },
+      {
+        "i": 247,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 157.16,
+        "end": 157.48,
+        "conf": 0.9999092817306519,
+        "sent": 26
+      },
+      {
+        "i": 248,
+        "source": "s01",
+        "w": "app",
+        "norm": "app",
+        "start": 157.48000000000002,
+        "end": 157.8,
+        "conf": 0.9981956481933594,
+        "sent": 26
+      },
+      {
+        "i": 249,
+        "source": "s01",
+        "w": "transcript",
+        "norm": "transcript",
+        "start": 157.8,
+        "end": 158.68,
+        "conf": 0.99949967834078,
+        "sent": 26
+      },
+      {
+        "i": 250,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 158.68,
+        "end": 158.92000000000002,
+        "conf": 0.9999465942382812,
+        "sent": 26
+      },
+      {
+        "i": 251,
+        "source": "s01",
+        "w": "becoming",
+        "norm": "becoming",
+        "start": 158.92000000000002,
+        "end": 159.32,
+        "conf": 0.9999134523945858,
+        "sent": 26
+      },
+      {
+        "i": 252,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 159.32,
+        "end": 159.56,
+        "conf": 0.9999087452888489,
+        "sent": 26
+      },
+      {
+        "i": 253,
+        "source": "s01",
+        "w": "product",
+        "norm": "product",
+        "start": 159.56,
+        "end": 159.88,
+        "conf": 0.9999952912222554,
+        "sent": 26
+      },
+      {
+        "i": 254,
+        "source": "s01",
+        "w": "itself.",
+        "norm": "itself",
+        "start": 159.88,
+        "end": 160.68,
+        "conf": 0.987227024977095,
+        "sent": 26
+      },
+      {
+        "i": 255,
+        "source": "s01",
+        "w": "So",
+        "norm": "so",
+        "start": 160.68,
+        "end": 160.84,
+        "conf": 0.9952206611633301,
+        "sent": 27
+      },
+      {
+        "i": 256,
+        "source": "s01",
+        "w": "everything",
+        "norm": "everything",
+        "start": 160.92000000000002,
+        "end": 161.24,
+        "conf": 0.9998294115066528,
+        "sent": 27
+      },
+      {
+        "i": 257,
+        "source": "s01",
+        "w": "lives",
+        "norm": "lives",
+        "start": 161.24,
+        "end": 161.72000000000003,
+        "conf": 0.9998617380443816,
+        "sent": 27
+      },
+      {
+        "i": 258,
+        "source": "s01",
+        "w": "inside",
+        "norm": "inside",
+        "start": 161.72,
+        "end": 162.12,
+        "conf": 0.9998385776125891,
+        "sent": 27
+      },
+      {
+        "i": 259,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 162.12,
+        "end": 162.28,
+        "conf": 0.9998549222946167,
+        "sent": 27
+      },
+      {
+        "i": 260,
+        "source": "s01",
+        "w": "conversation,",
+        "norm": "conversation",
+        "start": 162.28,
+        "end": 163.08,
+        "conf": 0.9861310581933419,
+        "sent": 27
+      },
+      {
+        "i": 261,
+        "source": "s01",
+        "w": "which",
+        "norm": "which",
+        "start": 163.07999999999998,
+        "end": 163.23999999999998,
+        "conf": 0.9994462728500366,
+        "sent": 27
+      },
+      {
+        "i": 262,
+        "source": "s01",
+        "w": "can",
+        "norm": "can",
+        "start": 163.24,
+        "end": 163.48000000000002,
+        "conf": 0.9996954798698425,
+        "sent": 27
+      },
+      {
+        "i": 263,
+        "source": "s01",
+        "w": "hold",
+        "norm": "hold",
+        "start": 163.48000000000002,
+        "end": 163.88,
+        "conf": 0.9999139576998898,
+        "sent": 27
+      },
+      {
+        "i": 264,
+        "source": "s01",
+        "w": "state.",
+        "norm": "state",
+        "start": 163.88,
+        "end": 165.07999999999998,
+        "conf": 0.9633738644357662,
+        "sent": 27
+      },
+      {
+        "i": 265,
+        "source": "s01",
+        "w": "So",
+        "norm": "so",
+        "start": 166.04,
+        "end": 166.2,
+        "conf": 0.9897050857543945,
+        "sent": 28
+      },
+      {
+        "i": 266,
+        "source": "s01",
+        "w": "everything",
+        "norm": "everything",
+        "start": 166.28,
+        "end": 166.6,
+        "conf": 0.999885082244873,
+        "sent": 28
+      },
+      {
+        "i": 267,
+        "source": "s01",
+        "w": "lives",
+        "norm": "lives",
+        "start": 166.6,
+        "end": 167.0,
+        "conf": 0.9998711335634193,
+        "sent": 28
+      },
+      {
+        "i": 268,
+        "source": "s01",
+        "w": "inside",
+        "norm": "inside",
+        "start": 167.0,
+        "end": 167.48,
+        "conf": 0.9998267143043201,
+        "sent": 28
+      },
+      {
+        "i": 269,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 167.48000000000002,
+        "end": 167.64000000000001,
+        "conf": 0.9998087882995605,
+        "sent": 28
+      },
+      {
+        "i": 270,
+        "source": "s01",
+        "w": "conversation,",
+        "norm": "conversation",
+        "start": 167.64,
+        "end": 168.28,
+        "conf": 0.9869704157779814,
+        "sent": 28
+      },
+      {
+        "i": 271,
+        "source": "s01",
+        "w": "which",
+        "norm": "which",
+        "start": 168.28,
+        "end": 168.52,
+        "conf": 0.9997357726097107,
+        "sent": 28
+      },
+      {
+        "i": 272,
+        "source": "s01",
+        "w": "can",
+        "norm": "can",
+        "start": 168.52,
+        "end": 168.68,
+        "conf": 0.9999328851699829,
+        "sent": 28
+      },
+      {
+        "i": 273,
+        "source": "s01",
+        "w": "now",
+        "norm": "now",
+        "start": 168.68,
+        "end": 168.92000000000002,
+        "conf": 0.9999521970748901,
+        "sent": 28
+      },
+      {
+        "i": 274,
+        "source": "s01",
+        "w": "hold",
+        "norm": "hold",
+        "start": 168.92000000000002,
+        "end": 169.32,
+        "conf": 0.9998940775619151,
+        "sent": 28
+      },
+      {
+        "i": 275,
+        "source": "s01",
+        "w": "state,",
+        "norm": "state",
+        "start": 169.32,
+        "end": 170.12,
+        "conf": 0.990067815782463,
+        "sent": 28
+      },
+      {
+        "i": 276,
+        "source": "s01",
+        "w": "get",
+        "norm": "get",
+        "start": 170.12,
+        "end": 170.44,
+        "conf": 0.9993910789489746,
+        "sent": 28
+      },
+      {
+        "i": 277,
+        "source": "s01",
+        "w": "inputs,",
+        "norm": "inputs",
+        "start": 170.44,
+        "end": 171.16,
+        "conf": 0.9833355958140081,
+        "sent": 28
+      },
+      {
+        "i": 278,
+        "source": "s01",
+        "w": "and",
+        "norm": "and",
+        "start": 171.16,
+        "end": 171.48,
+        "conf": 0.9999005794525146,
+        "sent": 28
+      },
+      {
+        "i": 279,
+        "source": "s01",
+        "w": "emit",
+        "norm": "emit",
+        "start": 171.48000000000002,
+        "end": 171.88,
+        "conf": 0.9995725080369001,
+        "sent": 28
+      },
+      {
+        "i": 280,
+        "source": "s01",
+        "w": "outputs.",
+        "norm": "outputs",
+        "start": 171.88,
+        "end": 173.48,
+        "conf": 0.995978706514355,
+        "sent": 28
+      },
+      {
+        "i": 281,
+        "source": "s01",
+        "w": "So",
+        "norm": "so",
+        "start": 205.56,
+        "end": 205.72,
+        "conf": 0.9880344867706299,
+        "sent": 29
+      },
+      {
+        "i": 282,
+        "source": "s01",
+        "w": "we",
+        "norm": "we",
+        "start": 205.8,
+        "end": 205.96,
+        "conf": 0.9998223185539246,
+        "sent": 29
+      },
+      {
+        "i": 283,
+        "source": "s01",
+        "w": "can",
+        "norm": "can",
+        "start": 205.96,
+        "end": 206.04000000000002,
+        "conf": 0.9999709725379944,
+        "sent": 29
+      },
+      {
+        "i": 284,
+        "source": "s01",
+        "w": "see",
+        "norm": "see",
+        "start": 206.04000000000002,
+        "end": 206.20000000000002,
+        "conf": 0.9999377131462097,
+        "sent": 29
+      },
+      {
+        "i": 285,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 206.2,
+        "end": 206.35999999999999,
+        "conf": 0.9999532103538513,
+        "sent": 29
+      },
+      {
+        "i": 286,
+        "source": "s01",
+        "w": "over",
+        "norm": "over",
+        "start": 206.36,
+        "end": 206.68,
+        "conf": 0.999966025352478,
+        "sent": 29
+      },
+      {
+        "i": 287,
+        "source": "s01",
+        "w": "time,",
+        "norm": "time",
+        "start": 206.68,
+        "end": 206.92,
+        "conf": 0.9484274420866876,
+        "sent": 29
+      },
+      {
+        "i": 288,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 206.92000000000002,
+        "end": 207.24,
+        "conf": 0.9997668862342834,
+        "sent": 29
+      },
+      {
+        "i": 289,
+        "source": "s01",
+        "w": "generative",
+        "norm": "generative",
+        "start": 207.24,
+        "end": 207.88,
+        "conf": 0.9998313180743225,
+        "sent": 29
+      },
+      {
+        "i": 290,
+        "source": "s01",
+        "w": "UI",
+        "norm": "ui",
+        "start": 207.88,
+        "end": 208.36,
+        "conf": 0.9996213821026111,
+        "sent": 29
+      },
+      {
+        "i": 291,
+        "source": "s01",
+        "w": "will",
+        "norm": "will",
+        "start": 208.36,
+        "end": 208.60000000000002,
+        "conf": 0.9984413981437683,
+        "sent": 29
+      },
+      {
+        "i": 292,
+        "source": "s01",
+        "w": "actually",
+        "norm": "actually",
+        "start": 208.60000000000002,
+        "end": 208.84000000000003,
+        "conf": 0.9999809265136719,
+        "sent": 29
+      },
+      {
+        "i": 293,
+        "source": "s01",
+        "w": "change",
+        "norm": "change",
+        "start": 208.84,
+        "end": 209.23999999999998,
+        "conf": 0.9999779760661688,
+        "sent": 29
+      },
+      {
+        "i": 294,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 209.24,
+        "end": 209.48000000000002,
+        "conf": 0.9996767640113831,
+        "sent": 29
+      },
+      {
+        "i": 295,
+        "source": "s01",
+        "w": "space",
+        "norm": "space",
+        "start": 209.48000000000002,
+        "end": 210.04,
+        "conf": 0.999417006049013,
+        "sent": 29
+      },
+      {
+        "i": 296,
+        "source": "s01",
+        "w": "here.",
+        "norm": "here",
+        "start": 210.04000000000002,
+        "end": 211.0,
+        "conf": 0.9782530139813939,
+        "sent": 29
+      },
+      {
+        "i": 297,
+        "source": "s01",
+        "w": "So",
+        "norm": "so",
+        "start": 212.92000000000002,
+        "end": 213.08,
+        "conf": 0.9610776901245117,
+        "sent": 30
+      },
+      {
+        "i": 298,
+        "source": "s01",
+        "w": "over",
+        "norm": "over",
+        "start": 213.16,
+        "end": 213.4,
+        "conf": 0.9906353950500488,
+        "sent": 30
+      },
+      {
+        "i": 299,
+        "source": "s01",
+        "w": "time,",
+        "norm": "time",
+        "start": 213.4,
+        "end": 213.64000000000001,
+        "conf": 0.9626531994691833,
+        "sent": 30
+      },
+      {
+        "i": 300,
+        "source": "s01",
+        "w": "you",
+        "norm": "you",
+        "start": 213.64,
+        "end": 213.79999999999998,
+        "conf": 0.9018481969833374,
+        "sent": 30
+      },
+      {
+        "i": 301,
+        "source": "s01",
+        "w": "will",
+        "norm": "will",
+        "start": 213.8,
+        "end": 213.96,
+        "conf": 0.9998126029968262,
+        "sent": 30
+      },
+      {
+        "i": 302,
+        "source": "s01",
+        "w": "see",
+        "norm": "see",
+        "start": 213.96,
+        "end": 214.12,
+        "conf": 0.999984622001648,
+        "sent": 30
+      },
+      {
+        "i": 303,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 214.12,
+        "end": 214.28,
+        "conf": 0.9994337558746338,
+        "sent": 30
+      },
+      {
+        "i": 304,
+        "source": "s01",
+        "w": "generative",
+        "norm": "generative",
+        "start": 214.28,
+        "end": 214.84000000000003,
+        "conf": 0.9981517658061073,
+        "sent": 30
+      },
+      {
+        "i": 305,
+        "source": "s01",
+        "w": "UI",
+        "norm": "ui",
+        "start": 214.84,
+        "end": 215.39999999999998,
+        "conf": 0.999743170020223,
+        "sent": 30
+      },
+      {
+        "i": 306,
+        "source": "s01",
+        "w": "actually",
+        "norm": "actually",
+        "start": 215.4,
+        "end": 215.72,
+        "conf": 0.9999414086341858,
+        "sent": 30
+      },
+      {
+        "i": 307,
+        "source": "s01",
+        "w": "changes",
+        "norm": "changes",
+        "start": 215.72,
+        "end": 216.20000000000002,
+        "conf": 0.9999148834774302,
+        "sent": 30
+      },
+      {
+        "i": 308,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 216.2,
+        "end": 216.44,
+        "conf": 0.9999674558639526,
+        "sent": 30
+      },
+      {
+        "i": 309,
+        "source": "s01",
+        "w": "game",
+        "norm": "game",
+        "start": 216.44,
+        "end": 216.84000000000003,
+        "conf": 0.9999290396047712,
+        "sent": 30
+      },
+      {
+        "i": 310,
+        "source": "s01",
+        "w": "here.",
+        "norm": "here",
+        "start": 216.84,
+        "end": 217.39999999999998,
+        "conf": 0.9976309990939781,
+        "sent": 30
+      },
+      {
+        "i": 311,
+        "source": "s01",
+        "w": "A",
+        "norm": "a",
+        "start": 219.96,
+        "end": 220.12,
+        "conf": 0.9771354794502258,
+        "sent": 31
+      },
+      {
+        "i": 312,
+        "source": "s01",
+        "w": "chat",
+        "norm": "chat",
+        "start": 220.12,
+        "end": 220.44,
+        "conf": 0.9959248214960843,
+        "sent": 31
+      },
+      {
+        "i": 313,
+        "source": "s01",
+        "w": "bubble",
+        "norm": "bubble",
+        "start": 220.44,
+        "end": 220.76000000000002,
+        "conf": 0.9984644309266345,
+        "sent": 31
+      },
+      {
+        "i": 314,
+        "source": "s01",
+        "w": "isn't",
+        "norm": "isnt",
+        "start": 220.76,
+        "end": 221.07999999999998,
+        "conf": 0.9981107428082808,
+        "sent": 31
+      },
+      {
+        "i": 315,
+        "source": "s01",
+        "w": "just",
+        "norm": "just",
+        "start": 221.07999999999998,
+        "end": 221.23999999999998,
+        "conf": 0.9997540712356567,
+        "sent": 31
+      },
+      {
+        "i": 316,
+        "source": "s01",
+        "w": "representing",
+        "norm": "representing",
+        "start": 221.24,
+        "end": 222.04,
+        "conf": 0.9998776057260114,
+        "sent": 31
+      },
+      {
+        "i": 317,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 222.04000000000002,
+        "end": 222.36,
+        "conf": 0.9728204607963562,
+        "sent": 31
+      },
+      {
+        "i": 318,
+        "source": "s01",
+        "w": "static",
+        "norm": "static",
+        "start": 222.36,
+        "end": 223.07999999999998,
+        "conf": 0.9999565674396924,
+        "sent": 31
+      },
+      {
+        "i": 319,
+        "source": "s01",
+        "w": "text,",
+        "norm": "text",
+        "start": 223.07999999999998,
+        "end": 223.8,
+        "conf": 0.989688345017848,
+        "sent": 31
+      },
+      {
+        "i": 320,
+        "source": "s01",
+        "w": "but",
+        "norm": "but",
+        "start": 223.8,
+        "end": 224.04000000000002,
+        "conf": 0.9831491112709045,
+        "sent": 31
+      },
+      {
+        "i": 321,
+        "source": "s01",
+        "w": "instead",
+        "norm": "instead",
+        "start": 224.04000000000002,
+        "end": 224.52,
+        "conf": 0.9995188000530683,
+        "sent": 31
+      },
+      {
+        "i": 322,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 224.60000000000002,
+        "end": 224.76000000000002,
+        "conf": 0.8918499946594238,
+        "sent": 31
+      },
+      {
+        "i": 323,
+        "source": "s01",
+        "w": "has",
+        "norm": "has",
+        "start": 225.28,
+        "end": 225.6,
+        "conf": 0.9997075796127319,
+        "sent": 31
+      },
+      {
+        "i": 324,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 233.04,
+        "end": 233.28,
+        "conf": 0.9187893867492676,
+        "sent": 31
+      },
+      {
+        "i": 325,
+        "source": "s01",
+        "w": "interesting",
+        "norm": "interesting",
+        "start": 233.28,
+        "end": 233.68,
+        "conf": 0.9996983555186615,
+        "sent": 31
+      },
+      {
+        "i": 326,
+        "source": "s01",
+        "w": "development",
+        "norm": "development",
+        "start": 233.68,
+        "end": 234.08,
+        "conf": 0.9999437010740373,
+        "sent": 31
+      },
+      {
+        "i": 327,
+        "source": "s01",
+        "w": "of",
+        "norm": "of",
+        "start": 234.08,
+        "end": 234.32000000000002,
+        "conf": 0.9203969240188599,
+        "sent": 31
+      },
+      {
+        "i": 328,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 234.32,
+        "end": 234.4,
+        "conf": 0.9913316965103149,
+        "sent": 31
+      },
+      {
+        "i": 329,
+        "source": "s01",
+        "w": "long",
+        "norm": "long",
+        "start": 234.4,
+        "end": 234.56,
+        "conf": 0.9998721480369568,
+        "sent": 31
+      },
+      {
+        "i": 330,
+        "source": "s01",
+        "w": "time,",
+        "norm": "time",
+        "start": 234.56,
+        "end": 234.88000000000002,
+        "conf": 0.9420170337633571,
+        "sent": 31
+      },
+      {
+        "i": 331,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 234.88,
+        "end": 234.96,
+        "conf": 0.9987061023712158,
+        "sent": 31
+      },
+      {
+        "i": 332,
+        "source": "s01",
+        "w": "think,",
+        "norm": "think",
+        "start": 234.96,
+        "end": 235.28,
+        "conf": 0.9977023394545342,
+        "sent": 31
+      },
+      {
+        "i": 333,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 235.28,
+        "end": 235.52,
+        "conf": 0.9961226582527161,
+        "sent": 31
+      },
+      {
+        "i": 334,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 235.52,
+        "end": 235.76000000000002,
+        "conf": 0.9993883967399597,
+        "sent": 31
+      },
+      {
+        "i": 335,
+        "source": "s01",
+        "w": "generative",
+        "norm": "generative",
+        "start": 235.76,
+        "end": 236.48,
+        "conf": 0.9873085280810534,
+        "sent": 31
+      },
+      {
+        "i": 336,
+        "source": "s01",
+        "w": "UI",
+        "norm": "ui",
+        "start": 236.48,
+        "end": 237.12,
+        "conf": 0.9992410247791248,
+        "sent": 31
+      },
+      {
+        "i": 337,
+        "source": "s01",
+        "w": "will",
+        "norm": "will",
+        "start": 237.12,
+        "end": 237.36,
+        "conf": 0.9999366998672485,
+        "sent": 31
+      },
+      {
+        "i": 338,
+        "source": "s01",
+        "w": "change",
+        "norm": "change",
+        "start": 237.36,
+        "end": 237.84,
+        "conf": 0.999907134078728,
+        "sent": 31
+      },
+      {
+        "i": 339,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 237.84,
+        "end": 238.08,
+        "conf": 0.9999257326126099,
+        "sent": 31
+      },
+      {
+        "i": 340,
+        "source": "s01",
+        "w": "game",
+        "norm": "game",
+        "start": 238.08,
+        "end": 238.48000000000002,
+        "conf": 0.9999526140260082,
+        "sent": 31
+      },
+      {
+        "i": 341,
+        "source": "s01",
+        "w": "here",
+        "norm": "here",
+        "start": 238.48,
+        "end": 238.72,
+        "conf": 0.9998299479484558,
+        "sent": 31
+      },
+      {
+        "i": 342,
+        "source": "s01",
+        "w": "because",
+        "norm": "because",
+        "start": 239.04,
+        "end": 239.28,
+        "conf": 0.9995942711830139,
+        "sent": 31
+      },
+      {
+        "i": 343,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 239.28,
+        "end": 239.6,
+        "conf": 0.9994215965270996,
+        "sent": 31
+      },
+      {
+        "i": 344,
+        "source": "s01",
+        "w": "chat",
+        "norm": "chat",
+        "start": 239.6,
+        "end": 240.0,
+        "conf": 0.9994671241957378,
+        "sent": 31
+      },
+      {
+        "i": 345,
+        "source": "s01",
+        "w": "bubble",
+        "norm": "bubble",
+        "start": 240.0,
+        "end": 240.48000000000002,
+        "conf": 0.9986542982656368,
+        "sent": 31
+      },
+      {
+        "i": 346,
+        "source": "s01",
+        "w": "doesn't",
+        "norm": "doesnt",
+        "start": 240.48,
+        "end": 240.88,
+        "conf": 0.9998875242456646,
+        "sent": 31
+      },
+      {
+        "i": 347,
+        "source": "s01",
+        "w": "just",
+        "norm": "just",
+        "start": 240.88,
+        "end": 241.2,
+        "conf": 0.9999059438705444,
+        "sent": 31
+      },
+      {
+        "i": 348,
+        "source": "s01",
+        "w": "hold",
+        "norm": "hold",
+        "start": 241.2,
+        "end": 241.60000000000002,
+        "conf": 0.9999405131699982,
+        "sent": 31
+      },
+      {
+        "i": 349,
+        "source": "s01",
+        "w": "static",
+        "norm": "static",
+        "start": 241.6,
+        "end": 242.16,
+        "conf": 0.9998331427239018,
+        "sent": 31
+      },
+      {
+        "i": 350,
+        "source": "s01",
+        "w": "text",
+        "norm": "text",
+        "start": 242.16,
+        "end": 242.64000000000001,
+        "conf": 0.999956428086322,
+        "sent": 31
+      },
+      {
+        "i": 351,
+        "source": "s01",
+        "w": "anymore.",
+        "norm": "anymore",
+        "start": 242.64,
+        "end": 243.76,
+        "conf": 0.9829969602904407,
+        "sent": 31
+      },
+      {
+        "i": 352,
+        "source": "s01",
+        "w": "It",
+        "norm": "it",
+        "start": 243.76,
+        "end": 244.07999999999998,
+        "conf": 0.996898353099823,
+        "sent": 32
+      },
+      {
+        "i": 353,
+        "source": "s01",
+        "w": "arrives,",
+        "norm": "arrives",
+        "start": 244.07999999999998,
+        "end": 244.96,
+        "conf": 0.9841439894080329,
+        "sent": 32
+      },
+      {
+        "i": 354,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 244.96,
+        "end": 245.12,
+        "conf": 0.9964108467102051,
+        "sent": 32
+      },
+      {
+        "i": 355,
+        "source": "s01",
+        "w": "then",
+        "norm": "then",
+        "start": 245.12,
+        "end": 245.36,
+        "conf": 0.9997873306274414,
+        "sent": 32
+      },
+      {
+        "i": 356,
+        "source": "s01",
+        "w": "needs",
+        "norm": "needs",
+        "start": 245.36,
+        "end": 245.84,
+        "conf": 0.9999879598599364,
+        "sent": 32
+      },
+      {
+        "i": 357,
+        "source": "s01",
+        "w": "to",
+        "norm": "to",
+        "start": 245.84,
+        "end": 246.16,
+        "conf": 0.9999367594718933,
+        "sent": 32
+      },
+      {
+        "i": 358,
+        "source": "s01",
+        "w": "update",
+        "norm": "update",
+        "start": 246.16,
+        "end": 246.8,
+        "conf": 0.9999791381194477,
+        "sent": 32
+      },
+      {
+        "i": 359,
+        "source": "s01",
+        "w": "in",
+        "norm": "in",
+        "start": 246.8,
+        "end": 247.12,
+        "conf": 0.9997248649597168,
+        "sent": 32
+      },
+      {
+        "i": 360,
+        "source": "s01",
+        "w": "real",
+        "norm": "real",
+        "start": 247.12,
+        "end": 247.44,
+        "conf": 0.9999269843101501,
+        "sent": 32
+      },
+      {
+        "i": 361,
+        "source": "s01",
+        "w": "time",
+        "norm": "time",
+        "start": 247.44,
+        "end": 247.6,
+        "conf": 0.9999921917915344,
+        "sent": 32
+      },
+      {
+        "i": 362,
+        "source": "s01",
+        "w": "and",
+        "norm": "and",
+        "start": 247.84,
+        "end": 248.16,
+        "conf": 0.9996124505996704,
+        "sent": 32
+      },
+      {
+        "i": 363,
+        "source": "s01",
+        "w": "keep",
+        "norm": "keep",
+        "start": 248.16,
+        "end": 248.48,
+        "conf": 0.9993524551391602,
+        "sent": 32
+      },
+      {
+        "i": 364,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 248.48000000000002,
+        "end": 248.8,
+        "conf": 0.9998036026954651,
+        "sent": 32
+      },
+      {
+        "i": 365,
+        "source": "s01",
+        "w": "state",
+        "norm": "state",
+        "start": 248.8,
+        "end": 249.28,
+        "conf": 0.999791043170849,
+        "sent": 32
+      },
+      {
+        "i": 366,
+        "source": "s01",
+        "w": "updated",
+        "norm": "updated",
+        "start": 249.28,
+        "end": 250.24,
+        "conf": 0.99994830111313,
+        "sent": 32
+      },
+      {
+        "i": 367,
+        "source": "s01",
+        "w": "for",
+        "norm": "for",
+        "start": 250.24,
+        "end": 250.56,
+        "conf": 0.9998039603233337,
+        "sent": 32
+      },
+      {
+        "i": 368,
+        "source": "s01",
+        "w": "every",
+        "norm": "every",
+        "start": 250.56,
+        "end": 250.88,
+        "conf": 0.9999790787696838,
+        "sent": 32
+      },
+      {
+        "i": 369,
+        "source": "s01",
+        "w": "participant",
+        "norm": "participant",
+        "start": 250.88,
+        "end": 251.44,
+        "conf": 0.9999980727821097,
+        "sent": 32
+      },
+      {
+        "i": 370,
+        "source": "s01",
+        "w": "in",
+        "norm": "in",
+        "start": 251.44,
+        "end": 251.68,
+        "conf": 0.9999459385871887,
+        "sent": 32
+      },
+      {
+        "i": 371,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 251.68,
+        "end": 251.92000000000002,
+        "conf": 0.9981037974357605,
+        "sent": 32
+      },
+      {
+        "i": 372,
+        "source": "s01",
+        "w": "conversation.",
+        "norm": "conversation",
+        "start": 251.92000000000002,
+        "end": 253.2,
+        "conf": 0.9750060145628977,
+        "sent": 32
+      },
+      {
+        "i": 373,
+        "source": "s01",
+        "w": "So,",
+        "norm": "so",
+        "start": 266.32,
+        "end": 266.56,
+        "conf": 0.9544252316870667,
+        "sent": 33
+      },
+      {
+        "i": 374,
+        "source": "s01",
+        "w": "if",
+        "norm": "if",
+        "start": 266.56,
+        "end": 266.64,
+        "conf": 0.9788988828659058,
+        "sent": 33
+      },
+      {
+        "i": 375,
+        "source": "s01",
+        "w": "you're",
+        "norm": "youre",
+        "start": 266.64,
+        "end": 266.8,
+        "conf": 0.9969800247606116,
+        "sent": 33
+      },
+      {
+        "i": 376,
+        "source": "s01",
+        "w": "using",
+        "norm": "using",
+        "start": 266.8,
+        "end": 267.12,
+        "conf": 0.9999618225030713,
+        "sent": 33
+      },
+      {
+        "i": 377,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 267.12,
+        "end": 267.28000000000003,
+        "conf": 0.9985958337783813,
+        "sent": 33
+      },
+      {
+        "i": 378,
+        "source": "s01",
+        "w": "conversation,",
+        "norm": "conversation",
+        "start": 267.28,
+        "end": 268.24,
+        "conf": 0.9636928484833851,
+        "sent": 33
+      },
+      {
+        "i": 379,
+        "source": "s01",
+        "w": "so",
+        "norm": "so",
+        "start": 268.24,
+        "end": 268.40000000000003,
+        "conf": 0.9257294535636902,
+        "sent": 33
+      },
+      {
+        "i": 380,
+        "source": "s01",
+        "w": "if",
+        "norm": "if",
+        "start": 268.48,
+        "end": 268.56,
+        "conf": 0.9993559122085571,
+        "sent": 33
+      },
+      {
+        "i": 381,
+        "source": "s01",
+        "w": "your",
+        "norm": "your",
+        "start": 268.56,
+        "end": 268.72,
+        "conf": 0.9911494255065918,
+        "sent": 33
+      },
+      {
+        "i": 382,
+        "source": "s01",
+        "w": "app",
+        "norm": "app",
+        "start": 268.72,
+        "end": 268.96000000000004,
+        "conf": 0.9990931749343872,
+        "sent": 33
+      },
+      {
+        "i": 383,
+        "source": "s01",
+        "w": "has",
+        "norm": "has",
+        "start": 268.96,
+        "end": 269.12,
+        "conf": 0.9997662305831909,
+        "sent": 33
+      },
+      {
+        "i": 384,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 269.12,
+        "end": 269.28000000000003,
+        "conf": 0.9998877644538879,
+        "sent": 33
+      },
+      {
+        "i": 385,
+        "source": "s01",
+        "w": "conversation",
+        "norm": "conversation",
+        "start": 269.28,
+        "end": 269.84000000000003,
+        "conf": 0.9996257755793463,
+        "sent": 33
+      },
+      {
+        "i": 386,
+        "source": "s01",
+        "w": "interface,",
+        "norm": "interface",
+        "start": 269.84000000000003,
+        "end": 270.56,
+        "conf": 0.9978385420259775,
+        "sent": 33
+      },
+      {
+        "i": 387,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 270.56,
+        "end": 270.64,
+        "conf": 0.9992578625679016,
+        "sent": 33
+      },
+      {
+        "i": 388,
+        "source": "s01",
+        "w": "hope",
+        "norm": "hope",
+        "start": 270.64,
+        "end": 270.8,
+        "conf": 0.9999647138872017,
+        "sent": 33
+      },
+      {
+        "i": 389,
+        "source": "s01",
+        "w": "you're",
+        "norm": "youre",
+        "start": 270.8,
+        "end": 271.03999999999996,
+        "conf": 0.9978691617327337,
+        "sent": 33
+      },
+      {
+        "i": 390,
+        "source": "s01",
+        "w": "using",
+        "norm": "using",
+        "start": 271.04,
+        "end": 271.52,
+        "conf": 0.9999941289323638,
+        "sent": 33
+      },
+      {
+        "i": 391,
+        "source": "s01",
+        "w": "something",
+        "norm": "something",
+        "start": 271.52,
+        "end": 271.84,
+        "conf": 0.999958336353302,
+        "sent": 33
+      },
+      {
+        "i": 392,
+        "source": "s01",
+        "w": "like",
+        "norm": "like",
+        "start": 271.84000000000003,
+        "end": 272.16,
+        "conf": 0.9999820590019226,
+        "sent": 33
+      },
+      {
+        "i": 393,
+        "source": "s01",
+        "w": "stream,",
+        "norm": "stream",
+        "start": 272.16,
+        "end": 273.2,
+        "conf": 0.9585482151904534,
+        "sent": 33
+      },
+      {
+        "i": 394,
+        "source": "s01",
+        "w": "where",
+        "norm": "where",
+        "start": 273.2,
+        "end": 273.52,
+        "conf": 0.9986720681190491,
+        "sent": 33
+      },
+      {
+        "i": 395,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 273.52,
+        "end": 273.84,
+        "conf": 0.9994866847991943,
+        "sent": 33
+      },
+      {
+        "i": 396,
+        "source": "s01",
+        "w": "chat",
+        "norm": "chat",
+        "start": 273.84000000000003,
+        "end": 274.16,
+        "conf": 0.9989286129643449,
+        "sent": 33
+      },
+      {
+        "i": 397,
+        "source": "s01",
+        "w": "bubble",
+        "norm": "bubble",
+        "start": 274.15999999999997,
+        "end": 274.56,
+        "conf": 0.9968508932947959,
+        "sent": 33
+      },
+      {
+        "i": 398,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 274.56,
+        "end": 274.64,
+        "conf": 0.9996300339698792,
+        "sent": 33
+      },
+      {
+        "i": 399,
+        "source": "s01",
+        "w": "already",
+        "norm": "already",
+        "start": 274.64,
+        "end": 274.88,
+        "conf": 0.9999725811627008,
+        "sent": 33
+      },
+      {
+        "i": 400,
+        "source": "s01",
+        "w": "treated",
+        "norm": "treated",
+        "start": 274.88,
+        "end": 275.2,
+        "conf": 0.9999617724520812,
+        "sent": 33
+      },
+      {
+        "i": 401,
+        "source": "s01",
+        "w": "as",
+        "norm": "as",
+        "start": 275.2,
+        "end": 275.36,
+        "conf": 0.9999754428863525,
+        "sent": 33
+      },
+      {
+        "i": 402,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 275.36,
+        "end": 275.6,
+        "conf": 0.9998753070831299,
+        "sent": 33
+      },
+      {
+        "i": 403,
+        "source": "s01",
+        "w": "real-time",
+        "norm": "realtime",
+        "start": 275.6,
+        "end": 276.16,
+        "conf": 0.9960865654040866,
+        "sent": 33
+      },
+      {
+        "i": 404,
+        "source": "s01",
+        "w": "interface",
+        "norm": "interface",
+        "start": 276.15999999999997,
+        "end": 276.8,
+        "conf": 0.9999902843728399,
+        "sent": 33
+      },
+      {
+        "i": 405,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 276.8,
+        "end": 276.96000000000004,
+        "conf": 0.9998676180839539,
+        "sent": 33
+      },
+      {
+        "i": 406,
+        "source": "s01",
+        "w": "can",
+        "norm": "can",
+        "start": 276.96000000000004,
+        "end": 277.20000000000005,
+        "conf": 0.9999482035636902,
+        "sent": 33
+      },
+      {
+        "i": 407,
+        "source": "s01",
+        "w": "hold",
+        "norm": "hold",
+        "start": 277.2,
+        "end": 277.52000000000004,
+        "conf": 0.999939053658255,
+        "sent": 33
+      },
+      {
+        "i": 408,
+        "source": "s01",
+        "w": "state",
+        "norm": "state",
+        "start": 277.52,
+        "end": 278.0,
+        "conf": 0.9993809794859734,
+        "sent": 33
+      },
+      {
+        "i": 409,
+        "source": "s01",
+        "w": "and",
+        "norm": "and",
+        "start": 278.0,
+        "end": 278.24,
+        "conf": 0.9998819828033447,
+        "sent": 33
+      },
+      {
+        "i": 410,
+        "source": "s01",
+        "w": "change",
+        "norm": "change",
+        "start": 278.24,
+        "end": 278.88,
+        "conf": 0.9997489451747358,
+        "sent": 33
+      },
+      {
+        "i": 411,
+        "source": "s01",
+        "w": "over",
+        "norm": "over",
+        "start": 278.88,
+        "end": 279.2,
+        "conf": 0.99982750415802,
+        "sent": 33
+      },
+      {
+        "i": 412,
+        "source": "s01",
+        "w": "time.",
+        "norm": "time",
+        "start": 279.2,
+        "end": 280.16,
+        "conf": 0.9707324754049715,
+        "sent": 33
+      },
+      {
+        "i": 413,
+        "source": "s01",
+        "w": "So,",
+        "norm": "so",
+        "start": 297.28,
+        "end": 297.52,
+        "conf": 0.9517068018511139,
+        "sent": 34
+      },
+      {
+        "i": 414,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 297.52,
+        "end": 297.59999999999997,
+        "conf": 0.9050423502922058,
+        "sent": 34
+      },
+      {
+        "i": 415,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 297.6,
+        "end": 297.76000000000005,
+        "conf": 0.9999614953994751,
+        "sent": 34
+      },
+      {
+        "i": 416,
+        "source": "s01",
+        "w": "it's",
+        "norm": "its",
+        "start": 297.76,
+        "end": 298.0,
+        "conf": 0.9979616903289017,
+        "sent": 34
+      },
+      {
+        "i": 417,
+        "source": "s01",
+        "w": "interesting",
+        "norm": "interesting",
+        "start": 298.0,
+        "end": 298.32,
+        "conf": 0.9997591384973826,
+        "sent": 34
+      },
+      {
+        "i": 418,
+        "source": "s01",
+        "w": "to",
+        "norm": "to",
+        "start": 298.32,
+        "end": 298.48,
+        "conf": 0.999630331993103,
+        "sent": 34
+      },
+      {
+        "i": 419,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 298.48,
+        "end": 298.64000000000004,
+        "conf": 0.9997794032096863,
+        "sent": 34
+      },
+      {
+        "i": 420,
+        "source": "s01",
+        "w": "about",
+        "norm": "about",
+        "start": 298.64,
+        "end": 298.96,
+        "conf": 0.9995100498199463,
+        "sent": 34
+      },
+      {
+        "i": 421,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 301.52,
+        "end": 301.76,
+        "conf": 0.9786255359649658,
+        "sent": 34
+      },
+      {
+        "i": 422,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 301.76,
+        "end": 302.0,
+        "conf": 0.9991419315338135,
+        "sent": 34
+      },
+      {
+        "i": 423,
+        "source": "s01",
+        "w": "next",
+        "norm": "next",
+        "start": 302.0,
+        "end": 302.32,
+        "conf": 0.99996018409729,
+        "sent": 34
+      },
+      {
+        "i": 424,
+        "source": "s01",
+        "w": "interface",
+        "norm": "interface",
+        "start": 302.32,
+        "end": 302.96000000000004,
+        "conf": 0.9999831515307428,
+        "sent": 34
+      },
+      {
+        "i": 425,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 302.96000000000004,
+        "end": 303.12000000000006,
+        "conf": 0.9944770932197571,
+        "sent": 34
+      },
+      {
+        "i": 426,
+        "source": "s01",
+        "w": "your",
+        "norm": "your",
+        "start": 303.12,
+        "end": 303.28000000000003,
+        "conf": 0.9990600347518921,
+        "sent": 34
+      },
+      {
+        "i": 427,
+        "source": "s01",
+        "w": "users",
+        "norm": "users",
+        "start": 303.28,
+        "end": 303.68,
+        "conf": 0.9998793303514558,
+        "sent": 34
+      },
+      {
+        "i": 428,
+        "source": "s01",
+        "w": "will",
+        "norm": "will",
+        "start": 303.68,
+        "end": 303.84000000000003,
+        "conf": 0.9997180700302124,
+        "sent": 34
+      },
+      {
+        "i": 429,
+        "source": "s01",
+        "w": "interact",
+        "norm": "interact",
+        "start": 303.84000000000003,
+        "end": 304.32,
+        "conf": 0.999972343085102,
+        "sent": 34
+      },
+      {
+        "i": 430,
+        "source": "s01",
+        "w": "with",
+        "norm": "with",
+        "start": 304.32,
+        "end": 304.56,
+        "conf": 0.9999668002128601,
+        "sent": 34
+      },
+      {
+        "i": 431,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 304.56,
+        "end": 304.8,
+        "conf": 0.998873770236969,
+        "sent": 34
+      },
+      {
+        "i": 432,
+        "source": "s01",
+        "w": "not",
+        "norm": "not",
+        "start": 304.8,
+        "end": 305.04,
+        "conf": 0.9998728632926941,
+        "sent": 34
+      },
+      {
+        "i": 433,
+        "source": "s01",
+        "w": "necessarily",
+        "norm": "necessarily",
+        "start": 305.04,
+        "end": 305.76000000000005,
+        "conf": 0.9999634765845781,
+        "sent": 34
+      },
+      {
+        "i": 434,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 305.76,
+        "end": 306.08,
+        "conf": 0.9995895028114319,
+        "sent": 34
+      },
+      {
+        "i": 435,
+        "source": "s01",
+        "w": "screen",
+        "norm": "screen",
+        "start": 306.08,
+        "end": 306.56,
+        "conf": 0.9998945105682236,
+        "sent": 34
+      },
+      {
+        "i": 436,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 306.56,
+        "end": 306.72,
+        "conf": 0.9985837936401367,
+        "sent": 34
+      },
+      {
+        "i": 437,
+        "source": "s01",
+        "w": "you",
+        "norm": "you",
+        "start": 306.72,
+        "end": 306.96000000000004,
+        "conf": 0.999901294708252,
+        "sent": 34
+      },
+      {
+        "i": 438,
+        "source": "s01",
+        "w": "build,",
+        "norm": "build",
+        "start": 306.96000000000004,
+        "end": 307.59999999999997,
+        "conf": 0.9640345802692529,
+        "sent": 34
+      },
+      {
+        "i": 439,
+        "source": "s01",
+        "w": "but",
+        "norm": "but",
+        "start": 307.6,
+        "end": 307.84000000000003,
+        "conf": 0.9972459673881531,
+        "sent": 34
+      },
+      {
+        "i": 440,
+        "source": "s01",
+        "w": "instead",
+        "norm": "instead",
+        "start": 307.84000000000003,
+        "end": 308.15999999999997,
+        "conf": 0.9998966350213788,
+        "sent": 34
+      },
+      {
+        "i": 441,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 308.24,
+        "end": 308.40000000000003,
+        "conf": 0.9994685053825378,
+        "sent": 34
+      },
+      {
+        "i": 442,
+        "source": "s01",
+        "w": "can",
+        "norm": "can",
+        "start": 308.4,
+        "end": 308.64,
+        "conf": 0.999941349029541,
+        "sent": 34
+      },
+      {
+        "i": 443,
+        "source": "s01",
+        "w": "be",
+        "norm": "be",
+        "start": 308.64,
+        "end": 308.88,
+        "conf": 0.9999691247940063,
+        "sent": 34
+      },
+      {
+        "i": 444,
+        "source": "s01",
+        "w": "tiny",
+        "norm": "tiny",
+        "start": 308.88,
+        "end": 309.59999999999997,
+        "conf": 0.9999723233776053,
+        "sent": 34
+      },
+      {
+        "i": 445,
+        "source": "s01",
+        "w": "components.",
+        "norm": "components",
+        "start": 309.6,
+        "end": 311.12,
+        "conf": 0.9794138052499102,
+        "sent": 34
+      },
+      {
+        "i": 446,
+        "source": "s01",
+        "w": "So,",
+        "norm": "so",
+        "start": 313.04,
+        "end": 313.28,
+        "conf": 0.983533841974142,
+        "sent": 35
+      },
+      {
+        "i": 447,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 313.28,
+        "end": 313.35999999999996,
+        "conf": 0.9958447813987732,
+        "sent": 35
+      },
+      {
+        "i": 448,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 313.36,
+        "end": 313.52000000000004,
+        "conf": 0.9999428987503052,
+        "sent": 35
+      },
+      {
+        "i": 449,
+        "source": "s01",
+        "w": "it's",
+        "norm": "its",
+        "start": 313.52,
+        "end": 313.68,
+        "conf": 0.9996074783788246,
+        "sent": 35
+      },
+      {
+        "i": 450,
+        "source": "s01",
+        "w": "interesting",
+        "norm": "interesting",
+        "start": 313.68,
+        "end": 314.08000000000004,
+        "conf": 0.999959140195793,
+        "sent": 35
+      },
+      {
+        "i": 451,
+        "source": "s01",
+        "w": "to",
+        "norm": "to",
+        "start": 314.08,
+        "end": 314.15999999999997,
+        "conf": 0.9999308586120605,
+        "sent": 35
+      },
+      {
+        "i": 452,
+        "source": "s01",
+        "w": "see",
+        "norm": "see",
+        "start": 314.15999999999997,
+        "end": 314.32,
+        "conf": 0.999972939491272,
+        "sent": 35
+      },
+      {
+        "i": 453,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 314.32,
+        "end": 314.56,
+        "conf": 0.9998999834060669,
+        "sent": 35
+      },
+      {
+        "i": 454,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 314.56,
+        "end": 314.72,
+        "conf": 0.9996402263641357,
+        "sent": 35
+      },
+      {
+        "i": 455,
+        "source": "s01",
+        "w": "next",
+        "norm": "next",
+        "start": 314.72,
+        "end": 314.96000000000004,
+        "conf": 0.999941349029541,
+        "sent": 35
+      },
+      {
+        "i": 456,
+        "source": "s01",
+        "w": "interface",
+        "norm": "interface",
+        "start": 314.96000000000004,
+        "end": 315.52000000000004,
+        "conf": 0.9999715082953132,
+        "sent": 35
+      },
+      {
+        "i": 457,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 315.52,
+        "end": 315.68,
+        "conf": 0.9912015199661255,
+        "sent": 35
+      },
+      {
+        "i": 458,
+        "source": "s01",
+        "w": "your",
+        "norm": "your",
+        "start": 315.68,
+        "end": 315.92,
+        "conf": 0.9993441104888916,
+        "sent": 35
+      },
+      {
+        "i": 459,
+        "source": "s01",
+        "w": "users",
+        "norm": "users",
+        "start": 315.92,
+        "end": 316.32,
+        "conf": 0.9999399777286188,
+        "sent": 35
+      },
+      {
+        "i": 460,
+        "source": "s01",
+        "w": "might",
+        "norm": "might",
+        "start": 316.32,
+        "end": 316.64,
+        "conf": 0.9998161792755127,
+        "sent": 35
+      },
+      {
+        "i": 461,
+        "source": "s01",
+        "w": "interact",
+        "norm": "interact",
+        "start": 316.64,
+        "end": 317.2,
+        "conf": 0.9999943375449901,
+        "sent": 35
+      },
+      {
+        "i": 462,
+        "source": "s01",
+        "w": "with",
+        "norm": "with",
+        "start": 317.2,
+        "end": 317.52,
+        "conf": 0.9999731779098511,
+        "sent": 35
+      },
+      {
+        "i": 463,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 317.52,
+        "end": 317.84,
+        "conf": 0.9998291730880737,
+        "sent": 35
+      },
+      {
+        "i": 464,
+        "source": "s01",
+        "w": "not",
+        "norm": "not",
+        "start": 317.84000000000003,
+        "end": 318.08000000000004,
+        "conf": 0.9999358057975769,
+        "sent": 35
+      },
+      {
+        "i": 465,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 318.08,
+        "end": 318.32,
+        "conf": 0.9998997449874878,
+        "sent": 35
+      },
+      {
+        "i": 466,
+        "source": "s01",
+        "w": "screen",
+        "norm": "screen",
+        "start": 318.32,
+        "end": 318.88000000000005,
+        "conf": 0.9998502941611104,
+        "sent": 35
+      },
+      {
+        "i": 467,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 318.88,
+        "end": 319.12,
+        "conf": 0.9989424347877502,
+        "sent": 35
+      },
+      {
+        "i": 468,
+        "source": "s01",
+        "w": "you",
+        "norm": "you",
+        "start": 319.12,
+        "end": 319.28000000000003,
+        "conf": 0.9999595284461975,
+        "sent": 35
+      },
+      {
+        "i": 469,
+        "source": "s01",
+        "w": "designed,",
+        "norm": "designed",
+        "start": 319.28,
+        "end": 320.08,
+        "conf": 0.9943830758820633,
+        "sent": 35
+      },
+      {
+        "i": 470,
+        "source": "s01",
+        "w": "but",
+        "norm": "but",
+        "start": 320.08,
+        "end": 320.32,
+        "conf": 0.9956041574478149,
+        "sent": 35
+      },
+      {
+        "i": 471,
+        "source": "s01",
+        "w": "instead",
+        "norm": "instead",
+        "start": 320.32,
+        "end": 320.56,
+        "conf": 0.9999165073655922,
+        "sent": 35
+      },
+      {
+        "i": 472,
+        "source": "s01",
+        "w": "it",
+        "norm": "it",
+        "start": 320.72,
+        "end": 320.88000000000005,
+        "conf": 0.9995877742767334,
+        "sent": 35
+      },
+      {
+        "i": 473,
+        "source": "s01",
+        "w": "might",
+        "norm": "might",
+        "start": 320.88,
+        "end": 321.12,
+        "conf": 0.9999535083770752,
+        "sent": 35
+      },
+      {
+        "i": 474,
+        "source": "s01",
+        "w": "be",
+        "norm": "be",
+        "start": 321.12,
+        "end": 321.36,
+        "conf": 0.9999651312828064,
+        "sent": 35
+      },
+      {
+        "i": 475,
+        "source": "s01",
+        "w": "something",
+        "norm": "something",
+        "start": 321.36,
+        "end": 321.68,
+        "conf": 0.9999787211418152,
+        "sent": 35
+      },
+      {
+        "i": 476,
+        "source": "s01",
+        "w": "like",
+        "norm": "like",
+        "start": 321.68,
+        "end": 322.0,
+        "conf": 0.9999857544898987,
+        "sent": 35
+      },
+      {
+        "i": 477,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 322.0,
+        "end": 322.32,
+        "conf": 0.9999703168869019,
+        "sent": 35
+      },
+      {
+        "i": 478,
+        "source": "s01",
+        "w": "reply",
+        "norm": "reply",
+        "start": 322.32,
+        "end": 322.96,
+        "conf": 0.999992132172501,
+        "sent": 35
+      },
+      {
+        "i": 479,
+        "source": "s01",
+        "w": "or",
+        "norm": "or",
+        "start": 323.28,
+        "end": 323.59999999999997,
+        "conf": 0.9994183778762817,
+        "sent": 35
+      },
+      {
+        "i": 480,
+        "source": "s01",
+        "w": "anything",
+        "norm": "anything",
+        "start": 323.6,
+        "end": 324.24,
+        "conf": 0.9999460266293921,
+        "sent": 35
+      },
+      {
+        "i": 481,
+        "source": "s01",
+        "w": "inside",
+        "norm": "inside",
+        "start": 324.24,
+        "end": 324.88,
+        "conf": 0.9999049857106411,
+        "sent": 35
+      },
+      {
+        "i": 482,
+        "source": "s01",
+        "w": "a",
+        "norm": "a",
+        "start": 324.88,
+        "end": 325.2,
+        "conf": 0.9998109936714172,
+        "sent": 35
+      },
+      {
+        "i": 483,
+        "source": "s01",
+        "w": "chat",
+        "norm": "chat",
+        "start": 325.2,
+        "end": 325.6,
+        "conf": 0.9995583293886836,
+        "sent": 35
+      },
+      {
+        "i": 484,
+        "source": "s01",
+        "w": "bubble",
+        "norm": "bubble",
+        "start": 325.6,
+        "end": 326.47999999999996,
+        "conf": 0.9982489291656862,
+        "sent": 35
+      },
+      {
+        "i": 485,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 326.48,
+        "end": 326.8,
+        "conf": 0.9993098378181458,
+        "sent": 35
+      },
+      {
+        "i": 486,
+        "source": "s01",
+        "w": "will",
+        "norm": "will",
+        "start": 326.8,
+        "end": 327.04,
+        "conf": 0.9985208511352539,
+        "sent": 35
+      },
+      {
+        "i": 487,
+        "source": "s01",
+        "w": "use",
+        "norm": "use",
+        "start": 327.36,
+        "end": 327.68,
+        "conf": 0.9999746084213257,
+        "sent": 35
+      },
+      {
+        "i": 488,
+        "source": "s01",
+        "w": "pre-built",
+        "norm": "prebuilt",
+        "start": 327.68,
+        "end": 328.4,
+        "conf": 0.998512059070439,
+        "sent": 35
+      },
+      {
+        "i": 489,
+        "source": "s01",
+        "w": "components.",
+        "norm": "components",
+        "start": 328.4,
+        "end": 329.44,
+        "conf": 0.998632551161189,
+        "sent": 35
+      },
+      {
+        "i": 490,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 329.48,
+        "end": 329.64000000000004,
+        "conf": 0.9994195103645325,
+        "sent": 36
+      },
+      {
+        "i": 491,
+        "source": "s01",
+        "w": "hope",
+        "norm": "hope",
+        "start": 329.64,
+        "end": 329.96000000000004,
+        "conf": 0.9996045650294011,
+        "sent": 36
+      },
+      {
+        "i": 492,
+        "source": "s01",
+        "w": "you're",
+        "norm": "youre",
+        "start": 329.96,
+        "end": 330.2,
+        "conf": 0.9976887825113794,
+        "sent": 36
+      },
+      {
+        "i": 493,
+        "source": "s01",
+        "w": "ready",
+        "norm": "ready",
+        "start": 330.2,
+        "end": 330.44,
+        "conf": 0.9999796746107805,
+        "sent": 36
+      },
+      {
+        "i": 494,
+        "source": "s01",
+        "w": "for",
+        "norm": "for",
+        "start": 330.44,
+        "end": 330.68,
+        "conf": 0.9999818801879883,
+        "sent": 36
+      },
+      {
+        "i": 495,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 330.68,
+        "end": 330.76,
+        "conf": 0.9998825192451477,
+        "sent": 36
+      },
+      {
+        "i": 496,
+        "source": "s01",
+        "w": "because",
+        "norm": "because",
+        "start": 331.0,
+        "end": 331.32,
+        "conf": 0.9998144507408142,
+        "sent": 36
+      },
+      {
+        "i": 497,
+        "source": "s01",
+        "w": "GPT",
+        "norm": "gpt",
+        "start": 331.32,
+        "end": 332.12,
+        "conf": 0.9983176162650166,
+        "sent": 36
+      },
+      {
+        "i": 498,
+        "source": "s01",
+        "w": "really",
+        "norm": "really",
+        "start": 332.12,
+        "end": 332.44,
+        "conf": 0.9999486804008484,
+        "sent": 36
+      },
+      {
+        "i": 499,
+        "source": "s01",
+        "w": "shows",
+        "norm": "shows",
+        "start": 332.44,
+        "end": 332.84000000000003,
+        "conf": 0.9999499015466722,
+        "sent": 36
+      },
+      {
+        "i": 500,
+        "source": "s01",
+        "w": "us",
+        "norm": "us",
+        "start": 332.84,
+        "end": 333.08,
+        "conf": 0.9999789595603943,
+        "sent": 36
+      },
+      {
+        "i": 501,
+        "source": "s01",
+        "w": "how",
+        "norm": "how",
+        "start": 333.08,
+        "end": 333.24,
+        "conf": 0.9999680519104004,
+        "sent": 36
+      },
+      {
+        "i": 502,
+        "source": "s01",
+        "w": "it's",
+        "norm": "its",
+        "start": 333.24,
+        "end": 333.56,
+        "conf": 0.999599952384159,
+        "sent": 36
+      },
+      {
+        "i": 503,
+        "source": "s01",
+        "w": "gonna",
+        "norm": "gonna",
+        "start": 333.56,
+        "end": 333.8,
+        "conf": 0.9019923806190491,
+        "sent": 36
+      },
+      {
+        "i": 504,
+        "source": "s01",
+        "w": "be.",
+        "norm": "be",
+        "start": 334.12,
+        "end": 334.68,
+        "conf": 0.9534113893643873,
+        "sent": 36
+      },
+      {
+        "i": 505,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 335.32,
+        "end": 335.48,
+        "conf": 0.9959544539451599,
+        "sent": 37
+      },
+      {
+        "i": 506,
+        "source": "s01",
+        "w": "hope",
+        "norm": "hope",
+        "start": 335.48,
+        "end": 335.71999999999997,
+        "conf": 0.9971639099282426,
+        "sent": 37
+      },
+      {
+        "i": 507,
+        "source": "s01",
+        "w": "you're",
+        "norm": "youre",
+        "start": 335.72,
+        "end": 335.88,
+        "conf": 0.9989554902632979,
+        "sent": 37
+      },
+      {
+        "i": 508,
+        "source": "s01",
+        "w": "ready",
+        "norm": "ready",
+        "start": 335.88,
+        "end": 336.12,
+        "conf": 0.9999288593344366,
+        "sent": 37
+      },
+      {
+        "i": 509,
+        "source": "s01",
+        "w": "for",
+        "norm": "for",
+        "start": 336.12,
+        "end": 336.36,
+        "conf": 0.9999650716781616,
+        "sent": 37
+      },
+      {
+        "i": 510,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 336.36,
+        "end": 336.44,
+        "conf": 0.9998358488082886,
+        "sent": 37
+      },
+      {
+        "i": 511,
+        "source": "s01",
+        "w": "because",
+        "norm": "because",
+        "start": 336.6,
+        "end": 336.84000000000003,
+        "conf": 0.9998077154159546,
+        "sent": 37
+      },
+      {
+        "i": 512,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 336.84,
+        "end": 336.91999999999996,
+        "conf": 0.9994614124298096,
+        "sent": 37
+      },
+      {
+        "i": 513,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 336.92,
+        "end": 337.08000000000004,
+        "conf": 0.9999853372573853,
+        "sent": 37
+      },
+      {
+        "i": 514,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 337.08,
+        "end": 337.24,
+        "conf": 0.9999240040779114,
+        "sent": 37
+      },
+      {
+        "i": 515,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 337.24,
+        "end": 337.48,
+        "conf": 0.9999707937240601,
+        "sent": 37
+      },
+      {
+        "i": 516,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 337.48,
+        "end": 337.72,
+        "conf": 0.9998433589935303,
+        "sent": 37
+      },
+      {
+        "i": 517,
+        "source": "s01",
+        "w": "future.",
+        "norm": "future",
+        "start": 337.72,
+        "end": 339.0,
+        "conf": 0.9803783575532727,
+        "sent": 37
+      },
+      {
+        "i": 518,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 339.96,
+        "end": 340.12,
+        "conf": 0.9932729601860046,
+        "sent": 38
+      },
+      {
+        "i": 519,
+        "source": "s01",
+        "w": "hope",
+        "norm": "hope",
+        "start": 340.12,
+        "end": 340.35999999999996,
+        "conf": 0.99785152494766,
+        "sent": 38
+      },
+      {
+        "i": 520,
+        "source": "s01",
+        "w": "you're",
+        "norm": "youre",
+        "start": 340.36,
+        "end": 340.6,
+        "conf": 0.9988343776825088,
+        "sent": 38
+      },
+      {
+        "i": 521,
+        "source": "s01",
+        "w": "ready",
+        "norm": "ready",
+        "start": 340.6,
+        "end": 340.84000000000003,
+        "conf": 0.9999295746365278,
+        "sent": 38
+      },
+      {
+        "i": 522,
+        "source": "s01",
+        "w": "for",
+        "norm": "for",
+        "start": 340.84,
+        "end": 341.08,
+        "conf": 0.9999698996543884,
+        "sent": 38
+      },
+      {
+        "i": 523,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 341.08,
+        "end": 341.15999999999997,
+        "conf": 0.999559223651886,
+        "sent": 38
+      },
+      {
+        "i": 524,
+        "source": "s01",
+        "w": "because",
+        "norm": "because",
+        "start": 341.32,
+        "end": 341.56,
+        "conf": 0.9997477531433105,
+        "sent": 38
+      },
+      {
+        "i": 525,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 341.56,
+        "end": 341.8,
+        "conf": 0.9988694190979004,
+        "sent": 38
+      },
+      {
+        "i": 526,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 341.8,
+        "end": 341.96000000000004,
+        "conf": 0.9999914169311523,
+        "sent": 38
+      },
+      {
+        "i": 527,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 341.96,
+        "end": 342.2,
+        "conf": 0.9999425411224365,
+        "sent": 38
+      },
+      {
+        "i": 528,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 342.2,
+        "end": 342.44,
+        "conf": 0.9999727606773376,
+        "sent": 38
+      },
+      {
+        "i": 529,
+        "source": "s01",
+        "w": "something",
+        "norm": "something",
+        "start": 342.44,
+        "end": 342.68,
+        "conf": 0.9999598264694214,
+        "sent": 38
+      },
+      {
+        "i": 530,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 342.68,
+        "end": 342.92,
+        "conf": 0.9995747804641724,
+        "sent": 38
+      },
+      {
+        "i": 531,
+        "source": "s01",
+        "w": "won't",
+        "norm": "wont",
+        "start": 342.92,
+        "end": 343.64,
+        "conf": 0.9999591539983688,
+        "sent": 38
+      },
+      {
+        "i": 532,
+        "source": "s01",
+        "w": "go",
+        "norm": "go",
+        "start": 343.64,
+        "end": 343.96,
+        "conf": 0.9999951720237732,
+        "sent": 38
+      },
+      {
+        "i": 533,
+        "source": "s01",
+        "w": "away.",
+        "norm": "away",
+        "start": 343.96,
+        "end": 344.92,
+        "conf": 0.9780868255772933,
+        "sent": 38
+      },
+      {
+        "i": 534,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 345.88,
+        "end": 346.04,
+        "conf": 0.990157961845398,
+        "sent": 39
+      },
+      {
+        "i": 535,
+        "source": "s01",
+        "w": "hope",
+        "norm": "hope",
+        "start": 346.04,
+        "end": 346.28000000000003,
+        "conf": 0.998806256124734,
+        "sent": 39
+      },
+      {
+        "i": 536,
+        "source": "s01",
+        "w": "you're",
+        "norm": "youre",
+        "start": 346.28,
+        "end": 346.44,
+        "conf": 0.9980471508870065,
+        "sent": 39
+      },
+      {
+        "i": 537,
+        "source": "s01",
+        "w": "ready",
+        "norm": "ready",
+        "start": 346.44,
+        "end": 346.59999999999997,
+        "conf": 0.9995927584268176,
+        "sent": 39
+      },
+      {
+        "i": 538,
+        "source": "s01",
+        "w": "for",
+        "norm": "for",
+        "start": 346.6,
+        "end": 346.76000000000005,
+        "conf": 0.9999309778213501,
+        "sent": 39
+      },
+      {
+        "i": 539,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 346.76,
+        "end": 346.92,
+        "conf": 0.9998911619186401,
+        "sent": 39
+      },
+      {
+        "i": 540,
+        "source": "s01",
+        "w": "because",
+        "norm": "because",
+        "start": 347.08,
+        "end": 347.24,
+        "conf": 0.9996286034584045,
+        "sent": 39
+      },
+      {
+        "i": 541,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 347.24,
+        "end": 347.32,
+        "conf": 0.9853819012641907,
+        "sent": 39
+      },
+      {
+        "i": 542,
+        "source": "s01",
+        "w": "don't",
+        "norm": "dont",
+        "start": 347.32,
+        "end": 347.56,
+        "conf": 0.9989331983737968,
+        "sent": 39
+      },
+      {
+        "i": 543,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 347.56,
+        "end": 347.72,
+        "conf": 0.9999861121177673,
+        "sent": 39
+      },
+      {
+        "i": 544,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 347.72,
+        "end": 347.88000000000005,
+        "conf": 0.9863342046737671,
+        "sent": 39
+      },
+      {
+        "i": 545,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 347.88,
+        "end": 348.04,
+        "conf": 0.999524712562561,
+        "sent": 39
+      },
+      {
+        "i": 546,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 348.04,
+        "end": 348.28000000000003,
+        "conf": 0.9998490810394287,
+        "sent": 39
+      },
+      {
+        "i": 547,
+        "source": "s01",
+        "w": "something",
+        "norm": "something",
+        "start": 348.28,
+        "end": 348.52,
+        "conf": 0.9999597072601318,
+        "sent": 39
+      },
+      {
+        "i": 548,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 348.52,
+        "end": 348.68,
+        "conf": 0.9960659146308899,
+        "sent": 39
+      },
+      {
+        "i": 549,
+        "source": "s01",
+        "w": "will",
+        "norm": "will",
+        "start": 348.68,
+        "end": 348.92,
+        "conf": 0.9990507364273071,
+        "sent": 39
+      },
+      {
+        "i": 550,
+        "source": "s01",
+        "w": "go",
+        "norm": "go",
+        "start": 348.92,
+        "end": 349.24,
+        "conf": 0.999619722366333,
+        "sent": 39
+      },
+      {
+        "i": 551,
+        "source": "s01",
+        "w": "away.",
+        "norm": "away",
+        "start": 349.24,
+        "end": 350.12,
+        "conf": 0.9880157954704656,
+        "sent": 39
+      },
+      {
+        "i": 552,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 350.44,
+        "end": 350.6,
+        "conf": 0.996344804763794,
+        "sent": 40
+      },
+      {
+        "i": 553,
+        "source": "s01",
+        "w": "hope",
+        "norm": "hope",
+        "start": 350.6,
+        "end": 350.84,
+        "conf": 0.998890270437416,
+        "sent": 40
+      },
+      {
+        "i": 554,
+        "source": "s01",
+        "w": "you're",
+        "norm": "youre",
+        "start": 350.84000000000003,
+        "end": 351.0,
+        "conf": 0.9983557729646316,
+        "sent": 40
+      },
+      {
+        "i": 555,
+        "source": "s01",
+        "w": "ready",
+        "norm": "ready",
+        "start": 351.0,
+        "end": 351.15999999999997,
+        "conf": 0.9998769684960507,
+        "sent": 40
+      },
+      {
+        "i": 556,
+        "source": "s01",
+        "w": "for",
+        "norm": "for",
+        "start": 351.16,
+        "end": 351.32000000000005,
+        "conf": 0.9999561905860901,
+        "sent": 40
+      },
+      {
+        "i": 557,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 351.32,
+        "end": 351.48,
+        "conf": 0.9998803734779358,
+        "sent": 40
+      },
+      {
+        "i": 558,
+        "source": "s01",
+        "w": "because",
+        "norm": "because",
+        "start": 351.56,
+        "end": 351.72,
+        "conf": 0.9996907711029053,
+        "sent": 40
+      },
+      {
+        "i": 559,
+        "source": "s01",
+        "w": "I",
+        "norm": "i",
+        "start": 351.72,
+        "end": 351.88000000000005,
+        "conf": 0.9988476037979126,
+        "sent": 40
+      },
+      {
+        "i": 560,
+        "source": "s01",
+        "w": "don't",
+        "norm": "dont",
+        "start": 351.88,
+        "end": 352.12,
+        "conf": 0.9998562544023246,
+        "sent": 40
+      },
+      {
+        "i": 561,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 352.12,
+        "end": 352.28000000000003,
+        "conf": 0.9999948143959045,
+        "sent": 40
+      },
+      {
+        "i": 562,
+        "source": "s01",
+        "w": "this",
+        "norm": "this",
+        "start": 352.28,
+        "end": 352.44,
+        "conf": 0.9998992681503296,
+        "sent": 40
+      },
+      {
+        "i": 563,
+        "source": "s01",
+        "w": "is",
+        "norm": "is",
+        "start": 352.44,
+        "end": 352.68,
+        "conf": 0.9999486804008484,
+        "sent": 40
+      },
+      {
+        "i": 564,
+        "source": "s01",
+        "w": "something",
+        "norm": "something",
+        "start": 352.68,
+        "end": 352.92,
+        "conf": 0.9999576210975647,
+        "sent": 40
+      },
+      {
+        "i": 565,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 352.92,
+        "end": 353.16,
+        "conf": 0.9990655183792114,
+        "sent": 40
+      },
+      {
+        "i": 566,
+        "source": "s01",
+        "w": "will",
+        "norm": "will",
+        "start": 353.16,
+        "end": 353.40000000000003,
+        "conf": 0.9995107054710388,
+        "sent": 40
+      },
+      {
+        "i": 567,
+        "source": "s01",
+        "w": "go",
+        "norm": "go",
+        "start": 353.4,
+        "end": 353.56,
+        "conf": 0.9999489188194275,
+        "sent": 40
+      },
+      {
+        "i": 568,
+        "source": "s01",
+        "w": "away",
+        "norm": "away",
+        "start": 353.56,
+        "end": 353.88000000000005,
+        "conf": 0.9999974369978428,
+        "sent": 40
+      },
+      {
+        "i": 569,
+        "source": "s01",
+        "w": "anytime",
+        "norm": "anytime",
+        "start": 353.88,
+        "end": 354.52000000000004,
+        "conf": 0.9938186603407485,
+        "sent": 40
+      },
+      {
+        "i": 570,
+        "source": "s01",
+        "w": "soon.",
+        "norm": "soon",
+        "start": 354.52,
+        "end": 355.4,
+        "conf": 0.9998167271686272,
+        "sent": 40
+      },
+      {
+        "i": 571,
+        "source": "s01",
+        "w": "Let",
+        "norm": "let",
+        "start": 355.4,
+        "end": 355.56,
+        "conf": 0.9998310442509972,
+        "sent": 41
+      },
+      {
+        "i": 572,
+        "source": "s01",
+        "w": "me",
+        "norm": "me",
+        "start": 355.56,
+        "end": 355.72,
+        "conf": 0.9999943375587463,
+        "sent": 41
+      },
+      {
+        "i": 573,
+        "source": "s01",
+        "w": "know",
+        "norm": "know",
+        "start": 355.72,
+        "end": 355.8,
+        "conf": 0.9999921917915344,
+        "sent": 41
+      },
+      {
+        "i": 574,
+        "source": "s01",
+        "w": "what",
+        "norm": "what",
+        "start": 355.8,
+        "end": 355.96000000000004,
+        "conf": 0.9999746680259705,
+        "sent": 41
+      },
+      {
+        "i": 575,
+        "source": "s01",
+        "w": "you",
+        "norm": "you",
+        "start": 355.96,
+        "end": 356.12,
+        "conf": 0.9998253583908081,
+        "sent": 41
+      },
+      {
+        "i": 576,
+        "source": "s01",
+        "w": "think",
+        "norm": "think",
+        "start": 356.12,
+        "end": 356.36,
+        "conf": 0.9999634623527527,
+        "sent": 41
+      },
+      {
+        "i": 577,
+        "source": "s01",
+        "w": "about",
+        "norm": "about",
+        "start": 356.36,
+        "end": 356.6,
+        "conf": 0.9999239444732666,
+        "sent": 41
+      },
+      {
+        "i": 578,
+        "source": "s01",
+        "w": "that",
+        "norm": "that",
+        "start": 356.6,
+        "end": 356.76000000000005,
+        "conf": 0.9998584389686584,
+        "sent": 41
+      },
+      {
+        "i": 579,
+        "source": "s01",
+        "w": "and",
+        "norm": "and",
+        "start": 356.92,
+        "end": 357.16,
+        "conf": 0.9942580461502075,
+        "sent": 41
+      },
+      {
+        "i": 580,
+        "source": "s01",
+        "w": "see",
+        "norm": "see",
+        "start": 357.16,
+        "end": 357.40000000000003,
+        "conf": 0.9999246001243591,
+        "sent": 41
+      },
+      {
+        "i": 581,
+        "source": "s01",
+        "w": "you",
+        "norm": "you",
+        "start": 357.4,
+        "end": 357.56,
+        "conf": 0.9997515678405762,
+        "sent": 41
+      },
+      {
+        "i": 582,
+        "source": "s01",
+        "w": "in",
+        "norm": "in",
+        "start": 357.56,
+        "end": 357.64,
+        "conf": 0.9997201561927795,
+        "sent": 41
+      },
+      {
+        "i": 583,
+        "source": "s01",
+        "w": "the",
+        "norm": "the",
+        "start": 357.64,
+        "end": 357.71999999999997,
+        "conf": 0.9999594688415527,
+        "sent": 41
+      },
+      {
+        "i": 584,
+        "source": "s01",
+        "w": "next",
+        "norm": "next",
+        "start": 357.72,
+        "end": 357.96000000000004,
+        "conf": 0.9999867081642151,
+        "sent": 41
+      },
+      {
+        "i": 585,
+        "source": "s01",
+        "w": "one.",
+        "norm": "one",
+        "start": 357.96,
+        "end": 358.36,
+        "conf": 0.9981398729891133,
+        "sent": 41
+      },
+      {
+        "i": 586,
+        "source": "s01",
+        "w": "Bye-bye.",
+        "norm": "byebye",
+        "start": 358.36,
+        "end": 359.64,
+        "conf": 0.9675903481241601,
+        "sent": 42
+      }
+    ]
+  }
+}

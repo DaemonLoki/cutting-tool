@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "stage": "ingest",
+    "stage_version": 2,
+    "inputs_hash": "sha256:2dcf0d9c41d8f2d5424c5751f07ed9e59a2cd4ecc39c49335de3a24b41f6671a",
+    "config_hash": "sha256:1fed5fdc4fc6889dd19225ea5a5d5c139e27346306cf9a7a4ddd428829169271",
+    "created_at": "2026-10-12T10:15:03Z"
+  },
+  "data": {
+    "fps": "24000/1001",
+    "width": 3840,
+    "height": 2160,
+    "audio_rate": 48000,
+    "audio_channels": 2,
+    "sources": [
+      {
+        "id": "s01",
+        "path": "/Users/stefanblos/Developer/Stream/cutting-tool/test/gold/ChatGPT-Intelligent-UI/raw/1-video.MP4",
+        "duration_s": 360.8605,
+        "duration_frames": 8652,
+        "start_timecode": "01:25:53:04",
+        "start_frames": 123676,
+        "vfr_warning": false,
+        "asr_wav": "artifacts/audio/s01.16k.wav",
+        "analysis_wav": "artifacts/audio/s01.48k.wav",
+        "proxy": null
+      }
+    ]
+  }
+}

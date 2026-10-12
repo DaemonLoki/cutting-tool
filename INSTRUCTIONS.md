@@ -69,7 +69,9 @@ a filler drop out of the rejects project unless `fcpxml.rejects_include_fillers`
 is true. When `audio_events.json` lists claps, tighten keeps each clap out of
 the rough cut. The rough cut changes when those artifacts exist. The new keys
 do change the cache for the
-stages that read them. `short` uses the same values as `long` for every new key.
+stages that read them. `short` uses the same values as `long` for every new key
+except `claps.min_rise_db`, tuned higher against real reel footage; see
+`profiles/short.md`.
 
 ## Create a project
 

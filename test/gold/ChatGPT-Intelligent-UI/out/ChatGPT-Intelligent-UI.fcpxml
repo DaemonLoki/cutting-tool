@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.14">
+  <resources>
+    <format id="r1" name="FFVideoFormat3840x2160p2398" frameDuration="1001/24000s" width="3840" height="2160" colorSpace="1-1-1 (Rec. 709)"/>
+    <asset id="r2" name="1-video" start="30949919/6000s" duration="721721/2000s" hasVideo="1" format="r1" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="file:///Users/stefanblos/Developer/Stream/cutting-tool/test/gold/ChatGPT-Intelligent-UI/raw/1-video.MP4"/>
+    </asset>
+  </resources>
+  <library>
+    <event name="ChatGPT-Intelligent-UI – cutter">
+      <project name="ChatGPT-Intelligent-UI – rough cut">
+        <sequence format="r1" duration="4943939/24000s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+          <spine>
+            <asset-clip ref="r2" offset="0s" name="1-video" start="24797773/4800s" duration="67067/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="24797773/4800s" duration="1001/24000s" value="CHECK: unscripted"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="67067/24000s" name="1-video" start="8279271/1600s" duration="113113/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="124191067/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d003)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="3003/400s" name="1-video" start="124353229/24000s" duration="71071/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="15544529/3000s" duration="1001/24000s" value="CHECK: complete_sentence (d004)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="251251/24000s" name="1-video" start="124455331/24000s" duration="43043/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="49049/4000s" name="1-video" start="41500459/8000s" duration="31031/4800s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="124503379/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d005)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="449449/24000s" name="1-video" start="10391381/2000s" duration="41041/8000s" tcFormat="NDF" audioRole="dialogue">
+              <chapter-marker start="124797673/24000s" value="Script (about 1:45)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="143143/6000s" name="1-video" start="20803783/4000s" duration="73073/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="43043/1600s" name="1-video" start="62449387/12000s" duration="13013/6000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="697697/24000s" name="1-video" start="125051927/24000s" duration="59059/12000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="1953952/375s" duration="1001/24000s" value="CHECK: unscripted"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="163163/4800s" name="1-video" start="2503501/480s" duration="19019/4800s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="91091/2400s" name="1-video" start="4177173/800s" duration="31031/12000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="125356231/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d006)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="81081/2000s" name="1-video" start="8359351/1600s" duration="3003/1000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="87087/2000s" name="1-video" start="62745683/12000s" duration="11011/3000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="62781719/12000s" duration="1001/24000s" value="CHECK: complete_sentence (d007)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="283283/6000s" name="1-video" start="125586461/24000s" duration="1001/150s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="125632507/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d008)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="323323/6000s" name="1-video" start="5032027/960s" duration="17017/4800s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="459459/8000s" name="1-video" start="126245119/24000s" duration="71071/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="126245119/24000s" duration="1001/24000s" value="CHECK: script_close_call (d001)"/>
+              <marker start="126245119/24000s" duration="1001/24000s" value="CHECK: script_close_call (d002)"/>
+              <marker start="15782767/3000s" duration="1001/24000s" value="CHECK: unscripted"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="181181/3000s" name="1-video" start="8421413/1600s" duration="13013/3000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="97097/1500s" name="1-video" start="8439431/1600s" duration="7007/1600s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="63326263/12000s" duration="1001/24000s" value="CHECK: complete_sentence (d009)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="1658657/24000s" name="1-video" start="21124103/4000s" duration="91091/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="437437/6000s" name="1-video" start="63422359/12000s" duration="17017/3000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="157157/2000s" name="1-video" start="8471463/1600s" duration="11011/1000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="10591581/2000s" duration="1001/24000s" value="CHECK: complete_sentence (d010)"/>
+              <marker start="127073947/24000s" duration="1001/24000s" value="CHECK: unscripted"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="179179/2000s" name="1-video" start="63754691/12000s" duration="47047/8000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="763763/8000s" name="1-video" start="42551509/8000s" duration="1001/250s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="8515507/1600s" duration="1001/24000s" value="CHECK: complete_sentence (d011)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="159159/1600s" name="1-video" start="5324319/1000s" duration="27027/4000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="849849/8000s" name="1-video" start="128731603/24000s" duration="11011/2000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="893893/8000s" name="1-video" start="6445439/1200s" duration="53053/12000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="128955827/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d012)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="557557/4800s" name="1-video" start="129075947/24000s" duration="119119/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="121121/1000s" name="1-video" start="64695631/12000s" duration="139139/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="64695631/12000s" duration="1001/24000s" value="CHECK: tiny fragment removed"/>
+              <marker start="8631623/1600s" duration="1001/24000s" value="CHECK: complete_sentence (d013)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="3046043/24000s" name="1-video" start="8635627/1600s" duration="9009/2000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="3154151/24000s" name="1-video" start="25928903/4800s" duration="33033/8000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="13013/96s" name="1-video" start="129746617/24000s" duration="29029/6000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="561561/4000s" name="1-video" start="43396353/8000s" duration="27027/2000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="16275259/3000s" duration="1001/24000s" value="CHECK: complete_sentence (d014)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="123123/800s" name="1-video" start="65466401/12000s" duration="43043/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="3736733/24000s" name="1-video" start="131033903/24000s" duration="43043/4800s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="65614549/12000s" duration="1001/24000s" value="CHECK: complete_sentence (d015)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="329329/2000s" name="1-video" start="131310179/24000s" duration="121121/12000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="419419/2400s" name="1-video" start="5262257/960s" duration="71071/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="4265261/24000s" name="1-video" start="131634503/24000s" duration="1001/1600s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="1070069/6000s" name="1-video" start="65826761/12000s" duration="23023/12000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="2163161/12000s" name="1-video" start="5268263/960s" duration="11011/8000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="871871/4800s" name="1-video" start="4391387/800s" duration="71071/24000s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="2215213/12000s" name="1-video" start="32953921/6000s" duration="17017/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="65908843/12000s" duration="1001/24000s" value="CHECK: complete_sentence (d016)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="1482481/8000s" name="1-video" start="131844713/24000s" duration="77077/24000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="131904773/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d017)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="113113/600s" name="1-video" start="8247239/1500s" duration="41041/8000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="22008987/4000s" duration="1001/24000s" value="CHECK: complete_sentence (d018)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="4647643/24000s" name="1-video" start="66048983/12000s" duration="1001/250s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="132181049/24000s" duration="1001/24000s" value="CHECK: complete_sentence (d019)"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="4743739/24000s" name="1-video" start="33052019/6000s" duration="7007/1500s" tcFormat="NDF" audioRole="dialogue"/>
+            <asset-clip ref="r2" offset="1618617/8000s" name="1-video" start="33082049/6000s" duration="11011/3000s" tcFormat="NDF" audioRole="dialogue"/>
+          </spine>
+        </sequence>
+      </project>
+      <project name="ChatGPT-Intelligent-UI – rejects">
+        <sequence format="r1" duration="181181/12000s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+          <spine>
+            <asset-clip ref="r2" offset="0s" name="1-video" start="125884759/24000s" duration="41041/6000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="125884759/24000s" duration="1001/24000s" value="d001: retake"/>
+            </asset-clip>
+            <asset-clip ref="r2" offset="41041/6000s" name="1-video" start="21007987/4000s" duration="33033/4000s" tcFormat="NDF" audioRole="dialogue">
+              <marker start="21007987/4000s" duration="1001/24000s" value="d002: retake"/>
+            </asset-clip>
+          </spine>
+        </sequence>
+      </project>
+    </event>
+  </library>
+</fcpxml>

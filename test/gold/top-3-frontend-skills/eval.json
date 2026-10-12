@@ -1,0 +1,12 @@
+{
+  "precision": 0.8181818181818182,
+  "recall": 0.9801980198019802,
+  "f1": 0.8918918918918919,
+  "false_cut_sentences": 2,
+  "missed_retake_words": 66,
+  "false_cut_sentences_per_10min": 9.377845101443535,
+  "missed_retake_words_per_10min": 309.46888834763666,
+  "gold_duration_s": 127.96116666666668,
+  "kept_words": 363,
+  "gold_kept_words": 303
+}

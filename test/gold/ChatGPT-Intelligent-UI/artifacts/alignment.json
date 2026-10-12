@@ -1,0 +1,344 @@
+{
+  "meta": {
+    "stage": "align",
+    "stage_version": 2,
+    "inputs_hash": "sha256:70451e0b40f722ef05da4ec41ace16457c4872b20db0984ff5cd52fee98cd5f4",
+    "config_hash": "sha256:bf005593b665ae82242c1a4ff0f03f603544db8edf65164df936dad6c88dce8c",
+    "created_at": "2026-10-12T10:15:17Z"
+  },
+  "data": {
+    "script": {
+      "path": "script.md",
+      "hash": "sha256:e51bc679d506506ec39c08601cd627cbcf3c28fc1d3866dfb05d13ac22944b3b"
+    },
+    "chapters": [
+      {
+        "id": "c01",
+        "title": "Script (about 1:45)",
+        "level": 2,
+        "first_sentence": 0
+      }
+    ],
+    "sentences": [
+      {
+        "id": 0,
+        "chapter": "c01",
+        "text": "0:00–0:04 — Hook (talking head, tight crop) “ChatGPT doesn’t just answer anymore.",
+        "takes": []
+      },
+      {
+        "id": 1,
+        "chapter": "c01",
+        "text": "It ships the interface.”",
+        "takes": []
+      },
+      {
+        "id": 2,
+        "chapter": "c01",
+        "text": "Cut on the word “interface” to the bill-splitter appearing mid-reply.",
+        "takes": []
+      },
+      {
+        "id": 3,
+        "chapter": "c01",
+        "text": "0:04–0:14 — Proof (screen recording) Voiceover: “Ask it to split a bill and it doesn’t describe a calculator.",
+        "takes": []
+      },
+      {
+        "id": 4,
+        "chapter": "c01",
+        "text": "It builds one.",
+        "takes": [
+          {
+            "first_word": 55,
+            "last_word": 56,
+            "score": 86.95652173913044,
+            "chosen": true
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "chapter": "c01",
+        "text": "Tip, headcount, total — live, inside the message.”",
+        "takes": [
+          {
+            "first_word": 57,
+            "last_word": 64,
+            "score": 86.0,
+            "chosen": true
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "chapter": "c01",
+        "text": "Show your finger changing the tip from 15 to 20 and the per-person number updating.",
+        "takes": []
+      },
+      {
+        "id": 7,
+        "chapter": "c01",
+        "text": "No pause longer than a second.",
+        "takes": []
+      },
+      {
+        "id": 8,
+        "chapter": "c01",
+        "text": "0:14–0:28 — What it actually is (talking head + simple animation) “OpenAI calls it Intelligent UI.",
+        "takes": []
+      },
+      {
+        "id": 9,
+        "chapter": "c01",
+        "text": "GPT-6 picks from a library of native components — buttons, forms, charts — and a compiler streams them in as the tokens arrive.",
+        "takes": []
+      },
+      {
+        "id": 10,
+        "chapter": "c01",
+        "text": "Same bubble.",
+        "takes": [
+          {
+            "first_word": 127,
+            "last_word": 128,
+            "score": 100.0,
+            "chosen": true
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "chapter": "c01",
+        "text": "No iframe.",
+        "takes": [
+          {
+            "first_word": 133,
+            "last_word": 133,
+            "score": 80.0,
+            "chosen": false
+          },
+          {
+            "first_word": 145,
+            "last_word": 145,
+            "score": 80.0,
+            "chosen": false
+          },
+          {
+            "first_word": 164,
+            "last_word": 164,
+            "score": 80.0,
+            "chosen": true
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "chapter": "c01",
+        "text": "No ‘open this link.’”",
+        "takes": []
+      },
+      {
+        "id": 13,
+        "chapter": "c01",
+        "text": "Animation: three boxes sliding in left to right — “tokens” → “component library” → “compiled bubble” — with a thin stream of dots moving between them.",
+        "takes": []
+      },
+      {
+        "id": 14,
+        "chapter": "c01",
+        "text": "Hold it under four seconds.",
+        "takes": []
+      },
+      {
+        "id": 15,
+        "chapter": "c01",
+        "text": "0:28–0:48 — Second example (screen recording, quick cuts) Voiceover: “Same trick on anything visual.",
+        "takes": []
+      },
+      {
+        "id": 16,
+        "chapter": "c01",
+        "text": "Pricing, architecture, a recipe that rescales.”",
+        "takes": [
+          {
+            "first_word": 209,
+            "last_word": 215,
+            "score": 81.3953488372093,
+            "chosen": true
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "chapter": "c01",
+        "text": "Cut 1: the pricing chart with the under/over-100k toggle.",
+        "takes": []
+      },
+      {
+        "id": 18,
+        "chapter": "c01",
+        "text": "Tap it once.",
+        "takes": []
+      },
+      {
+        "id": 19,
+        "chapter": "c01",
+        "text": "Cut 2: the diagram with tappable nodes.",
+        "takes": []
+      },
+      {
+        "id": 20,
+        "chapter": "c01",
+        "text": "Tap “compiler.” “Developers have been hand-building these widgets for years.",
+        "takes": []
+      },
+      {
+        "id": 21,
+        "chapter": "c01",
+        "text": "The model is now emitting them.”",
+        "takes": []
+      },
+      {
+        "id": 22,
+        "chapter": "c01",
+        "text": "0:48–1:05 — Why it matters (talking head) “The chat transcript is becoming the app surface.",
+        "takes": []
+      },
+      {
+        "id": 23,
+        "chapter": "c01",
+        "text": "If your product is a conversation, the message itself can now hold state, inputs, and actions — not just text that points somewhere else.”",
+        "takes": []
+      },
+      {
+        "id": 24,
+        "chapter": "c01",
+        "text": "Optional one-frame lower-third: “Chat tab only · Sol on paid · Luna on free.”",
+        "takes": []
+      },
+      {
+        "id": 25,
+        "chapter": "c01",
+        "text": "1:05–1:18 — Subtle Stream beat (talking head, same energy) “That’s the part I keep thinking about at Stream.",
+        "takes": []
+      },
+      {
+        "id": 26,
+        "chapter": "c01",
+        "text": "We already treat the message as the unit that has to stay realtime, ordered, and multiplayer.",
+        "takes": []
+      },
+      {
+        "id": 27,
+        "chapter": "c01",
+        "text": "Generative UI just raises the stakes on that pipe — the bubble has to arrive, update, and stay in sync for everyone in the channel.”",
+        "takes": []
+      },
+      {
+        "id": 28,
+        "chapter": "c01",
+        "text": "Do not show a logo.",
+        "takes": []
+      },
+      {
+        "id": 29,
+        "chapter": "c01",
+        "text": "Do not say “check out” or “sign up.”",
+        "takes": []
+      },
+      {
+        "id": 30,
+        "chapter": "c01",
+        "text": "1:18–1:32 — Close (screen recording into talking head) Back to the bill splitter for one second, then you: “So the next interface your users touch might not be a screen you designed.",
+        "takes": []
+      },
+      {
+        "id": 31,
+        "chapter": "c01",
+        "text": "It might be a reply.",
+        "takes": []
+      },
+      {
+        "id": 32,
+        "chapter": "c01",
+        "text": "Build like that’s normal.”",
+        "takes": []
+      },
+      {
+        "id": 33,
+        "chapter": "c01",
+        "text": "End card, 1.5 seconds: plain text “GPT-6 Intelligent UI · Chat tab” and your handle.",
+        "takes": []
+      },
+      {
+        "id": 34,
+        "chapter": "c01",
+        "text": "No CTA button.",
+        "takes": []
+      }
+    ],
+    "unscripted": [
+      {
+        "first_word": 0,
+        "last_word": 54
+      },
+      {
+        "first_word": 65,
+        "last_word": 126
+      },
+      {
+        "first_word": 129,
+        "last_word": 132
+      },
+      {
+        "first_word": 134,
+        "last_word": 144
+      },
+      {
+        "first_word": 146,
+        "last_word": 163
+      },
+      {
+        "first_word": 165,
+        "last_word": 208
+      },
+      {
+        "first_word": 216,
+        "last_word": 586
+      }
+    ],
+    "missing": [
+      0,
+      1,
+      2,
+      3,
+      6,
+      7,
+      8,
+      9,
+      12,
+      13,
+      14,
+      15,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34
+    ]
+  }
+}
