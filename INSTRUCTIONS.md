@@ -355,7 +355,8 @@ The default profile calls a local OpenAI-compatible server, such as LM Studio:
 http://localhost:1234/v1
 ```
 
-The model name is `qwen3-14b`. A verdict can drop the earlier take, keep both
+The default profile asks for `google/gemma-4-12b-qat`, the name loaded in
+LM Studio. A verdict can drop the earlier take, keep both
 takes, or flag that the first take should stay (`judge_prefers_first_take`).
 Answers below the profile's `min_confidence` (0.7 in `long`) stay flagged.
 
@@ -686,20 +687,20 @@ a valid cache entry.
 
 ## Current command status
 
-| Command | Status | Main output |
-| --- | --- | --- |
-| `cutter ingest` | Implemented | `artifacts/sources.json`, WAV files |
-| `cutter transcribe` | Implemented | `artifacts/words.json` |
-| `cutter audio` | Implemented (speech segments and claps) | `artifacts/audio_events.json` |
-| `cutter align` | Implemented | `artifacts/alignment.json` |
-| `cutter words` | Implemented | Console output |
-| `cutter retakes` | Implemented | `artifacts/decisions.json` |
-| `cutter judge` | Implemented | `artifacts/decisions.json` |
-| `cutter fillers` | Implemented | `artifacts/fillers.json` |
-| `cutter tighten` | Implemented | `artifacts/timeline.json` |
-| `cutter export` | Implemented | `out/<project>.fcpxml` |
-| `cutter run` | Implemented | FCPXML plus the artifacts above |
-| `cutter eval` | Implemented | `<gold>/eval.json` |
+| Command             | Status                                  | Main output                         |
+| ------------------- | --------------------------------------- | ----------------------------------- |
+| `cutter ingest`     | Implemented                             | `artifacts/sources.json`, WAV files |
+| `cutter transcribe` | Implemented                             | `artifacts/words.json`              |
+| `cutter audio`      | Implemented (speech segments and claps) | `artifacts/audio_events.json`       |
+| `cutter align`      | Implemented                             | `artifacts/alignment.json`          |
+| `cutter words`      | Implemented                             | Console output                      |
+| `cutter retakes`    | Implemented                             | `artifacts/decisions.json`          |
+| `cutter judge`      | Implemented                             | `artifacts/decisions.json`          |
+| `cutter fillers`    | Implemented                             | `artifacts/fillers.json`            |
+| `cutter tighten`    | Implemented                             | `artifacts/timeline.json`           |
+| `cutter export`     | Implemented                             | `out/<project>.fcpxml`              |
+| `cutter run`        | Implemented                             | FCPXML plus the artifacts above     |
+| `cutter eval`       | Implemented                             | `<gold>/eval.json`                  |
 
 ## Exit codes
 

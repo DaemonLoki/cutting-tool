@@ -41,12 +41,12 @@ Clap detection, script alignment, keywords per script paragraph, chapter markers
 
 ## 2. Prerequisites (provided by Stefan before work starts)
 
-| Item | Path | Purpose |
-| --- | --- | --- |
-| Reference export from FCP | `test/fixtures/reference.fcpxmld/Info.fcpxml` | Full library export. Source of truth for `version`, `<format>` and camera `<asset>` attributes. The timeline also contains screen recordings, titles, color, and transitions; do not reproduce that timeline. |
-| Sample raw sources | `test/fixtures/sample/raw/` | `1-intro.MP4` and `2-skills.MP4`, the camera sources for the gold edit. |
-| Gold project | `test/gold/frontend-skills/manual.fcpxmld/Info.fcpxml` | A cut made only from those two sources. `src` attributes point at `~/Downloads/sample-videos/Videos/`; resolve them to the repo copies by filename. Used by `cutter eval`. |
-| Machine | Apple Silicon, macOS, ffmpeg via Homebrew, LM Studio optional | |
+| Item                      | Path                                                          | Purpose                                                                                                                                                                                                       |
+| ------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Reference export from FCP | `test/fixtures/reference.fcpxmld/Info.fcpxml`                 | Full library export. Source of truth for `version`, `<format>` and camera `<asset>` attributes. The timeline also contains screen recordings, titles, color, and transitions; do not reproduce that timeline. |
+| Sample raw sources        | `test/fixtures/sample/raw/`                                   | `1-intro.MP4` and `2-skills.MP4`, the camera sources for the gold edit.                                                                                                                                       |
+| Gold project              | `test/gold/frontend-skills/manual.fcpxmld/Info.fcpxml`        | A cut made only from those two sources. `src` attributes point at `~/Downloads/sample-videos/Videos/`; resolve them to the repo copies by filename. Used by `cutter eval`.                                    |
+| Machine                   | Apple Silicon, macOS, ffmpeg via Homebrew, LM Studio optional |                                                                                                                                                                                                               |
 
 Locate the DTD with:
 
@@ -113,51 +113,51 @@ projects/<name>/    # gitignored
 
 ```yaml
 ingest:
-  allowed_extensions: [".mov", ".mp4", ".m4v"]
+  allowed_extensions: ['.mov', '.mp4', '.m4v']
   asr_sample_rate: 16000
   analysis_sample_rate: 48000
 
 transcribe:
-  model: "mlx-community/parakeet-tdt-0.6b-v2"
+  model: 'mlx-community/parakeet-tdt-0.6b-v2'
   chunk_duration_s: 120
   overlap_duration_s: 15
 
 retakes:
-  window_words: 6            # words compared at a retake candidate
-  min_match_words: 3         # minimum consecutive matching words
-  word_similarity: 85        # rapidfuzz ratio per word, 0–100
-  max_mismatches: 1          # tolerated mismatched words inside the match
+  window_words: 6 # words compared at a retake candidate
+  min_match_words: 3 # minimum consecutive matching words
+  word_similarity: 85 # rapidfuzz ratio per word, 0–100
+  max_mismatches: 1 # tolerated mismatched words inside the match
   max_lookback_s: 90
-  auto_drop_max_s: 20        # longer failed segments are flagged, not auto-dropped
+  auto_drop_max_s: 20 # longer failed segments are flagged, not auto-dropped
   missing_content_ratio: 0.3 # flag if dropped segment has this share of content words the retake lacks
-  stopwords_file: null       # null = built-in English list
+  stopwords_file: null # null = built-in English list
 
 judge:
   enabled: true
-  base_url: "http://localhost:1234/v1"
-  model: "qwen3-14b"         # whatever is loaded in LM Studio
+  base_url: 'http://localhost:1234/v1'
+  model: 'qwen3-14b' # whatever is loaded in LM Studio
   min_confidence: 0.7
   timeout_s: 60
 
 tighten:
-  max_gap_ms: 400            # gaps longer than this get cut
+  max_gap_ms: 400 # gaps longer than this get cut
   pad_head_ms: 80
   pad_tail_ms: 120
   snap_window_ms: 150
-  min_head_ms: 30            # in-point never closer than this to first word
-  min_tail_ms: 40            # out-point never closer than this to last word
+  min_head_ms: 30 # in-point never closer than this to first word
+  min_tail_ms: 40 # out-point never closer than this to last word
   rms_frame_ms: 10
-  voice_margin_db: 12        # voice is this far above the source's background
-  voice_quiet_ms: 300        # this much background inside a word ends its voice
-  min_range_frames: 6        # shorter ranges are merged into neighbours or dropped with a CHECK marker
+  voice_margin_db: 12 # voice is this far above the source's background
+  voice_quiet_ms: 300 # this much background inside a word ends its voice
+  min_range_frames: 6 # shorter ranges are merged into neighbours or dropped with a CHECK marker
 
 fcpxml:
-  version: "1.14"            # must match test/fixtures/reference.fcpxmld/Info.fcpxml
-  dtd_path: "/Applications/Final Cut Pro.app/Contents/Frameworks/Interchange.framework/Versions/A/Resources/FCPXMLv1_14.dtd"
-  event_name: "{project} – cutter"
-  project_name: "{project} – rough cut"
-  rejects_project_name: "{project} – rejects"
-  audio_role: "dialogue"
+  version: '1.14' # must match test/fixtures/reference.fcpxmld/Info.fcpxml
+  dtd_path: '/Applications/Final Cut Pro.app/Contents/Frameworks/Interchange.framework/Versions/A/Resources/FCPXMLv1_14.dtd'
+  event_name: '{project} – cutter'
+  project_name: '{project} – rough cut'
+  rejects_project_name: '{project} – rejects'
+  audio_role: 'dialogue'
 ```
 
 Load into Pydantic models with `extra="forbid"`. CLI flag `--set key.path=value` overrides single values (useful for eval sweeps).
@@ -177,7 +177,7 @@ All artifacts are JSON with a common envelope:
     "config_hash": "sha256:…",
     "created_at": "2026-10-06T12:00:00Z"
   },
-  "data": { }
+  "data": {}
 }
 ```
 
@@ -213,7 +213,16 @@ Times in analysis artifacts are **float seconds from the start of the source fil
 ```json
 {
   "words": [
-    {"i": 0, "source": "s01", "w": "So,", "norm": "so", "start": 1.20, "end": 1.38, "conf": null, "sent": 0}
+    {
+      "i": 0,
+      "source": "s01",
+      "w": "So,",
+      "norm": "so",
+      "start": 1.2,
+      "end": 1.38,
+      "conf": null,
+      "sent": 0
+    }
   ]
 }
 ```
@@ -263,11 +272,13 @@ Times in analysis artifacts are **float seconds from the start of the source fil
       "out_frame": 567,
       "first_word": 0,
       "last_word": 58,
-      "markers": [{"at_word": 12, "text": "CHECK: low-confidence retake (d003)"}]
+      "markers": [
+        { "at_word": 12, "text": "CHECK: low-confidence retake (d003)" }
+      ]
     }
   ],
   "dropped": [
-    {"source": "s01", "in_s": 18.91, "out_s": 26.3, "decision": "d001"}
+    { "source": "s01", "in_s": 18.91, "out_s": 26.3, "decision": "d001" }
   ]
 }
 ```
@@ -322,7 +333,7 @@ Times in analysis artifacts are **float seconds from the start of the source fil
 
 **Input:** `words.json`. **Output:** `decisions.json`.
 
-A *retake* is when the speaker starts a passage again. The earlier take is dropped; the later take is kept ("last take wins"). That includes an aborted attempt, and a finished sentence whose next sentence uses the same words. A finished sentence followed by different words stays in the rough cut, with a `CHECK` marker.
+A _retake_ is when the speaker starts a passage again. The earlier take is dropped; the later take is kept ("last take wins"). That includes an aborted attempt, and a finished sentence whose next sentence uses the same words. A finished sentence followed by different words stays in the rough cut, with a `CHECK` marker.
 
 **Algorithm**
 
@@ -346,7 +357,7 @@ for i in range(n):                                   # left to right
 - `candidates(i)`: indices `j` with `j < i`, same source as `i`, `j not in claimed`, `words[i].start - words[j].start <= max_lookback_s`, ordered **nearest first** (descending `j`). `claimed` stops a second decision on a suffix of the same repeat.
 - `match_length(j, i)`: compare `norm` of `words[j+t]` and `words[i+t]` for `t = 0, 1, …` while `t < window_words` and `j + t < i`. A word matches if `rapidfuzz.fuzz.ratio >= word_similarity`. Count consecutive matches, allowing up to `max_mismatches` mismatches that are followed by a match. Stop at the first unrecoverable mismatch. Return the match count.
 - `has_content_word(j, m)`: at least one matched word is not a stopword, **or** `m >= 5`. Prevents matching "and the" / "so the".
-- Retakes never cross a source boundary in the main scan. A failed take at the end of `01.mov` and its retake in `02.mov` is handled separately: see *cross-file retakes* below.
+- Retakes never cross a source boundary in the main scan. A failed take at the end of `01.mov` and its retake in `02.mov` is handled separately: see _cross-file retakes_ below.
 
 Apply the guards in order; the first match wins.
 
@@ -362,18 +373,18 @@ If the first `window_words` words of source `k+1` match (same rules) a word run 
 
 **Acceptance (unit tests with synthetic word lists, no audio needed)**
 
-| Case | Words | Expected |
-| --- | --- | --- |
-| Simple retake | `the agent joins the — the agent joins the call` | drop first 4 |
-| Short aborted take | `so the agent so the agent joins the call` | drop first 3 |
-| Chain of 3 aborted takes | takes A, B, C of the same words, no sentence end | keep C only, two decisions |
-| Stopword-only repeat | `and the … and the server` | no decision |
-| Legit repetition after 2 min | same sentence 120 s apart | no decision (lookback) |
-| Long aborted segment | aborted span longer than 20 s | `keep`, flagged `long_segment` |
-| Exact finished sentence | `A neuron is a weighted vote. A neuron is a weighted vote.` | one decision, drop the first sentence |
-| Different finished sentence | `A neuron is a weighted vote. A neuron is a weighted guess.` | one decision, `keep`, flagged `complete_sentence` |
-| Cross-file | `01` ends with an aborted sentence, `02` starts with it | drop tail of `01` |
-| Exact finished sentence, cross-file | `01` ends with a sentence, `02` starts by repeating it | drop the sentence on `01` |
+| Case                                | Words                                                        | Expected                                          |
+| ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------- |
+| Simple retake                       | `the agent joins the — the agent joins the call`             | drop first 4                                      |
+| Short aborted take                  | `so the agent so the agent joins the call`                   | drop first 3                                      |
+| Chain of 3 aborted takes            | takes A, B, C of the same words, no sentence end             | keep C only, two decisions                        |
+| Stopword-only repeat                | `and the … and the server`                                   | no decision                                       |
+| Legit repetition after 2 min        | same sentence 120 s apart                                    | no decision (lookback)                            |
+| Long aborted segment                | aborted span longer than 20 s                                | `keep`, flagged `long_segment`                    |
+| Exact finished sentence             | `A neuron is a weighted vote. A neuron is a weighted vote.`  | one decision, drop the first sentence             |
+| Different finished sentence         | `A neuron is a weighted vote. A neuron is a weighted guess.` | one decision, `keep`, flagged `complete_sentence` |
+| Cross-file                          | `01` ends with an aborted sentence, `02` starts with it      | drop tail of `01`                                 |
+| Exact finished sentence, cross-file | `01` ends with a sentence, `02` starts by repeating it       | drop the sentence on `01`                         |
 
 ### 7.4 Judge (`judge.py`, `llm.py`)
 
@@ -385,11 +396,15 @@ If the first `window_words` words of source `k+1` match (same rules) a word run 
 - System prompt: load from `skills/retake-judging/SKILL.md` if present, else a built-in default. The default must explain: A is a candidate failed attempt, B is the candidate retake; answer `"B"` if A should be dropped, `"A"` if B is the failed one and A should be kept instead, `"both"` if it's not a retake.
 - Output schema:
   ```json
-  {"type": "object", "required": ["choice", "confidence", "reason"],
-   "properties": {
-     "choice": {"enum": ["A", "B", "both"]},
-     "confidence": {"type": "number", "minimum": 0, "maximum": 1},
-     "reason": {"type": "string", "maxLength": 300}}}
+  {
+    "type": "object",
+    "required": ["choice", "confidence", "reason"],
+    "properties": {
+      "choice": { "enum": ["A", "B", "both"] },
+      "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+      "reason": { "type": "string", "maxLength": 300 }
+    }
+  }
   ```
 - Applying the verdict:
   - `confidence < min_confidence` → `action: keep`, stays flagged.
@@ -411,7 +426,7 @@ If the first `window_words` words of source `k+1` match (same rules) a word run 
 5. **Snap to silence:** compute an RMS envelope (`rms_frame_ms` windows) of the 48 kHz WAV. Within `±snap_window_ms` of each raw cut point, pick the lowest-RMS position, subject to:
    - in-point ≤ `first.start − min_head_ms` and ≥ previous word's end
    - out-point ≥ `voice_end(last) + min_tail_ms`, ≤ the raw out-point, and ≤ next word's start
-   If the allowed interval is empty, keep the raw cut point.
+     If the allowed interval is empty, keep the raw cut point.
 6. **Frame rounding (once, last):** `in_frame = floor(in_s × fps)`, `out_frame = ceil(out_s × fps)`, using `Fraction(fps)`.
 7. **Cleanup:** merge consecutive ranges of the same source whose frame gap is ≤ 1. Ranges shorter than `min_range_frames`: merge into the neighbour if the gap is ≤ `max_gap_ms`, otherwise drop the range and attach a `CHECK: tiny fragment removed` marker to the next range.
 8. **Markers:** each flagged decision attaches a marker to the range containing `kept_from_word` (or the nearest following range). Text: `CHECK: <flag_reason> (<decision id>)`.
@@ -553,20 +568,20 @@ cutter words      <project_dir> --from 12.0 --to 30.0   # debug: print words wit
 
 Tasks are sized for one agent session each. `→` marks dependencies.
 
-| # | Task | Depends on | Done when |
-| --- | --- | --- | --- |
-| T0 | Scaffold: `uv` project, package layout, Typer stub, pytest, ruff | — | `uv run cutter --help` works, CI-style `uv run pytest` passes |
-| T1 | `config.py`, `models.py`, `cache.py`, `profiles/long.yaml`, `--set` overrides | T0 | Round-trip tests for every model; config rejects unknown keys |
-| T2 | Ingest | T1 | §7.1 acceptance |
-| T3 | Transcribe (verify parakeet-mlx API first) | T1 | §7.2 acceptance; `cutter words` works |
-| T4 | Retake detection | T1 | All §7.3 unit cases pass |
-| T5 | LLM client + judge | T1, T4 | §7.4 acceptance with mocked client |
-| T6 | Tighten + RMS helpers | T1, T4 | §7.5 property tests pass |
-| T7 | FCPXML export (mirror reference.fcpxml) | T1 | §7.6 snapshot + property tests; DTD validation |
-| T8 | `run` orchestration + caching + summary | T2–T7 | Second `run` with no changes skips all stages |
-| T9 | Eval + FCPXML parser | T7, T8 | §7.7 acceptance |
-| T10 | Synthetic e2e fixture + test | T8 | §9 passes |
-| T11 | Real-footage pass: run on sample + gold, tune `long.yaml`, document results | T9, T10 | Phase 1 acceptance below met, or a written list of what blocks it |
+| #   | Task                                                                          | Depends on | Done when                                                         |
+| --- | ----------------------------------------------------------------------------- | ---------- | ----------------------------------------------------------------- |
+| T0  | Scaffold: `uv` project, package layout, Typer stub, pytest, ruff              | —          | `uv run cutter --help` works, CI-style `uv run pytest` passes     |
+| T1  | `config.py`, `models.py`, `cache.py`, `profiles/long.yaml`, `--set` overrides | T0         | Round-trip tests for every model; config rejects unknown keys     |
+| T2  | Ingest                                                                        | T1         | §7.1 acceptance                                                   |
+| T3  | Transcribe (verify parakeet-mlx API first)                                    | T1         | §7.2 acceptance; `cutter words` works                             |
+| T4  | Retake detection                                                              | T1         | All §7.3 unit cases pass                                          |
+| T5  | LLM client + judge                                                            | T1, T4     | §7.4 acceptance with mocked client                                |
+| T6  | Tighten + RMS helpers                                                         | T1, T4     | §7.5 property tests pass                                          |
+| T7  | FCPXML export (mirror reference.fcpxml)                                       | T1         | §7.6 snapshot + property tests; DTD validation                    |
+| T8  | `run` orchestration + caching + summary                                       | T2–T7      | Second `run` with no changes skips all stages                     |
+| T9  | Eval + FCPXML parser                                                          | T7, T8     | §7.7 acceptance                                                   |
+| T10 | Synthetic e2e fixture + test                                                  | T8         | §9 passes                                                         |
+| T11 | Real-footage pass: run on sample + gold, tune `long.yaml`, document results   | T9, T10    | Phase 1 acceptance below met, or a written list of what blocks it |
 
 T2, T3, T4 and T7 can run in parallel after T1. T7 works from a hand-written synthetic `timeline.json`.
 
